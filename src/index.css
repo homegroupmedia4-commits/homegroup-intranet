@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   ROOT / DESIGN SYSTEM
+========================= */
+:root{
+  --ink:#111827;--ink2:#374151;--ink3:#6b7280;
+  --cream:#f8fafc;--warm:#f1f5f9;--white:#fff;
+  --green:#2d7d32;--green2:#4caf50;--green-pale:#e8f5e9;
+  --gold:#c9a84c;
+  --red:#c62828;--red-pale:#fce4ec;
+  --blue:#1565c0;--blue-pale:#e3f2fd;
+  --orange:#e65100;--orange-pale:#fff3e0;
+  --purple:#6a1b9a;--purple-pale:#f3e5f5;
+  --border:rgba(17,24,39,.09);
+  --sh:0 2px 12px rgba(17,24,39,.07);
+  --sh2:0 8px 32px rgba(17,24,39,.12);
+  --r:10px;
+}
+
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+header{
+  background:#0a0a0a;
+  height:66px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 1.2rem;
+  position:sticky;
+  top:0;
+  z-index:200;
+  box-shadow:0 2px 20px rgba(0,0,0,.4)
+}
+
+.h-logo{display:flex;align-items:center;gap:10px}
+.h-logo img{height:46px;object-fit:contain}
+.h-div{width:1px;height:30px;background:rgba(255,255,255,.15)}
+
+.h-sub{
+  font-size:.72rem;
+  color:rgba(255,255,255,.5);
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+
+.h-sub strong{
+  display:block;
+  color:rgba(255,255,255,.88);
+}
+
+/* NAV */
+nav{display:flex;align-items:center}
+
+nav a {
+  background:none;
+  border:none;
+  color:rgba(255,255,255,.5);
+  font-family:'DM Sans',sans-serif;
+  font-size:.76rem;
+  font-weight:500;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  cursor:pointer;
+  padding:0 .85rem;
+  height:66px;
+  display:flex;
+  align-items:center;
+  border-bottom:3px solid transparent;
+  transition:all .2s;
+  white-space:nowrap;
+  text-decoration:none;
+}
+
+nav a:hover {
+  color:#fff;
+  background:rgba(255,255,255,.05);
+}
+
+nav a.active {
+  color:var(--green2);
+  border-bottom-color:var(--green2);
+}
+
+
+
+/* =========================
+   PAGE
+========================= */
+.page{
+  display:none;
+  padding:2rem 1.5rem;
+  max-width:1120px;
+  margin:0 auto;
+}
+.page.active{display:block}
+
+/* =========================
+   CARD
+========================= */
+.card{
+  background:var(--white);
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  box-shadow:var(--sh);
+  padding:1.4rem;
+}
+
+/* =========================
+   FORM
+========================= */
+input,select,textarea{
+  width:100%;
+  padding:9px 11px;
+  border:1px solid var(--border);
+  border-radius:7px;
+  background:var(--cream);
+}
+
+input:focus,textarea:focus{
+  border-color:var(--green);
+  box-shadow:0 0 0 3px rgba(45,127,50,.1);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn{
+  padding:9px 18px;
+  border-radius:7px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn-primary{
+  background:var(--ink);
+  color:#fff;
+}
+
+.btn-green{
+  background:var(--green);
+  color:#fff;
+}
+
+/* =========================
+   TABLE
+========================= */
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:10px;
+  border-bottom:1px solid var(--border);
+  text-align:left;
+}
+
+/* =========================
+   TOAST
+========================= */
+.toast{
+  position:fixed;
+  bottom:1.5rem;
+  right:1.5rem;
+  background:var(--ink);
+  color:#fff;
+  padding:11px 18px;
+  border-radius:9px;
+}
+
+/* =========================
+   MODAL
+========================= */
+.modal{
+  background:#fff;
+  border-radius:14px;
+  padding:1.8rem;
+  box-shadow:var(--sh2);
+}
+
+/* =========================
+   CHAT
+========================= */
+.chat-container{
+  background:#fff;
+  border-radius:14px;
+  border:1px solid var(--border);
+  box-shadow:var(--sh2);
+  display:flex;
+  flex-direction:column;
+  height:460px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media(max-width:700px){
+  header{padding:0 .8rem}
+  .page{padding:1.2rem 1rem}
+  .chat-container{height:380px}
+}
