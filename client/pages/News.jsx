@@ -5,7 +5,7 @@ export default function News() {
       {/* HEADER */}
       <div className="ph">
         <div className="ph-tag">La vie du groupe</div>
-        <h1>Actualités</h1>
+        <h1>Actualités 2026</h1>
         <p>
           Les dernières nouvelles et annonces du groupe Home Group.
         </p>
