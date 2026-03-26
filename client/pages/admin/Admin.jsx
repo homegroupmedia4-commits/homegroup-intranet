@@ -20,9 +20,12 @@ export default function Admin() {
       const formData = new FormData();
       formData.append("file", file);
 
-     const resUpload = await api.post("/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
+    const res = await fetch("https://com.home-group.fr/api/upload", {
+  method: "POST",
+  body: formData
+});
+
+const resUpload = await res.json();
 
       imageUrl = resUpload.url;
     }
