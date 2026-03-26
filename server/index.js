@@ -2,11 +2,35 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const Test = require("./models/Test");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+/* ======================
+   TEST DB (WRITE)
+====================== */
+app.get("/api/test-save", async (req, res) => {
+  try {
+    const newDoc = new Test({
+      message: "Test HomeGroup OK 🚀"
+    });
+
+    await newDoc.save();
+
+    res.json({
+      ok: true,
+      data: newDoc
+    });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      error: err.message
+    });
+  }
+});
 
 /* ======================
    🔌 CONNEXION MONGODB
