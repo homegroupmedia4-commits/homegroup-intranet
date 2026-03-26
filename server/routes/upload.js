@@ -19,8 +19,11 @@ const upload = multer({
 
 router.post("/", upload.single("file"), (req, res) => {
   if (!req.file) {
+    console.error("❌ Aucun fichier reçu");
     return res.status(400).json({ error: "No file uploaded" });
   }
+
+  console.log("✅ FILE:", req.file);
 
   res.json({
     url: req.file.location
