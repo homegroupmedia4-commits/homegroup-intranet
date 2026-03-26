@@ -1,7 +1,7 @@
-import express from "express";
-import multer from "multer";
-import multerS3 from "multer-s3";
-import { s3 } from "../config/s3.js";
+const express = require("express");
+const multer = require("multer");
+const multerS3 = require("multer-s3");
+const { s3 } = require("../config/s3");
 
 const router = express.Router();
 
@@ -23,4 +23,4 @@ router.post("/", upload.single("file"), (req, res) => {
   });
 });
 
-export default router;
+module.exports = router;
