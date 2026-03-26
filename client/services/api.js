@@ -10,13 +10,16 @@ export const api = {
   },
 
   post: async (url, data) => {
+    const isFormData = data instanceof FormData;
+
     const res = await fetch(`${BASE_URL}${url}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
+      headers: isFormData
+        ? {} // ✅ NE RIEN METTRE
+        : { "Content-Type": "application/json" },
+      body: isFormData ? data : JSON.stringify(data)
     });
+
     return res.json();
   },
 
