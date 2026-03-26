@@ -6,15 +6,27 @@ const { s3 } = require("../config/s3");
 const router = express.Router();
 
 /* ======================
+   CLEAN FILENAME
+====================== */
+function cleanFileName(name) {
+  return name
+    .normalize("NFD") // supprime accents
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s/g, "")
+    .replace(/[^\w.-]/g, "");
+}
+
+/* ======================
    CONFIG MULTER + S3
 ====================== */
 const upload = multer({
   storage: multerS3({
     s3,
     bucket: "homegroup-media",
+    acl: "public-read", // ✅ CRITIQUE (sinon image inaccessible)
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
-      const cleanName = file.originalname.replace(/\s/g, "");
+      const cleanName = cleanFileName(file.originalname);
       const fileName = `news/${Date.now()}-${cleanName}`;
       cb(null, fileName);
     }
@@ -29,6 +41,7 @@ const upload = multer({
 ====================== */
 router.post("/", (req, res) => {
   upload.single("file")(req, res, (err) => {
+
     // ❌ erreur multer / S3
     if (err) {
       console.error("❌ Erreur upload:", err);
@@ -46,11 +59,13 @@ router.post("/", (req, res) => {
       });
     }
 
-    // ✅ succès
-    console.log("✅ Upload réussi:", req.file.location);
+    // ✅ URL publique OVH (IMPORTANT)
+    const publicUrl = `https://homegroup-media.s3.eu-west-par.io.cloud.ovh.net/${req.file.key}`;
+
+    console.log("✅ Upload réussi:", publicUrl);
 
     res.json({
-      url: req.file.location
+      url: publicUrl
     });
   });
 });
