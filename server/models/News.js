@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 
 const NewsSchema = new mongoose.Schema({
-  title: String,
-  body: String,
-  category: String,
+  title: { type: String, required: true },
+  body: { type: String, required: true },
+  category: {
+    type: String,
+    enum: ["general", "rh", "direction", "organisation", "it", "evenement"],
+    default: "general"
+  },
   date: String,
   photo: String,
   video: String,
-  pinned: Boolean,
+  pinned: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model("News", NewsSchema);
