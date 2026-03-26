@@ -7,6 +7,7 @@ export default function Admin() {
   const [category, setCategory] = useState("general");
   const [pinned, setPinned] = useState(false);
   const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handlePublish = async () => {
     if (!title || !body) {
@@ -14,37 +15,64 @@ export default function Admin() {
       return;
     }
 
-    let imageUrl = "";
+    try {
+      setLoading(true);
 
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
+      let imageUrl = "";
 
-    const res = await fetch("https://com.home-group.fr/api/upload", {
-  method: "POST",
-  body: formData
-});
+      /* ======================
+         📤 UPLOAD IMAGE
+      ====================== */
+      if (file) {
+        console.log("📤 Uploading file:", file);
 
-const resUpload = await res.json();
+        const formData = new FormData();
+        formData.append("file", file);
 
-      imageUrl = resUpload.url;
+        const res = await fetch("https://com.home-group.fr/api/upload", {
+          method: "POST",
+          body: formData
+        });
+
+        const resUpload = await res.json();
+
+        console.log("✅ Upload response:", resUpload);
+
+        if (!res.ok || !resUpload.url) {
+          throw new Error("Erreur upload image");
+        }
+
+        imageUrl = resUpload.url;
+      }
+
+      /* ======================
+         📰 CREATE NEWS
+      ====================== */
+      await api.post("/news", {
+        title,
+        body,
+        category,
+        date: new Date().toLocaleDateString("fr-FR"),
+        pinned,
+        image: imageUrl
+      });
+
+      alert("Actualité publiée ✅");
+
+      /* ======================
+         RESET
+      ====================== */
+      setTitle("");
+      setBody("");
+      setPinned(false);
+      setFile(null);
+
+    } catch (err) {
+      console.error("❌ ERROR:", err);
+      alert("Erreur lors de la publication");
+    } finally {
+      setLoading(false);
     }
-
-    await api.post("/news", {
-      title,
-      body,
-      category,
-      date: new Date().toLocaleDateString("fr-FR"),
-      pinned,
-      image: imageUrl
-    });
-
-    alert("Actualité publiée ✅");
-
-    setTitle("");
-    setBody("");
-    setPinned(false);
-    setFile(null);
   };
 
   return (
@@ -72,7 +100,11 @@ const resUpload = await res.json();
 
         <input
           type="file"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={(e) => {
+            const selected = e.target.files[0];
+            console.log("📁 Selected file:", selected);
+            setFile(selected);
+          }}
         />
 
         <select
@@ -93,8 +125,12 @@ const resUpload = await res.json();
           Épingler
         </label>
 
-        <button className="btn btn-green" onClick={handlePublish}>
-          Publier
+        <button
+          className="btn btn-green"
+          onClick={handlePublish}
+          disabled={loading}
+        >
+          {loading ? "Publication..." : "Publier"}
         </button>
       </div>
 
