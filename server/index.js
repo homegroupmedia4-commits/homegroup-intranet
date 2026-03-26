@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-import uploadRoutes from "./routes/upload.js";
+const uploadRoutes = require("./routes/upload");
 
 const app = express();
 
