@@ -83,6 +83,9 @@ export default function News() {
             <div className="nc-body">
               <h3>{n.title}</h3>
               <p>{n.body}</p>
+              {n.image && (
+  <img src={n.image} className="nc-media" />
+)}
 
               {/* IMAGE */}
               {n.photo && (
