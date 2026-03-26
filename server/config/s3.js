@@ -1,6 +1,6 @@
-import { S3Client } from "@aws-sdk/client-s3";
+const { S3Client } = require("@aws-sdk/client-s3");
 
-export const s3 = new S3Client({
+const s3 = new S3Client({
   region: "eu-west-par",
   endpoint: "https://s3.eu-west-par.io.cloud.ovh.net",
   credentials: {
@@ -9,3 +9,5 @@ export const s3 = new S3Client({
   },
   forcePathStyle: true
 });
+
+module.exports = { s3 };
