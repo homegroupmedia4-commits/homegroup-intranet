@@ -10,10 +10,20 @@ const router = express.Router();
 ====================== */
 function cleanFileName(name) {
   return name
-    .normalize("NFD") // supprime accents
+    .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s/g, "")
     .replace(/[^\w.-]/g, "");
+}
+
+/* ======================
+   FILTER (images only)
+====================== */
+function fileFilter(req, file, cb) {
+  if (!file.mimetype.startsWith("image/")) {
+    return cb(new Error("Only images are allowed"), false);
+  }
+  cb(null, true);
 }
 
 /* ======================
@@ -23,7 +33,7 @@ const upload = multer({
   storage: multerS3({
     s3,
     bucket: "homegroup-media",
-    acl: "public-read", // ✅ CRITIQUE (sinon image inaccessible)
+    acl: "public-read", // 🔥 CRITIQUE
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
       const cleanName = cleanFileName(file.originalname);
@@ -32,8 +42,9 @@ const upload = multer({
     }
   }),
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB max
-  }
+    fileSize: 5 * 1024 * 1024 // 5MB
+  },
+  fileFilter
 });
 
 /* ======================
@@ -42,12 +53,17 @@ const upload = multer({
 router.post("/", (req, res) => {
   upload.single("file")(req, res, (err) => {
 
-    // ❌ erreur multer / S3
-    if (err) {
-      console.error("❌ Erreur upload:", err);
-      return res.status(500).json({
-        error: "Upload failed",
+    // ❌ erreur multer ou S3
+    if (err instanceof multer.MulterError) {
+      console.error("❌ Multer error:", err);
+      return res.status(400).json({
+        error: "Upload error",
         details: err.message
+      });
+    } else if (err) {
+      console.error("❌ Upload error:", err);
+      return res.status(500).json({
+        error: err.message
       });
     }
 
@@ -59,12 +75,14 @@ router.post("/", (req, res) => {
       });
     }
 
-    // ✅ URL publique OVH (IMPORTANT)
+    // ✅ URL publique correcte OVH
     const publicUrl = `https://homegroup-media.s3.eu-west-par.io.cloud.ovh.net/${req.file.key}`;
 
-    console.log("✅ Upload réussi:", publicUrl);
+    console.log("✅ Upload réussi:");
+    console.log("➡️ Key:", req.file.key);
+    console.log("➡️ URL:", publicUrl);
 
-    res.json({
+    return res.json({
       url: publicUrl
     });
   });
