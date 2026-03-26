@@ -2,6 +2,135 @@
 @tailwind components;
 @tailwind utilities;
 
+
+/* =========================
+   PAGE HEADER (Actualités)
+========================= */
+.ph{
+  margin-bottom:2rem;
+  padding-bottom:1.2rem;
+  border-bottom:1px solid var(--border);
+}
+
+.ph-tag{
+  font-size:.7rem;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--green);
+  margin-bottom:.4rem;
+}
+
+.ph h1{
+  font-family:'DM Serif Display',serif;
+  font-size:2rem;
+  line-height:1.15;
+}
+
+.ph p{
+  margin-top:.5rem;
+  color:var(--ink2);
+  font-size:.9rem;
+  max-width:560px;
+  line-height:1.65;
+}
+
+/* =========================
+   NEWS GRID
+========================= */
+.news-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:1rem;
+}
+
+/* =========================
+   NEWS CARD
+========================= */
+.news-card{
+  background:#fff;
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  box-shadow:var(--sh);
+  overflow:hidden;
+  transition:transform .2s,box-shadow .2s;
+}
+
+.news-card:hover{
+  transform:translateY(-4px) scale(1.01);
+  box-shadow:var(--sh2);
+}
+
+/* HEADER CARD */
+.nc-top{
+  background:linear-gradient(135deg,#0a0a0a,#111e11);
+  padding:1rem 1.3rem .8rem;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.nc-date{
+  font-size:.7rem;
+  color:rgba(255,255,255,.4);
+}
+
+/* BODY */
+.nc-body{
+  padding:1.1rem 1.3rem;
+}
+
+.nc-body h3{
+  font-weight:600;
+  font-size:.92rem;
+  line-height:1.4;
+  margin-bottom:.45rem;
+}
+
+.nc-body p{
+  font-size:.83rem;
+  color:var(--ink2);
+  line-height:1.58;
+}
+
+/* MEDIA */
+.nc-media{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  border-radius:6px;
+  margin-top:.7rem;
+}
+
+.nc-video{
+  width:100%;
+  border-radius:6px;
+  margin-top:.7rem;
+  max-height:200px;
+}
+
+/* PIN */
+.nc-pin{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:.71rem;
+  color:var(--green);
+  font-weight:600;
+  margin-top:.7rem;
+}
+
+/* EMPTY STATE */
+.news-empty{
+  text-align:center;
+  padding:3rem 1rem;
+  color:var(--ink3);
+  grid-column:1/-1;
+}
+
+
+
 /* =========================
    ROOT / DESIGN SYSTEM
 ========================= */
