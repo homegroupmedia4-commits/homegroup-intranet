@@ -1,108 +1,82 @@
 import { useState } from "react";
+import { api } from "../../services/api";
 
 export default function Admin() {
-  const [apiKey, setApiKey] = useState("");
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [category, setCategory] = useState("general");
+  const [pinned, setPinned] = useState(false);
+
+  const handlePublish = async () => {
+    if (!title || !body) {
+      alert("Titre et contenu requis");
+      return;
+    }
+
+    await api.post("/news", {
+      title,
+      body,
+      category,
+      date: new Date().toLocaleDateString("fr-FR"),
+      pinned
+    });
+
+    alert("Actualité publiée ✅");
+
+    setTitle("");
+    setBody("");
+    setPinned(false);
+  };
 
   return (
     <div className="page active">
 
-      {/* HEADER */}
       <div className="ph">
-        <div className="ph-tag">Administration</div>
-        <h1>Panneau d'administration</h1>
-        <p>Gérez l'ensemble du contenu.</p>
+        <h1>Admin</h1>
       </div>
 
-      <div className="admin-grid">
+      <div className="a-card">
+        <h3>📢 Ajouter une actualité</h3>
 
-        {/* API KEY */}
-        <div className="a-card">
-          <h3>🔑 Clé API Anthropic</h3>
-          <p className="sub">Active l'assistant IA</p>
+        <input
+          type="text"
+          placeholder="Titre"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
 
-          <div style={{ display: "flex", gap: "8px" }}>
-            <input
-              type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="sk-ant-api03-…"
-              style={{ flex: 1 }}
-            />
+        <textarea
+          placeholder="Contenu"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+        />
 
-            <button className="btn btn-green">
-              Enregistrer
-            </button>
-          </div>
-        </div>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="general">Général</option>
+          <option value="rh">RH</option>
+          <option value="direction">Direction</option>
+          <option value="organisation">Organisation</option>
+          <option value="it">IT</option>
+          <option value="evenement">Événement</option>
+        </select>
 
-        {/* EMAILS */}
-        <div className="a-card">
-          <h3>📧 Emails de réception</h3>
+        <label style={{ display: "flex", gap: "6px", marginTop: "10px" }}>
+          <input
+            type="checkbox"
+            checked={pinned}
+            onChange={() => setPinned(!pinned)}
+          />
+          Épingler
+        </label>
 
-          <div className="email-row">
-            <label>Améliorations</label>
-            <input type="email" placeholder="rh@homegroup.fr" />
-          </div>
-
-          <div className="email-row">
-            <label>Problèmes</label>
-            <input type="email" placeholder="direction@homegroup.fr" />
-          </div>
-
-          <button className="btn btn-green btn-sm">
-            Enregistrer
-          </button>
-        </div>
-
-        {/* DOCUMENTS */}
-        <div className="a-card">
-          <h3>📁 Documents</h3>
-
-          <ul className="doc-list">
-            <li className="doc-item">
-              📊 ORGANIGRAMME.pdf
-            </li>
-          </ul>
-
-          <div className="upload-zone">
-            📎 Ajouter fichier
-          </div>
-        </div>
-
-        {/* ACTUALITÉS */}
-        <div className="a-card">
-          <h3>📢 Actualités</h3>
-
-          <input type="text" placeholder="Titre..." />
-          <textarea placeholder="Contenu..." />
-
-          <button className="btn btn-green btn-sm">
-            Publier
-          </button>
-        </div>
-
-        {/* FAQ */}
-        <div className="a-card">
-          <h3>❓ FAQ</h3>
-
-          <input type="text" placeholder="Question..." />
-          <textarea placeholder="Réponse..." />
-
-          <button className="btn btn-green btn-sm">
-            Ajouter
-          </button>
-        </div>
-
-        {/* QRS */}
-        <div className="a-card">
-          <h3>💬 Contributions</h3>
-
-          <div style={{ fontSize: ".8rem", color: "var(--ink3)" }}>
-            Aucune donnée pour le moment
-          </div>
-        </div>
-
+        <button className="btn btn-green" onClick={handlePublish}>
+          Publier
+        </button>
       </div>
+
     </div>
   );
 }
