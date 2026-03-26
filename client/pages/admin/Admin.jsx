@@ -20,7 +20,7 @@ export default function Admin() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const resUpload = await api.post("/upload", formData, {
+     const resUpload = await api.post("/upload", formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
 
