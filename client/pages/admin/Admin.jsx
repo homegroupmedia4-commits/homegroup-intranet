@@ -124,7 +124,7 @@ export default function Admin() {
   };
 
   const saveGroup = async () => {
-    await api.put("/group", groupData);
+   await api.post("/group", groupData);
     alert("Groupe mis à jour ✅");
   };
 
