@@ -32,26 +32,34 @@ const GroupSchema = new mongoose.Schema({
   /* ======================
      STATS (nouveau)
   ====================== */
-  stats: {
-    experienceLabel: {
-      type: String,
-      default: "ans d'expérience"
-    },
-    entitiesLabel: {
-      type: String,
-      default: "entités spécialisées"
-    },
-    offerLabel: {
-      type: String,
-      default: "offre complète"
-    },
-
-    // optionnel si tu veux rendre 360 dynamique
-    offerValue: {
-      type: String,
-      default: "360°"
-    }
+stats: {
+  experienceValue: {
+    type: String,
+    default: "22"
   },
+  experienceLabel: {
+    type: String,
+    default: "ans d'expérience"
+  },
+
+  entitiesValue: {
+    type: String,
+    default: "3"
+  },
+  entitiesLabel: {
+    type: String,
+    default: "entités spécialisées"
+  },
+
+  offerValue: {
+    type: String,
+    default: "360°"
+  },
+  offerLabel: {
+    type: String,
+    default: "offre complète"
+  }
+},
 
   /* ======================
      WEBSITE (nouveau)
