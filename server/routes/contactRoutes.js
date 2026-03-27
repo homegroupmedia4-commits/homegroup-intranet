@@ -3,22 +3,43 @@ import express from "express";
 import {
   getFaq,
   getFaqCategories,
+
   createQRS,
   getPublicQRS,
+
   getAllQRS,
-  toggleQRS
+  updateQRSStatus,
+  toggleQRSVisibility,
+  deleteQRS
+
 } from "../controllers/contactController.js";
 
 const router = express.Router();
 
-/* FAQ */
+/* ======================
+   FAQ
+====================== */
 router.get("/faq", getFaq);
 router.get("/faq/categories", getFaqCategories);
 
-/* QRS */
+/* ======================
+   QRS - PUBLIC
+====================== */
 router.post("/qrs", createQRS);
 router.get("/qrs/public", getPublicQRS);
+
+/* ======================
+   QRS - ADMIN
+====================== */
 router.get("/qrs", getAllQRS);
-router.put("/qrs/:id/toggle", toggleQRS);
+
+// ✅ changer status (pending / approved / rejected)
+router.put("/qrs/:id/status", updateQRSStatus);
+
+// ✅ rendre public / privé
+router.put("/qrs/:id/visibility", toggleQRSVisibility);
+
+// ✅ suppression
+router.delete("/qrs/:id", deleteQRS);
 
 export default router;
