@@ -73,15 +73,17 @@ useEffect(() => {
 
 
 api.get("/group").then((data) => {
-  const mergedEntities = (data.entities || []).map((e, i) => ({
-    ...DEFAULT_GROUP.entities[i],
-    ...e,
-    title: e.title || DEFAULT_GROUP.entities[i]?.title,
-    badgeText: e.badgeText || DEFAULT_GROUP.entities[i]?.badgeText,
-    description: e.description || DEFAULT_GROUP.entities[i]?.description,
-    url: e.url || DEFAULT_GROUP.entities[i]?.url
-  }));
+const mergedEntities = (data.entities || []).map((e, i) => ({
+  ...DEFAULT_GROUP.entities[i],
+  ...e,
+  title: e.title?.trim() ? e.title : DEFAULT_GROUP.entities[i]?.title,
+  badgeText: e.badgeText?.trim() ? e.badgeText : DEFAULT_GROUP.entities[i]?.badgeText,
+  description: e.description?.trim() ? e.description : DEFAULT_GROUP.entities[i]?.description,
+  url: e.url?.trim() ? e.url : DEFAULT_GROUP.entities[i]?.url
+}));
 
+
+  
   setGroupData({
     ...DEFAULT_GROUP,
     ...data,
@@ -342,11 +344,21 @@ api.get("/contact/faq/categories").then(setFaqCategories);
 
       <strong>{e.title}</strong>
 
-      <input
-        placeholder="Badge"
-        value={e.badgeText}
-        onChange={(ev) => updateEntity(i, "badgeText", ev.target.value)}
-      />
+   <input
+  placeholder="Badge (ex: 🔨 Rénovation)"
+  value={`${e.icon || ""} ${e.badgeText || ""}`.trim()}
+  onChange={(ev) => {
+    const val = ev.target.value.trim();
+
+    const parts = val.split(" ");
+    const icon = parts[0] || "";
+    const text = parts.slice(1).join(" ");
+
+    updateEntity(i, "icon", icon);
+    updateEntity(i, "badgeText", text);
+  }}
+/>
+      
 
       <input
         placeholder="Couleur badge"
@@ -360,17 +372,12 @@ api.get("/contact/faq/categories").then(setFaqCategories);
         onChange={(ev) => updateEntity(i, "badgeTextColor", ev.target.value)}
       />
 
-      <input
-        placeholder="Icône"
-        value={e.icon}
-        onChange={(ev) => updateEntity(i, "icon", ev.target.value)}
-      />
-
-      <input
-        placeholder="Nom"
-        value={e.title}
-        onChange={(ev) => updateEntity(i, "title", ev.target.value)}
-      />
+ 
+<input
+  placeholder="Nom entité"
+  value={e.title || ""}
+  onChange={(ev) => updateEntity(i, "title", ev.target.value)}
+/>
 
       <textarea
         placeholder="Description"
