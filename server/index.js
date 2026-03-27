@@ -4,7 +4,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const uploadRoutes = require("./routes/upload");
 const groupRoutes = require("./routes/group.routes");
-const contactRoutes = require("./routes/contactRoutes");
+import contactRoutes from "./routes/contactRoutes.js";
+const newsRoutes = require("./routes/news.routes");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/api/upload", uploadRoutes);
 app.use("/api/group", groupRoutes);
+app.use("/api/contact", contactRoutes);
 app.use("/api/contact", contactRoutes);
 /* ======================
    🔌 DB
@@ -24,9 +26,9 @@ mongoose.connect(process.env.MONGO_URI)
 /* ======================
    ROUTES
 ====================== */
-const newsRoutes = require("./routes/news.routes");
 
-app.use("/api/news", newsRoutes);
+
+
 
 /* ======================
    TEST
