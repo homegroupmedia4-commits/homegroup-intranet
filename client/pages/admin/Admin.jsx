@@ -9,6 +9,12 @@ export default function Admin() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [groupData, setGroupData] = useState({
+  heroTitle: "",
+  heroText: "",
+  entities: []
+});
+
   const handlePublish = async () => {
     if (!title || !body) {
       alert("Titre et contenu requis");
@@ -74,6 +80,12 @@ export default function Admin() {
       setLoading(false);
     }
   };
+
+  const saveGroup = async () => {
+  await api.post("/group", groupData);
+  alert("Groupe mis à jour ✅");
+};
+  
 
   return (
     <div className="page active">
