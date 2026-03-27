@@ -5,12 +5,25 @@ export default function Groupe() {
   const [group, setGroup] = useState(null);
 
   useEffect(() => {
-    api.get("/group").then(setGroup);
+    loadGroup();
   }, []);
+
+  const loadGroup = async () => {
+    try {
+      const data = await api.get("/group");
+      setGroup(data);
+    } catch (err) {
+      console.error("❌ load group:", err);
+    }
+  };
 
   if (!group) return <div>Chargement...</div>;
 
-  const years = new Date().getFullYear() - (group.startYear || 2004);
+  /* ======================
+     YEARS AUTO CALCUL
+  ====================== */
+  const currentYear = new Date().getFullYear();
+  const years = currentYear - (group.startYear || 2004);
 
   return (
     <div className="page active">
@@ -26,24 +39,26 @@ export default function Groupe() {
       <div className="groupe-hero">
         <img src="/logo.png" alt="Home Group" />
 
-        <h2>{years} ans d'expérience à votre service</h2>
+        <h2>
+          {years} ans d'expérience à votre service
+        </h2>
 
         <p>{group.heroText}</p>
       </div>
 
       {/* ENTITÉS */}
       <div className="groupe-entities">
-        {group.entities.map((e, i) => (
+        {(group.entities || []).map((e, i) => (
           <div key={i} className="entity-card">
 
             <div
               className="entity-badge"
               style={{
-                background: e.badgeColor,
-                color: e.badgeTextColor
+                background: e.badgeColor || "#eee",
+                color: e.badgeTextColor || "#000"
               }}
             >
-              {e.icon} {e.badgeText}
+              {e.icon || "🏢"} {e.badgeText}
             </div>
 
             <div className="entity-name">{e.title}</div>
@@ -56,7 +71,7 @@ export default function Groupe() {
               target="_blank"
               rel="noreferrer"
             >
-              🔗 {e.url.replace("https://", "").replace("http://", "")}
+              🔗 {(e.url || "").replace("https://", "").replace("http://", "")}
             </a>
 
           </div>
@@ -65,21 +80,26 @@ export default function Groupe() {
 
       {/* STATS */}
       <div className="groupe-hero" style={{ padding: "2rem" }}>
-        <h3 style={{
-          fontFamily: "'DM Serif Display', serif",
-          fontSize: "1.3rem",
-          marginBottom: "1.5rem",
-          color: "var(--green2)"
-        }}>
+        <h3
+          style={{
+            fontFamily: "'DM Serif Display', serif",
+            fontSize: "1.3rem",
+            marginBottom: "1.5rem",
+            color: "var(--green2)"
+          }}
+        >
           Le groupe en chiffres
         </h3>
 
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))",
-          gap: "1.5rem"
-        }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))",
+            gap: "1.5rem"
+          }}
+        >
 
+          {/* YEARS */}
           <div>
             <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--green2)" }}>
               {years}
@@ -89,15 +109,17 @@ export default function Groupe() {
             </div>
           </div>
 
+          {/* ENTITIES COUNT */}
           <div>
             <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--green2)" }}>
-              {group.entities.length}
+              {(group.entities || []).length}
             </div>
             <div style={{ fontSize: ".82rem", opacity: 0.6 }}>
               entités spécialisées
             </div>
           </div>
 
+          {/* STATIC */}
           <div>
             <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--green2)" }}>
               360°
