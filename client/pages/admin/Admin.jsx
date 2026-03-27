@@ -348,14 +348,18 @@ api.get("/contact/faq/categories").then(setFaqCategories);
 >
   <option value="all">Toutes les entités</option>
 
-  {(groupData.entities || []).map((e, i) => (
+  {(groupData.entities || [.map((e, i) => {
+  const realIndex = groupData.entities.findIndex(ent => ent === e);
+
+  return (
+    <div key={realIndex} style={{ marginBottom: "25px" }}>
     <option key={i} value={i}>
       {e.title || `Entité ${i + 1}`}
     </option>
   ))}
 </select>
 
-(groupData.entities || [])
+{(groupData.entities || [])
   .filter((_, i) => selectedEntity === "all" || i === Number(selectedEntity))
   .map((e, i) => (
     <div key={i} style={{ marginBottom: "25px" }}>
