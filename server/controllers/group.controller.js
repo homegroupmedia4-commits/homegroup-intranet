@@ -86,3 +86,23 @@ exports.getGroup = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+exports.updateGroup = async (req, res) => {
+  try {
+    const data = await Group.findOneAndUpdate(
+      {},
+      req.body,
+      {
+        new: true,
+        upsert: true
+      }
+    );
+
+    res.json(data);
+
+  } catch (err) {
+    console.error("❌ UPDATE GROUP ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+};
