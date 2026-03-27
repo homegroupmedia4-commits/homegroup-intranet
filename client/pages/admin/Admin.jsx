@@ -47,7 +47,7 @@ const [faqCategory, setFaqCategory] = useState("Général");
       badgeColor: "#e3f2fd",
       badgeTextColor: "#1565c0",
       icon: "🏠",
-      title: "HOME DESIGN",
+      title: "HOME xxxxxDESIGN",
       description:
         "Le spécialiste des cuisines, salles de bain, ameublements et rénovation intérieure.",
       url: "https://homedesign-paris.com/"
