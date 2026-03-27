@@ -123,10 +123,14 @@ export default function Admin() {
     });
   };
 
-  const saveGroup = async () => {
-   await api.post("/group", groupData);
-    alert("Groupe mis à jour ✅");
-  };
+  
+
+ const saveGroup = async () => {
+   await api.put("/group", groupData);
+   alert("Groupe mis à jour ✅");
+};
+
+  
 
   if (!groupData) return <div>Chargement...</div>;
 
