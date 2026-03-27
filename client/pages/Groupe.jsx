@@ -40,7 +40,7 @@ export default function Groupe() {
         <img src="/logo.png" alt="Home Group" />
 
         <h2>
-          {years} ans d'expérience à votre service
+          {years} {group.stats?.experienceLabel || "ans d'expérience"} à votre service
         </h2>
 
         <p>{group.heroText}</p>
@@ -105,7 +105,7 @@ export default function Groupe() {
               {years}
             </div>
             <div style={{ fontSize: ".82rem", opacity: 0.6 }}>
-              ans d'expérience
+              {group.stats?.experienceLabel || "ans d'expérience"}
             </div>
           </div>
 
@@ -115,21 +115,56 @@ export default function Groupe() {
               {(group.entities || []).length}
             </div>
             <div style={{ fontSize: ".82rem", opacity: 0.6 }}>
-              entités spécialisées
+              {group.stats?.entitiesLabel || "entités spécialisées"}
             </div>
           </div>
 
-          {/* STATIC */}
+          {/* OFFER */}
           <div>
             <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--green2)" }}>
-              360°
+              {group.stats?.offerValue || "360°"}
             </div>
             <div style={{ fontSize: ".82rem", opacity: 0.6 }}>
-              offre complète
+              {group.stats?.offerLabel || "offre complète"}
             </div>
           </div>
 
         </div>
+      </div>
+
+      {/* WEBSITE */}
+      <div
+        style={{
+          marginTop: "1.2rem",
+          padding: "1.1rem",
+          background: "#fff",
+          borderRadius: "var(--r)",
+          border: "1px solid var(--border)",
+          display: "flex",
+          alignItems: "center",
+          gap: "12px"
+        }}
+      >
+        <span style={{ fontSize: "1.4rem" }}>🌐</span>
+
+        <div>
+          <div style={{ fontWeight: 600, fontSize: ".9rem" }}>
+            {group.website?.label || "Site web officiel"}
+          </div>
+          <div style={{ fontSize: ".81rem", color: "var(--ink3)" }}>
+            {group.website?.description || "Retrouvez toutes nos actualités sur"}
+          </div>
+        </div>
+
+        <a
+          href={group.website?.url}
+          target="_blank"
+          rel="noreferrer"
+          className="entity-link"
+          style={{ marginLeft: "auto", whiteSpace: "nowrap" }}
+        >
+          {(group.website?.url || "").replace("https://", "").replace("http://", "")} →
+        </a>
       </div>
 
     </div>
