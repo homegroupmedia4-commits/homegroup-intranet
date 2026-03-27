@@ -14,6 +14,13 @@ export default function Admin() {
   const [loading, setLoading] = useState(false);
   const [qrsList, setQrsList] = useState([]);
 
+  const [faqList, setFaqList] = useState([]);
+const [faqCategories, setFaqCategories] = useState([]);
+
+const [faqQuestion, setFaqQuestion] = useState("");
+const [faqAnswer, setFaqAnswer] = useState("");
+const [faqCategory, setFaqCategory] = useState("Général");
+
   /* ======================
      GROUP STATE
   ====================== */
@@ -54,6 +61,9 @@ useEffect(() => {
 
   // ✅ QRS
   api.get("/contact/qrs").then(setQrsList);
+  // FAQ
+api.get("/contact/faq").then(setFaqList);
+api.get("/contact/faq/categories").then(setFaqCategories);
 
 }, []);
 
@@ -161,6 +171,31 @@ useEffect(() => {
   setQrsList(prev => prev.filter(q => q._id !== id));
 };
 
+
+  const addFaq = async () => {
+  if (!faqQuestion || !faqAnswer) {
+    return alert("Champs requis");
+  }
+
+  const res = await api.post("/contact/faq", {
+    question: faqQuestion,
+    answer: faqAnswer,
+    category: faqCategory
+  });
+
+  setFaqList(prev => [...prev, res]);
+
+  setFaqQuestion("");
+  setFaqAnswer("");
+};
+
+  const deleteFaq = async (id) => {
+  if (!window.confirm("Supprimer ?")) return;
+
+  await api.delete(`/contact/faq/${id}`);
+
+  setFaqList(prev => prev.filter(f => f._id !== id));
+};
   
 
   if (!groupData) return <div>Chargement...</div>;
@@ -301,6 +336,64 @@ useEffect(() => {
           Enregistrer
         </button>
       </div>
+
+
+      {/* ======================
+    FAQ ADMIN
+====================== */}
+<div className="a-card">
+  <h3>❓ Gérer la Foire aux questions</h3>
+
+  {faqList.length === 0 && <div>Aucune FAQ</div>}
+
+  {faqList.map(f => (
+    <div key={f._id} className="faq-admin-item">
+
+      <div style={{ fontWeight: 600 }}>
+        {f.question}
+      </div>
+
+      <div style={{ margin: "5px 0" }}>
+        {f.answer}
+      </div>
+
+      <div style={{ fontSize: ".75rem", opacity: 0.6 }}>
+        {f.category}
+      </div>
+
+      <button onClick={() => deleteFaq(f._id)}>
+        ❌ Supprimer
+      </button>
+
+      <hr />
+    </div>
+  ))}
+
+  <input
+    placeholder="Question..."
+    value={faqQuestion}
+    onChange={(e) => setFaqQuestion(e.target.value)}
+  />
+
+  <select
+    value={faqCategory}
+    onChange={(e) => setFaqCategory(e.target.value)}
+  >
+    {faqCategories.map(cat => (
+      <option key={cat}>{cat}</option>
+    ))}
+  </select>
+
+  <textarea
+    placeholder="Réponse..."
+    value={faqAnswer}
+    onChange={(e) => setFaqAnswer(e.target.value)}
+  />
+
+  <button className="btn btn-green" onClick={addFaq}>
+    + Ajouter cette entrée
+  </button>
+</div>
 
 
       {/* ======================
