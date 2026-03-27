@@ -339,79 +339,81 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   <hr />
 
   {/* ENTITÉS */}
-<h4>Entités</h4>
+  <h4>Entités</h4>
 
-<select
-  value={selectedEntity}
-  onChange={(e) => setSelectedEntity(e.target.value)}
-  style={{ marginBottom: "15px" }}
->
-  <option value="all">Toutes les entités</option>
+  {/* SELECT */}
+  <select
+    value={selectedEntity}
+    onChange={(e) => setSelectedEntity(e.target.value)}
+    style={{ marginBottom: "15px" }}
+  >
+    <option value="all">Toutes les entités</option>
 
-  {(groupData.entities || [.map((e, i) => {
-  const realIndex = groupData.entities.findIndex(ent => ent === e);
+    {(groupData.entities || []).map((e, i) => (
+      <option key={i} value={i}>
+        {e.title || `Entité ${i + 1}`}
+      </option>
+    ))}
+  </select>
 
-  return (
-    <div key={realIndex} style={{ marginBottom: "25px" }}>
-    <option key={i} value={i}>
-      {e.title || `Entité ${i + 1}`}
-    </option>
-  ))}
-</select>
+  {/* LISTE FILTRÉE */}
+  {(groupData.entities || [])
+    .filter((_, i) => selectedEntity === "all" || i === Number(selectedEntity))
+    .map((e) => {
+      const realIndex = groupData.entities.findIndex(ent => ent === e);
 
-{(groupData.entities || [])
-  .filter((_, i) => selectedEntity === "all" || i === Number(selectedEntity))
-  .map((e, i) => (
-    <div key={i} style={{ marginBottom: "25px" }}>
+      return (
+        <div key={realIndex} style={{ marginBottom: "25px" }}>
 
-      <strong>{e.title}</strong>
+          <strong>{e.title}</strong>
 
-   <input
-  placeholder="Badge (ex: 🔨 Rénovation)"
-  value={`${e.icon || ""} ${e.badgeText || ""}`.trim()}
-  onChange={(ev) => {
-    const val = ev.target.value.trim();
+          {/* BADGE (icone + texte) */}
+          <input
+            placeholder="Badge (ex: 🔨 Rénovation)"
+            value={`${e.icon || ""} ${e.badgeText || ""}`.trim()}
+            onChange={(ev) => {
+              const val = ev.target.value.trim();
+              const parts = val.split(" ");
 
-    const parts = val.split(" ");
-    const icon = parts[0] || "";
-    const text = parts.slice(1).join(" ");
+              const icon = parts[0] || "";
+              const text = parts.slice(1).join(" ");
 
-    updateEntity(i, "icon", icon);
-    updateEntity(i, "badgeText", text);
-  }}
-/>
-      
+              updateEntity(realIndex, "icon", icon);
+              updateEntity(realIndex, "badgeText", text);
+            }}
+          />
 
-  
+          {/* NOM */}
+          <input
+            placeholder="Nom entité"
+            value={e.title || ""}
+            onChange={(ev) => updateEntity(realIndex, "title", ev.target.value)}
+          />
 
- 
-<input
-  placeholder="Nom entité"
-  value={e.title || ""}
-  onChange={(ev) => updateEntity(i, "title", ev.target.value)}
-/>
+          {/* DESCRIPTION */}
+          <textarea
+            placeholder="Description"
+            value={e.description}
+            onChange={(ev) => updateEntity(realIndex, "description", ev.target.value)}
+          />
 
-      <textarea
-        placeholder="Description"
-        value={e.description}
-        onChange={(ev) => updateEntity(i, "description", ev.target.value)}
-      />
+          {/* URL */}
+          <input
+            placeholder="URL"
+            value={e.url}
+            onChange={(ev) => updateEntity(realIndex, "url", ev.target.value)}
+          />
 
-      <input
-        placeholder="URL"
-        value={e.url}
-        onChange={(ev) => updateEntity(i, "url", ev.target.value)}
-      />
-
-      <hr />
-    </div>
-  ))}
+          <hr />
+        </div>
+      );
+    })}
 
   <button className="btn btn-green" onClick={saveGroup}>
     Enregistrer le groupe
   </button>
 </div>
-
+      
 
       {/* ======================
     FAQ ADMIN
