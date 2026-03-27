@@ -19,7 +19,39 @@ export default function Admin() {
   const [groupData, setGroupData] = useState(null);
 
   useEffect(() => {
-    api.get("/group").then(setGroupData);
+   api.get("/group").then((data) => {
+
+  if (!data.entities || data.entities.length === 0) {
+    data.entities = [
+      {
+        badgeText: "Rénovation",
+        icon: "🔨",
+        title: "MP RENOV",
+        description:
+          "Spécialiste des travaux de rénovation clé en main...",
+        url: "https://www.mp-renov.fr"
+      },
+      {
+        badgeText: "Design & Équipement",
+        icon: "🏠",
+        title: "HOME DESIGN",
+        description:
+          "Le spécialiste des cuisines, salles de bain...",
+        url: "https://homedesign-paris.com/"
+      },
+      {
+        badgeText: "Communication digitale",
+        icon: "📺",
+        title: "MEDIA4",
+        description:
+          "Solutions d'affichage dynamique pilotables...",
+        url: "http://media4.fr/"
+      }
+    ];
+  }
+
+  setGroupData(data);
+});
   }, []);
 
   /* ======================
