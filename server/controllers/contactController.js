@@ -1,13 +1,14 @@
 // controllers/contactController.js
-import QRS from "../models/QRS.js";
-import FAQ from "../models/FAQ.js";
+
+const QRS = require("../models/QRS");
+const FAQ = require("../models/FAQ");
 
 /* ======================
    FAQ
 ====================== */
 
 // GET all FAQ
-export const getFaq = async (req, res) => {
+const getFaq = async (req, res) => {
   try {
     const data = await FAQ.find().sort({ order: 1, createdAt: -1 });
     res.json(data);
@@ -18,7 +19,7 @@ export const getFaq = async (req, res) => {
 };
 
 // GET categories
-export const getFaqCategories = async (req, res) => {
+const getFaqCategories = async (req, res) => {
   try {
     const cats = await FAQ.distinct("category");
     res.json(cats);
@@ -29,7 +30,7 @@ export const getFaqCategories = async (req, res) => {
 };
 
 // CREATE FAQ
-export const createFaq = async (req, res) => {
+const createFaq = async (req, res) => {
   try {
     const { question, answer, category } = req.body;
 
@@ -53,7 +54,7 @@ export const createFaq = async (req, res) => {
 };
 
 // DELETE FAQ
-export const deleteFaq = async (req, res) => {
+const deleteFaq = async (req, res) => {
   try {
     await FAQ.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
@@ -64,13 +65,12 @@ export const deleteFaq = async (req, res) => {
 };
 
 
-
 /* ======================
    QRS
 ====================== */
 
 // CREATE QRS
-export const createQRS = async (req, res) => {
+const createQRS = async (req, res) => {
   try {
     const q = new QRS(req.body);
     await q.save();
@@ -82,7 +82,7 @@ export const createQRS = async (req, res) => {
 };
 
 // GET public QRS
-export const getPublicQRS = async (req, res) => {
+const getPublicQRS = async (req, res) => {
   try {
     const data = await QRS.find({ public: true })
       .sort({ createdAt: -1 });
@@ -95,7 +95,7 @@ export const getPublicQRS = async (req, res) => {
 };
 
 // GET all QRS (admin)
-export const getAllQRS = async (req, res) => {
+const getAllQRS = async (req, res) => {
   try {
     const data = await QRS.find()
       .sort({ createdAt: -1 });
@@ -107,8 +107,8 @@ export const getAllQRS = async (req, res) => {
   }
 };
 
-// UPDATE STATUS (approved / rejected)
-export const updateQRSStatus = async (req, res) => {
+// UPDATE STATUS
+const updateQRSStatus = async (req, res) => {
   try {
     const { status } = req.body;
 
@@ -126,8 +126,8 @@ export const updateQRSStatus = async (req, res) => {
   }
 };
 
-// TOGGLE VISIBILITY (public / privé)
-export const toggleQRSVisibility = async (req, res) => {
+// TOGGLE VISIBILITY
+const toggleQRSVisibility = async (req, res) => {
   try {
     const q = await QRS.findById(req.params.id);
     if (!q) return res.status(404).json({ error: "QRS introuvable" });
@@ -144,7 +144,7 @@ export const toggleQRSVisibility = async (req, res) => {
 };
 
 // DELETE QRS
-export const deleteQRS = async (req, res) => {
+const deleteQRS = async (req, res) => {
   try {
     await QRS.findByIdAndDelete(req.params.id);
     res.json({ ok: true });
@@ -152,4 +152,17 @@ export const deleteQRS = async (req, res) => {
     console.error("❌ deleteQRS:", err);
     res.status(500).json({ error: "Erreur suppression QRS" });
   }
+};
+
+module.exports = {
+  getFaq,
+  getFaqCategories,
+  createFaq,
+  deleteFaq,
+  createQRS,
+  getPublicQRS,
+  getAllQRS,
+  updateQRSStatus,
+  toggleQRSVisibility,
+  deleteQRS
 };
