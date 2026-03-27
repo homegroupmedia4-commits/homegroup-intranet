@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { api } from "../../services/api";
 
 export default function Admin() {
+
   /* ======================
      NEWS STATE
   ====================== */
@@ -18,11 +19,12 @@ export default function Admin() {
   const [groupData, setGroupData] = useState({
     heroTitle: "",
     heroText: "",
+    startYear: 2004,
     entities: []
   });
 
   /* ======================
-     LOAD GROUP DATA
+     LOAD GROUP
   ====================== */
   useEffect(() => {
     loadGroup();
@@ -36,6 +38,7 @@ export default function Admin() {
         setGroupData({
           heroTitle: data.heroTitle || "",
           heroText: data.heroText || "",
+          startYear: data.startYear || 2004,
           entities: data.entities || []
         });
       }
@@ -45,7 +48,7 @@ export default function Admin() {
   };
 
   /* ======================
-     NEWS PUBLISH
+     NEWS
   ====================== */
   const handlePublish = async () => {
     if (!title || !body) {
@@ -82,7 +85,7 @@ export default function Admin() {
         category,
         date: new Date().toLocaleDateString("fr-FR"),
         pinned,
-        photo: imageUrl // ✅ FIX IMPORTANT
+        photo: imageUrl
       });
 
       alert("Actualité publiée ✅");
@@ -101,7 +104,7 @@ export default function Admin() {
   };
 
   /* ======================
-     GROUP SAVE
+     SAVE GROUP
   ====================== */
   const saveGroup = async () => {
     try {
@@ -114,7 +117,7 @@ export default function Admin() {
   };
 
   /* ======================
-     ENTITY MANAGEMENT
+     ENTITY HANDLERS
   ====================== */
   const updateEntity = (index, field, value) => {
     const updated = [...groupData.entities];
@@ -132,11 +135,13 @@ export default function Admin() {
       entities: [
         ...groupData.entities,
         {
-          name: "",
+          badgeText: "",
+          badgeColor: "#eee",
+          badgeTextColor: "#000",
+          icon: "🏢",
+          title: "",
           description: "",
-          url: "",
-          badge: "#eee",
-          color: "#000"
+          url: ""
         }
       ]
     });
@@ -213,7 +218,7 @@ export default function Admin() {
       </div>
 
       {/* ======================
-          GROUP EDIT
+          GROUP GLOBAL
       ====================== */}
       <div className="a-card">
         <h3>🌐 Modifier le groupe</h3>
@@ -234,6 +239,15 @@ export default function Admin() {
           }
         />
 
+        <input
+          type="number"
+          placeholder="Année de création (ex: 2004)"
+          value={groupData.startYear}
+          onChange={(e) =>
+            setGroupData({ ...groupData, startYear: e.target.value })
+          }
+        />
+
         <button className="btn btn-green" onClick={saveGroup}>
           Enregistrer
         </button>
@@ -246,12 +260,36 @@ export default function Admin() {
         <h3>🏢 Entités</h3>
 
         {groupData.entities.map((e, i) => (
-          <div key={i} style={{ marginBottom: "15px" }}>
+          <div key={i} style={{ marginBottom: "20px" }}>
 
             <input
-              placeholder="Nom"
-              value={e.name}
-              onChange={(ev) => updateEntity(i, "name", ev.target.value)}
+              placeholder="Badge (ex: Rénovation)"
+              value={e.badgeText}
+              onChange={(ev) => updateEntity(i, "badgeText", ev.target.value)}
+            />
+
+            <input
+              placeholder="Emoji (ex: 🔨)"
+              value={e.icon}
+              onChange={(ev) => updateEntity(i, "icon", ev.target.value)}
+            />
+
+            <input
+              placeholder="Couleur badge"
+              value={e.badgeColor}
+              onChange={(ev) => updateEntity(i, "badgeColor", ev.target.value)}
+            />
+
+            <input
+              placeholder="Couleur texte badge"
+              value={e.badgeTextColor}
+              onChange={(ev) => updateEntity(i, "badgeTextColor", ev.target.value)}
+            />
+
+            <input
+              placeholder="Titre (ex: MP RENOV)"
+              value={e.title}
+              onChange={(ev) => updateEntity(i, "title", ev.target.value)}
             />
 
             <textarea
@@ -269,6 +307,8 @@ export default function Admin() {
             <button onClick={() => removeEntity(i)}>
               ❌ Supprimer
             </button>
+
+            <hr />
           </div>
         ))}
 
