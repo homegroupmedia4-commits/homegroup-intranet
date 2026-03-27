@@ -26,39 +26,65 @@ const [faqCategory, setFaqCategory] = useState("Général");
   ====================== */
   const [groupData, setGroupData] = useState(null);
 
+  const DEFAULT_GROUP = {
+  heroTitle: "22 ans d'expérience à votre service",
+  heroText:
+    "De la construction à l'équipement des habitations HOME GROUP vous propose une offre 360° grâce à ses différentes structures.",
+  startYear: 2004,
+  entities: [
+    {
+      badgeText: "Rénovation",
+      badgeColor: "#fff3e0",
+      badgeTextColor: "#e65100",
+      icon: "🔨",
+      title: "MP RENOV",
+      description:
+        "Spécialiste des travaux de rénovation clé en main. MP Renov maîtrise l'ensemble des corps d'état nécessaires aux réhabilitations TCE.",
+      url: "https://www.mp-renov.fr"
+    },
+    {
+      badgeText: "Design & Équipement",
+      badgeColor: "#e3f2fd",
+      badgeTextColor: "#1565c0",
+      icon: "🏠",
+      title: "HOME DESIGN",
+      description:
+        "Le spécialiste des cuisines, salles de bain, ameublements et rénovation intérieure.",
+      url: "https://homedesign-paris.com/"
+    },
+    {
+      badgeText: "Communication digitale",
+      badgeColor: "#f3e5f5",
+      badgeTextColor: "#6a1b9a",
+      icon: "📺",
+      title: "MEDIA4",
+      description:
+        "Solutions d'affichage dynamique pilotables à distance.",
+      url: "http://media4.fr/"
+    }
+  ]
+};
+
+  
+
 useEffect(() => {
 
-  // GROUP
+
+
+
+
   api.get("/group").then((data) => {
-    if (!data.entities || data.entities.length === 0) {
-      data.entities = [
-        {
-          badgeText: "Rénovation",
-          icon: "🔨",
-          title: "MP RENOV",
-          description: "Spécialiste des travaux de rénovation clé en main...",
-          url: "https://www.mp-renov.fr"
-        },
-        {
-          badgeText: "Design & Équipement",
-          icon: "🏠",
-          title: "HOME DESIGN",
-          description: "Le spécialiste des cuisines, salles de bain...",
-          url: "https://homedesign-paris.com/"
-        },
-        {
-          badgeText: "Communication digitale",
-          icon: "📺",
-          title: "MEDIA4",
-          description: "Solutions d'affichage dynamique pilotables...",
-          url: "http://media4.fr/"
-        }
-      ];
-    }
-
-    setGroupData(data);
+  setGroupData({
+    ...DEFAULT_GROUP,
+    ...data,
+    entities: data.entities?.length
+      ? data.entities
+      : DEFAULT_GROUP.entities
   });
+});
 
+
+  
   // ✅ QRS
   api.get("/contact/qrs").then(setQrsList);
   // FAQ
@@ -260,82 +286,103 @@ api.get("/contact/faq/categories").then(setFaqCategories);
           {loading ? "Publication..." : "Publier"}
         </button>
       </div>
+{/* ======================
+    GROUPE COMPLET
+====================== */}
+<div className="a-card">
+  <h3>🌐 Groupe</h3>
 
-      {/* ======================
-          GROUP HERO
-      ====================== */}
-      <div className="a-card">
-        <h3>🌐 Hero</h3>
+  {/* HERO */}
+  <h4>Hero</h4>
 
-        <input
-          value={groupData.heroTitle}
-          onChange={(e) =>
-            setGroupData({ ...groupData, heroTitle: e.target.value })
-          }
-        />
+  <input
+    placeholder="Titre hero"
+    value={groupData.heroTitle}
+    onChange={(e) =>
+      setGroupData({ ...groupData, heroTitle: e.target.value })
+    }
+  />
 
-        <textarea
-          value={groupData.heroText}
-          onChange={(e) =>
-            setGroupData({ ...groupData, heroText: e.target.value })
-          }
-        />
+  <textarea
+    placeholder="Texte hero"
+    value={groupData.heroText}
+    onChange={(e) =>
+      setGroupData({ ...groupData, heroText: e.target.value })
+    }
+  />
 
-        <input
-          type="number"
-          value={groupData.startYear}
-          onChange={(e) =>
-            setGroupData({
-              ...groupData,
-              startYear: Number(e.target.value) // ✅ FIX IMPORTANT
-            })
-          }
-        />
+  <input
+    type="number"
+    placeholder="Année de départ"
+    value={groupData.startYear}
+    onChange={(e) =>
+      setGroupData({
+        ...groupData,
+        startYear: Number(e.target.value)
+      })
+    }
+  />
 
-        <button className="btn btn-green" onClick={saveGroup}>
-          Enregistrer
-        </button>
-      </div>
+  <hr />
 
-      {/* ======================
-          ENTITÉS FIXES
-      ====================== */}
-      <div className="a-card">
-        <h3>🏢 Entités (fixes)</h3>
+  {/* ENTITÉS */}
+  <h4>Entités</h4>
 
-        {(groupData.entities || []).map((e, i) => (
-          <div key={i} style={{ marginBottom: "25px" }}>
+  {(groupData.entities || []).map((e, i) => (
+    <div key={i} style={{ marginBottom: "25px" }}>
 
-            <strong>{e.title}</strong>
+      <strong>{e.title}</strong>
 
-            <input
-              value={e.badgeText}
-              onChange={(ev) => updateEntity(i, "badgeText", ev.target.value)}
-            />
+      <input
+        placeholder="Badge"
+        value={e.badgeText}
+        onChange={(ev) => updateEntity(i, "badgeText", ev.target.value)}
+      />
 
-            <input
-              value={e.icon}
-              onChange={(ev) => updateEntity(i, "icon", ev.target.value)}
-            />
+      <input
+        placeholder="Couleur badge"
+        value={e.badgeColor}
+        onChange={(ev) => updateEntity(i, "badgeColor", ev.target.value)}
+      />
 
-            <textarea
-              value={e.description}
-              onChange={(ev) => updateEntity(i, "description", ev.target.value)}
-            />
+      <input
+        placeholder="Couleur texte"
+        value={e.badgeTextColor}
+        onChange={(ev) => updateEntity(i, "badgeTextColor", ev.target.value)}
+      />
 
-            <input
-              value={e.url}
-              onChange={(ev) => updateEntity(i, "url", ev.target.value)}
-            />
+      <input
+        placeholder="Icône"
+        value={e.icon}
+        onChange={(ev) => updateEntity(i, "icon", ev.target.value)}
+      />
 
-            <hr />
-          </div>
-        ))}
+      <input
+        placeholder="Nom"
+        value={e.title}
+        onChange={(ev) => updateEntity(i, "title", ev.target.value)}
+      />
 
-        <button className="btn btn-green" onClick={saveGroup}>
-          Enregistrer
-        </button>
-      </div>
+      <textarea
+        placeholder="Description"
+        value={e.description}
+        onChange={(ev) => updateEntity(i, "description", ev.target.value)}
+      />
+
+      <input
+        placeholder="URL"
+        value={e.url}
+        onChange={(ev) => updateEntity(i, "url", ev.target.value)}
+      />
+
+      <hr />
+    </div>
+  ))}
+
+  <button className="btn btn-green" onClick={saveGroup}>
+    Enregistrer le groupe
+  </button>
+</div>
 
 
       {/* ======================
