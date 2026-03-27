@@ -1,5 +1,6 @@
 // models/FAQ.js
-import mongoose from "mongoose";
+
+const mongoose = require("mongoose");
 
 const faqSchema = new mongoose.Schema({
   question: {
@@ -32,4 +33,4 @@ const faqSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export default mongoose.model("FAQ", faqSchema);
+module.exports = mongoose.model("FAQ", faqSchema);
