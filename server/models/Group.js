@@ -1,22 +1,19 @@
 const mongoose = require("mongoose");
 
 const EntitySchema = new mongoose.Schema({
-  name: String,
+  badgeText: String,
+  badgeColor: String,
+  badgeTextColor: String,
+  icon: String,
+  title: String,
   description: String,
-  url: String,
-  badge: String,
-  color: String
+  url: String
 });
 
 const GroupSchema = new mongoose.Schema({
   heroTitle: String,
   heroText: String,
-  stats: [
-    {
-      value: String,
-      label: String
-    }
-  ],
+  startYear: { type: Number, default: 2004 },
   entities: [EntitySchema]
 });
 
