@@ -119,21 +119,29 @@ exports.getGroup = async (req, res) => {
     if (!data.stats) {
       data.stats = DEFAULT_GROUP.stats;
       updated = true;
-    } else {
-      if (!data.stats.experienceLabel)
-        data.stats.experienceLabel = DEFAULT_GROUP.stats.experienceLabel;
+} else {
+  /* ✅ AJOUT ICI (TRÈS IMPORTANT) */
+  if (!data.stats.experienceValue)
+    data.stats.experienceValue = DEFAULT_GROUP.stats.experienceValue;
 
-      if (!data.stats.entitiesLabel)
-        data.stats.entitiesLabel = DEFAULT_GROUP.stats.entitiesLabel;
+  if (!data.stats.entitiesValue)
+    data.stats.entitiesValue = DEFAULT_GROUP.stats.entitiesValue;
 
-      if (!data.stats.offerLabel)
-        data.stats.offerLabel = DEFAULT_GROUP.stats.offerLabel;
+  /* EXISTANT */
+  if (!data.stats.experienceLabel)
+    data.stats.experienceLabel = DEFAULT_GROUP.stats.experienceLabel;
 
-      if (!data.stats.offerValue)
-        data.stats.offerValue = DEFAULT_GROUP.stats.offerValue;
+  if (!data.stats.entitiesLabel)
+    data.stats.entitiesLabel = DEFAULT_GROUP.stats.entitiesLabel;
 
-      updated = true;
-    }
+  if (!data.stats.offerLabel)
+    data.stats.offerLabel = DEFAULT_GROUP.stats.offerLabel;
+
+  if (!data.stats.offerValue)
+    data.stats.offerValue = DEFAULT_GROUP.stats.offerValue;
+
+  updated = true;
+}
 
     if (!data.website) {
       data.website = DEFAULT_GROUP.website;
