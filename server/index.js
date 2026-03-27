@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const uploadRoutes = require("./routes/upload");
 const groupRoutes = require("./routes/group.routes");
+const contactRoutes = require("./routes/contactRoutes");
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use("/api/upload", uploadRoutes);
 app.use("/api/group", groupRoutes);
+app.use("/api/contact", contactRoutes);
 /* ======================
    🔌 DB
 ====================== */
