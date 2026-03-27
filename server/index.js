@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const uploadRoutes = require("./routes/upload");
+const groupRoutes = require("./routes/group.routes");
 
 const app = express();
 
@@ -10,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/upload", uploadRoutes);
-
+app.use("/api/group", groupRoutes);
 /* ======================
    🔌 DB
 ====================== */
