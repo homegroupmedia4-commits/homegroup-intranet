@@ -36,11 +36,15 @@ const [faqCategory, setFaqCategory] = useState("Général");
 
       /* ✅ AJOUT ICI */
   stats: {
-    experienceLabel: "ans d'expérience",
-    entitiesLabel: "entités spécialisées",
-    offerLabel: "offre complète",
-    offerValue: "360°"
-  },
+  experienceValue: "22",
+  experienceLabel: "ans d'expérience",
+
+  entitiesValue: "3",
+  entitiesLabel: "entités spécialisées",
+
+  offerValue: "360°",
+  offerLabel: "offre complète"
+},
 
   /* ✅ AJOUT ICI */
   website: {
@@ -372,9 +376,25 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   <hr />
 
 
-  <h4>Statistiques</h4>
+<h4>Statistiques</h4>
+
+{/* EXPERIENCE */}
+<input
+  placeholder="Valeur expérience (ex: 22)"
+  value={groupData.stats?.experienceValue || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      stats: {
+        ...groupData.stats,
+        experienceValue: e.target.value
+      }
+    })
+  }
+/>
 
 <input
+  placeholder="Label expérience"
   value={groupData.stats?.experienceLabel || ""}
   onChange={(e) =>
     setGroupData({
@@ -387,7 +407,23 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   }
 />
 
+{/* ENTITIES */}
 <input
+  placeholder="Valeur entités (ex: 3)"
+  value={groupData.stats?.entitiesValue || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      stats: {
+        ...groupData.stats,
+        entitiesValue: e.target.value
+      }
+    })
+  }
+/>
+
+<input
+  placeholder="Label entités"
   value={groupData.stats?.entitiesLabel || ""}
   onChange={(e) =>
     setGroupData({
@@ -400,7 +436,23 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   }
 />
 
+{/* OFFER */}
 <input
+  placeholder="Valeur offre (ex: 360°)"
+  value={groupData.stats?.offerValue || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      stats: {
+        ...groupData.stats,
+        offerValue: e.target.value
+      }
+    })
+  }
+/>
+
+<input
+  placeholder="Label offre"
   value={groupData.stats?.offerLabel || ""}
   onChange={(e) =>
     setGroupData({
@@ -413,8 +465,7 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   }
 />
 
-
-  <hr />
+<hr />
 
 <h4>Site web</h4>
 
