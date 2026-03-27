@@ -92,7 +92,7 @@ export default function Admin() {
   };
 
   const saveGroup = async () => {
-    await api.post("/group", groupData);
+    await api.put("/group", groupData);
     alert("Groupe mis à jour ✅");
   };
 
