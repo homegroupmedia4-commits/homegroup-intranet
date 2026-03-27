@@ -23,7 +23,7 @@ const router = express.Router();
 
 /* ======================
    FAQ - PUBLIC
-====================== */
+===================g=== */
 
 // récupérer toutes les FAQ
 router.get("/faq", getFaq);
