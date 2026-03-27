@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../../services/api";
 
 export default function Admin() {
+  /* ======================
+     NEWS STATE
+  ====================== */
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [category, setCategory] = useState("general");
@@ -9,12 +12,41 @@ export default function Admin() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  /* ======================
+     GROUP STATE
+  ====================== */
   const [groupData, setGroupData] = useState({
-  heroTitle: "",
-  heroText: "",
-  entities: []
-});
+    heroTitle: "",
+    heroText: "",
+    entities: []
+  });
 
+  /* ======================
+     LOAD GROUP DATA
+  ====================== */
+  useEffect(() => {
+    loadGroup();
+  }, []);
+
+  const loadGroup = async () => {
+    try {
+      const data = await api.get("/group");
+
+      if (data) {
+        setGroupData({
+          heroTitle: data.heroTitle || "",
+          heroText: data.heroText || "",
+          entities: data.entities || []
+        });
+      }
+    } catch (err) {
+      console.error("❌ load group:", err);
+    }
+  };
+
+  /* ======================
+     NEWS PUBLISH
+  ====================== */
   const handlePublish = async () => {
     if (!title || !body) {
       alert("Titre et contenu requis");
@@ -26,12 +58,7 @@ export default function Admin() {
 
       let imageUrl = "";
 
-      /* ======================
-         📤 UPLOAD IMAGE
-      ====================== */
       if (file) {
-        console.log("📤 Uploading file:", file);
-
         const formData = new FormData();
         formData.append("file", file);
 
@@ -42,8 +69,6 @@ export default function Admin() {
 
         const resUpload = await res.json();
 
-        console.log("✅ Upload response:", resUpload);
-
         if (!res.ok || !resUpload.url) {
           throw new Error("Erreur upload image");
         }
@@ -51,23 +76,17 @@ export default function Admin() {
         imageUrl = resUpload.url;
       }
 
-      /* ======================
-         📰 CREATE NEWS
-      ====================== */
       await api.post("/news", {
         title,
         body,
         category,
         date: new Date().toLocaleDateString("fr-FR"),
         pinned,
-        image: imageUrl
+        photo: imageUrl // ✅ FIX IMPORTANT
       });
 
       alert("Actualité publiée ✅");
 
-      /* ======================
-         RESET
-      ====================== */
       setTitle("");
       setBody("");
       setPinned(false);
@@ -81,12 +100,60 @@ export default function Admin() {
     }
   };
 
+  /* ======================
+     GROUP SAVE
+  ====================== */
   const saveGroup = async () => {
-  await api.post("/group", groupData);
-  alert("Groupe mis à jour ✅");
-};
-  
+    try {
+      await api.post("/group", groupData);
+      alert("Groupe mis à jour ✅");
+    } catch (err) {
+      console.error(err);
+      alert("Erreur sauvegarde");
+    }
+  };
 
+  /* ======================
+     ENTITY MANAGEMENT
+  ====================== */
+  const updateEntity = (index, field, value) => {
+    const updated = [...groupData.entities];
+    updated[index][field] = value;
+
+    setGroupData({
+      ...groupData,
+      entities: updated
+    });
+  };
+
+  const addEntity = () => {
+    setGroupData({
+      ...groupData,
+      entities: [
+        ...groupData.entities,
+        {
+          name: "",
+          description: "",
+          url: "",
+          badge: "#eee",
+          color: "#000"
+        }
+      ]
+    });
+  };
+
+  const removeEntity = (index) => {
+    const updated = groupData.entities.filter((_, i) => i !== index);
+
+    setGroupData({
+      ...groupData,
+      entities: updated
+    });
+  };
+
+  /* ======================
+     UI
+  ====================== */
   return (
     <div className="page active">
 
@@ -94,6 +161,9 @@ export default function Admin() {
         <h1>Admin</h1>
       </div>
 
+      {/* ======================
+          NEWS
+      ====================== */}
       <div className="a-card">
         <h3>📢 Ajouter une actualité</h3>
 
@@ -112,11 +182,7 @@ export default function Admin() {
 
         <input
           type="file"
-          onChange={(e) => {
-            const selected = e.target.files[0];
-            console.log("📁 Selected file:", selected);
-            setFile(selected);
-          }}
+          onChange={(e) => setFile(e.target.files[0])}
         />
 
         <select
@@ -143,6 +209,71 @@ export default function Admin() {
           disabled={loading}
         >
           {loading ? "Publication..." : "Publier"}
+        </button>
+      </div>
+
+      {/* ======================
+          GROUP EDIT
+      ====================== */}
+      <div className="a-card">
+        <h3>🌐 Modifier le groupe</h3>
+
+        <input
+          placeholder="Titre hero"
+          value={groupData.heroTitle}
+          onChange={(e) =>
+            setGroupData({ ...groupData, heroTitle: e.target.value })
+          }
+        />
+
+        <textarea
+          placeholder="Texte hero"
+          value={groupData.heroText}
+          onChange={(e) =>
+            setGroupData({ ...groupData, heroText: e.target.value })
+          }
+        />
+
+        <button className="btn btn-green" onClick={saveGroup}>
+          Enregistrer
+        </button>
+      </div>
+
+      {/* ======================
+          ENTITIES
+      ====================== */}
+      <div className="a-card">
+        <h3>🏢 Entités</h3>
+
+        {groupData.entities.map((e, i) => (
+          <div key={i} style={{ marginBottom: "15px" }}>
+
+            <input
+              placeholder="Nom"
+              value={e.name}
+              onChange={(ev) => updateEntity(i, "name", ev.target.value)}
+            />
+
+            <textarea
+              placeholder="Description"
+              value={e.description}
+              onChange={(ev) => updateEntity(i, "description", ev.target.value)}
+            />
+
+            <input
+              placeholder="URL"
+              value={e.url}
+              onChange={(ev) => updateEntity(i, "url", ev.target.value)}
+            />
+
+            <button onClick={() => removeEntity(i)}>
+              ❌ Supprimer
+            </button>
+          </div>
+        ))}
+
+        <button onClick={addEntity}>
+          ➕ Ajouter une entité
         </button>
       </div>
 
