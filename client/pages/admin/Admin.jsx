@@ -20,6 +20,7 @@ const [faqCategories, setFaqCategories] = useState([]);
 const [faqQuestion, setFaqQuestion] = useState("");
 const [faqAnswer, setFaqAnswer] = useState("");
 const [faqCategory, setFaqCategory] = useState("Général");
+  const [selectedEntity, setSelectedEntity] = useState("all");
 
   /* ======================
      GROUP STATE
@@ -297,6 +298,7 @@ api.get("/contact/faq/categories").then(setFaqCategories);
           {loading ? "Publication..." : "Publier"}
         </button>
       </div>
+      
 {/* ======================
     GROUPE COMPLET
 ====================== */}
@@ -337,9 +339,25 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   <hr />
 
   {/* ENTITÉS */}
-  <h4>Entités</h4>
+<h4>Entités</h4>
+
+<select
+  value={selectedEntity}
+  onChange={(e) => setSelectedEntity(e.target.value)}
+  style={{ marginBottom: "15px" }}
+>
+  <option value="all">Toutes les entités</option>
 
   {(groupData.entities || []).map((e, i) => (
+    <option key={i} value={i}>
+      {e.title || `Entité ${i + 1}`}
+    </option>
+  ))}
+</select>
+
+(groupData.entities || [])
+  .filter((_, i) => selectedEntity === "all" || i === Number(selectedEntity))
+  .map((e, i) => (
     <div key={i} style={{ marginBottom: "25px" }}>
 
       <strong>{e.title}</strong>
@@ -360,17 +378,7 @@ api.get("/contact/faq/categories").then(setFaqCategories);
 />
       
 
-      <input
-        placeholder="Couleur badge"
-        value={e.badgeColor}
-        onChange={(ev) => updateEntity(i, "badgeColor", ev.target.value)}
-      />
-
-      <input
-        placeholder="Couleur texte"
-        value={e.badgeTextColor}
-        onChange={(ev) => updateEntity(i, "badgeTextColor", ev.target.value)}
-      />
+  
 
  
 <input
