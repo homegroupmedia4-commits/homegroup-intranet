@@ -23,6 +23,17 @@ export const api = {
     return res.json();
   },
 
+   put: async (url, data) => {
+    const res = await fetch(`${BASE_URL}${url}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    return res.json();
+  },
+
+
   delete: async (url) => {
     const res = await fetch(`${BASE_URL}${url}`, {
       method: "DELETE"
