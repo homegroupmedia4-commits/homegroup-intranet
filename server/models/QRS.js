@@ -1,5 +1,6 @@
 // models/QRS.js
-import mongoose from "mongoose";
+
+const mongoose = require("mongoose");
 
 const qrsSchema = new mongoose.Schema({
   prenom: {
@@ -51,4 +52,4 @@ const qrsSchema = new mongoose.Schema({
   timestamps: true
 });
 
-export default mongoose.model("QRS", qrsSchema);
+module.exports = mongoose.model("QRS", qrsSchema);
