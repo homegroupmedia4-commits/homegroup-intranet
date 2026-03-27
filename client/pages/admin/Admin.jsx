@@ -338,6 +338,50 @@ api.get("/contact/faq/categories").then(setFaqCategories);
 
   <hr />
 
+
+  <h4>Statistiques</h4>
+
+<input
+  value={groupData.stats?.experienceLabel || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      stats: {
+        ...groupData.stats,
+        experienceLabel: e.target.value
+      }
+    })
+  }
+/>
+
+<input
+  value={groupData.stats?.entitiesLabel || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      stats: {
+        ...groupData.stats,
+        entitiesLabel: e.target.value
+      }
+    })
+  }
+/>
+
+<input
+  value={groupData.stats?.offerLabel || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      stats: {
+        ...groupData.stats,
+        offerLabel: e.target.value
+      }
+    })
+  }
+/>
+
+  
+
   {/* ENTITÉS */}
   <h4>Entités</h4>
 
