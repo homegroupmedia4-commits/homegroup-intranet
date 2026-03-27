@@ -45,16 +45,39 @@ const DEFAULT_GROUP = {
 /* ======================
    GET GROUP
 ====================== */
+
 exports.getGroup = async (req, res) => {
   try {
     let data = await Group.findOne();
 
-    /* ======================
-       INIT DB SI VIDE
-    ====================== */
     if (!data) {
       data = await Group.create(DEFAULT_GROUP);
+      return res.json(data);
     }
+
+    let updated = false;
+
+    if (!data.heroTitle) {
+      data.heroTitle = DEFAULT_GROUP.heroTitle;
+      updated = true;
+    }
+
+    if (!data.heroText) {
+      data.heroText = DEFAULT_GROUP.heroText;
+      updated = true;
+    }
+
+    if (!data.startYear) {
+      data.startYear = DEFAULT_GROUP.startYear;
+      updated = true;
+    }
+
+    if (!data.entities || data.entities.length === 0) {
+      data.entities = DEFAULT_GROUP.entities;
+      updated = true;
+    }
+
+    if (updated) await data.save();
 
     res.json(data);
 
