@@ -72,14 +72,23 @@ useEffect(() => {
 
 
 
+api.get("/group").then((data) => {
+  const mergedEntities = (data.entities || []).map((e, i) => ({
+    ...DEFAULT_GROUP.entities[i],
+    ...e,
+    title: e.title || DEFAULT_GROUP.entities[i]?.title,
+    badgeText: e.badgeText || DEFAULT_GROUP.entities[i]?.badgeText,
+    description: e.description || DEFAULT_GROUP.entities[i]?.description,
+    url: e.url || DEFAULT_GROUP.entities[i]?.url
+  }));
 
-  api.get("/group").then((data) => {
   setGroupData({
     ...DEFAULT_GROUP,
     ...data,
-    entities: data.entities?.length
-      ? data.entities
-      : DEFAULT_GROUP.entities
+    heroTitle: data.heroTitle || DEFAULT_GROUP.heroTitle,
+    heroText: data.heroText || DEFAULT_GROUP.heroText,
+    startYear: data.startYear || DEFAULT_GROUP.startYear,
+    entities: mergedEntities.length ? mergedEntities : DEFAULT_GROUP.entities
   });
 });
 
