@@ -13,12 +13,16 @@ const DEFAULT_GROUP = {
   /* ======================
      STATS (NEW)
   ====================== */
-  stats: {
-    experienceLabel: "ans d'expérience",
-    entitiesLabel: "entités spécialisées",
-    offerLabel: "offre complète",
-    offerValue: "360°"
-  },
+stats: {
+  experienceValue: "22",
+  experienceLabel: "ans d'expérience",
+
+  entitiesValue: "3",
+  entitiesLabel: "entités spécialisées",
+
+  offerValue: "360°",
+  offerLabel: "offre complète"
+},
 
   /* ======================
      WEBSITE (NEW)
