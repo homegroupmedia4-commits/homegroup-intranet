@@ -32,6 +32,24 @@ const [faqCategory, setFaqCategory] = useState("Général");
   heroText:
     "De la construction à l'équipement des habitations HOME GROUP vous propose une offre 360° grâce à ses différentes structures.",
   startYear: 2004,
+
+
+      /* ✅ AJOUT ICI */
+  stats: {
+    experienceLabel: "ans d'expérience",
+    entitiesLabel: "entités spécialisées",
+    offerLabel: "offre complète",
+    offerValue: "360°"
+  },
+
+  /* ✅ AJOUT ICI */
+  website: {
+    url: "https://home-group.fr",
+    label: "Site web officiel",
+    description: "Retrouvez toutes nos actualités sur"
+  },
+
+    
   entities: [
     {
       badgeText: "Rénovation",
@@ -85,14 +103,29 @@ const mergedEntities = (data.entities || []).map((e, i) => ({
 
 
   
-  setGroupData({
-    ...DEFAULT_GROUP,
-    ...data,
-    heroTitle: data.heroTitle || DEFAULT_GROUP.heroTitle,
-    heroText: data.heroText || DEFAULT_GROUP.heroText,
-    startYear: data.startYear || DEFAULT_GROUP.startYear,
-    entities: mergedEntities.length ? mergedEntities : DEFAULT_GROUP.entities
-  });
+setGroupData({
+  ...DEFAULT_GROUP,
+  ...data,
+
+  stats: {
+    ...DEFAULT_GROUP.stats,
+    ...data.stats
+  },
+
+  website: {
+    ...DEFAULT_GROUP.website,
+    ...data.website
+  },
+
+  heroTitle: data.heroTitle || DEFAULT_GROUP.heroTitle,
+  heroText: data.heroText || DEFAULT_GROUP.heroText,
+  startYear: data.startYear || DEFAULT_GROUP.startYear,
+
+  entities: mergedEntities.length
+    ? mergedEntities
+    : DEFAULT_GROUP.entities
+});
+  
 });
 
 
@@ -380,6 +413,56 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   }
 />
 
+
+  <hr />
+
+<h4>Site web</h4>
+
+<input
+  placeholder="URL"
+  value={groupData.website?.url || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      website: {
+        ...groupData.website,
+        url: e.target.value
+      }
+    })
+  }
+/>
+
+<input
+  placeholder="Label (ex: Site web officiel)"
+  value={groupData.website?.label || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      website: {
+        ...groupData.website,
+        label: e.target.value
+      }
+    })
+  }
+/>
+
+<input
+  placeholder="Description"
+  value={groupData.website?.description || ""}
+  onChange={(e) =>
+    setGroupData({
+      ...groupData,
+      website: {
+        ...groupData.website,
+        description: e.target.value
+      }
+    })
+  }
+/>
+
+<hr />
+
+  
   
 
   {/* ENTITÉS */}
