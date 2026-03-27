@@ -7,7 +7,31 @@ const DEFAULT_GROUP = {
   heroTitle: "22 ans d'expérience à votre service",
   heroText:
     "De la construction à l'équipement des habitations HOME GROUP vous propose une offre 360° grâce à ses différentes structures.",
+
   startYear: 2004,
+
+  /* ======================
+     STATS (NEW)
+  ====================== */
+  stats: {
+    experienceLabel: "ans d'expérience",
+    entitiesLabel: "entités spécialisées",
+    offerLabel: "offre complète",
+    offerValue: "360°"
+  },
+
+  /* ======================
+     WEBSITE (NEW)
+  ====================== */
+  website: {
+    url: "https://home-group.fr",
+    label: "Site web officiel",
+    description: "Retrouvez toutes nos actualités sur"
+  },
+
+  /* ======================
+     ENTITIES
+  ====================== */
   entities: [
     {
       badgeText: "Rénovation",
@@ -50,12 +74,19 @@ exports.getGroup = async (req, res) => {
   try {
     let data = await Group.findOne();
 
+    /* ======================
+       FIRST INIT
+    ====================== */
     if (!data) {
       data = await Group.create(DEFAULT_GROUP);
       return res.json(data);
     }
 
     let updated = false;
+
+    /* ======================
+       SAFE MIGRATION (CRUCIAL)
+    ====================== */
 
     if (!data.heroTitle) {
       data.heroTitle = DEFAULT_GROUP.heroTitle;
@@ -77,6 +108,45 @@ exports.getGroup = async (req, res) => {
       updated = true;
     }
 
+    /* ======================
+       NEW FIELDS MIGRATION
+    ====================== */
+
+    if (!data.stats) {
+      data.stats = DEFAULT_GROUP.stats;
+      updated = true;
+    } else {
+      if (!data.stats.experienceLabel)
+        data.stats.experienceLabel = DEFAULT_GROUP.stats.experienceLabel;
+
+      if (!data.stats.entitiesLabel)
+        data.stats.entitiesLabel = DEFAULT_GROUP.stats.entitiesLabel;
+
+      if (!data.stats.offerLabel)
+        data.stats.offerLabel = DEFAULT_GROUP.stats.offerLabel;
+
+      if (!data.stats.offerValue)
+        data.stats.offerValue = DEFAULT_GROUP.stats.offerValue;
+
+      updated = true;
+    }
+
+    if (!data.website) {
+      data.website = DEFAULT_GROUP.website;
+      updated = true;
+    } else {
+      if (!data.website.url)
+        data.website.url = DEFAULT_GROUP.website.url;
+
+      if (!data.website.label)
+        data.website.label = DEFAULT_GROUP.website.label;
+
+      if (!data.website.description)
+        data.website.description = DEFAULT_GROUP.website.description;
+
+      updated = true;
+    }
+
     if (updated) await data.save();
 
     res.json(data);
@@ -87,6 +157,9 @@ exports.getGroup = async (req, res) => {
   }
 };
 
+/* ======================
+   UPDATE GROUP
+====================== */
 
 exports.updateGroup = async (req, res) => {
   try {
