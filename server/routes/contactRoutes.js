@@ -1,6 +1,8 @@
 // routes/contactRoutes.js
-import express from "express";
-import {
+
+const express = require("express");
+
+const {
   /* FAQ */
   getFaq,
   getFaqCategories,
@@ -15,7 +17,7 @@ import {
   toggleQRSVisibility,
   deleteQRS
 
-} from "../controllers/contactController.js";
+} = require("../controllers/contactController");
 
 const router = express.Router();
 
@@ -41,7 +43,6 @@ router.post("/faq", createFaq);
 router.delete("/faq/:id", deleteFaq);
 
 
-
 /* ======================
    QRS - PUBLIC
 ====================== */
@@ -51,7 +52,6 @@ router.post("/qrs", createQRS);
 
 // récupérer les contributions publiques
 router.get("/qrs/public", getPublicQRS);
-
 
 
 /* ======================
@@ -71,4 +71,4 @@ router.put("/qrs/:id/visibility", toggleQRSVisibility);
 router.delete("/qrs/:id", deleteQRS);
 
 
-export default router;
+module.exports = router;
