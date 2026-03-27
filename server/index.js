@@ -4,7 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const uploadRoutes = require("./routes/upload");
 const groupRoutes = require("./routes/group.routes");
-import contactRoutes from "./routes/contactRoutes.js";
+const contactRoutes = require("./routes/contactRoutes");
 const newsRoutes = require("./routes/news.routes");
 
 const app = express();
