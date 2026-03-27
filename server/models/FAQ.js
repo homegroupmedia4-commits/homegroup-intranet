@@ -2,9 +2,34 @@
 import mongoose from "mongoose";
 
 const faqSchema = new mongoose.Schema({
-  question: String,
-  answer: String,
-  category: String
+  question: {
+    type: String,
+    required: true,
+    trim: true
+  },
+
+  answer: {
+    type: String,
+    required: true
+  },
+
+  category: {
+    type: String,
+    default: "Général"
+  },
+
+  order: {
+    type: Number,
+    default: 0
+  },
+
+  isActive: {
+    type: Boolean,
+    default: true
+  }
+
+}, {
+  timestamps: true
 });
 
 export default mongoose.model("FAQ", faqSchema);
