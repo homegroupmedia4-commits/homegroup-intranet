@@ -6,6 +6,33 @@
    GROUPE PAGE
 ========================= */
 
+.btn-pin {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* hover */
+.btn-pin:hover {
+  border-color: var(--green);
+  color: var(--green);
+  background: var(--green-pale);
+}
+
+/* état actif (épinglé) */
+.btn-pin.active {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+
+
+
 .news-admin-item {
   padding: 10px;
   border: 1px solid var(--border);
