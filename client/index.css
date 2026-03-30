@@ -449,7 +449,8 @@
   border-radius:10px;
   border:1px solid var(--border);
   padding:1.3rem;
-  box-shadow:var(--sh);
+ 
+   margin-top: 30px;
 }
 
 .a-card h3{
@@ -755,6 +756,7 @@ input,select,textarea{
   border:1px solid var(--border);
   border-radius:7px;
   background:var(--cream);
+       margin: 10px 0px;
 }
 
 input:focus,textarea:focus{
