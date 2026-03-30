@@ -9,7 +9,7 @@ export default function Header() {
     <header>
       {/* LEFT */}
       <div className="h-logo">
-        <img src="/logo.png" alt="logo" />
+        <img src="/logo.jpg" alt="logo" />  
 
         <div className="h-div"></div>
 
