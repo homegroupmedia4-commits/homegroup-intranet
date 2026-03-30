@@ -29,12 +29,11 @@ const [faqCategory, setFaqCategory] = useState("Général");
   ====================== */
   const [groupData, setGroupData] = useState(null);
 
-  const togglePin = async (news) => {
-  const res = await api.put(`/news/${news._id}/pin`);
+const togglePin = async (news) => {
+  await api.put(`/news/${news._id}/pin`);
 
-  setNewsList(prev =>
-    prev.map(n => n._id === news._id ? res : n)
-  );
+  const updated = await api.get("/news");
+  setNewsList(updated);
 };
 
   const DEFAULT_GROUP = {
@@ -319,9 +318,14 @@ setNewsList(updated);
             <div style={{ display: "flex", gap: "10px" }}>
               <span>{n.category.toUpperCase()}</span>
 
-              <button onClick={() => togglePin(n)}>
-                {n.pinned ? "❌ Désépingler" : "📌 Épingler"}
-              </button>
+             <button
+  className={`btn-pin ${n.pinned ? "active" : ""}`}
+  onClick={() => togglePin(n)}
+>
+  {n.pinned ? "📌 Épinglée" : "📌 Épingler"}
+</button>
+
+              
             </div>
           </div>
 
@@ -408,7 +412,7 @@ setNewsList(updated);
         >
           <option value="general">Général</option>
           <option value="rh">RH</option>
-          <option value="Direction">Direction </option>
+          <option value="direction">Direction </option>
            <option value="organisation">Organisation</option>
            <option value="it">IT</option>
            <option value="evenement">Événement</option>
