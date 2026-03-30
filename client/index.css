@@ -6,6 +6,15 @@
    GROUPE PAGE
 ========================= */
 
+.nc-body p{
+  font-size:.83rem;
+  color:var(--ink2);
+  line-height:1.58;
+
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
 .btn-pin {
   padding: 6px 12px;
   border-radius: 20px;
