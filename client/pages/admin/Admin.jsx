@@ -303,7 +303,8 @@ setNewsList(updated);
       </div>
 
        <div className="a-card">
-      <h3>📰 Gérer les actualités</h3>
+      <h3>Actualités ajoutées</h3>
+          
 
       {newsList.length === 0 && <div>Aucune actualité</div>}
 
@@ -343,7 +344,8 @@ setNewsList(updated);
           NEWS
       ====================== */}
       <div className="a-card">
-        <h3>📢 Ajouter une actualité</h3>
+        <h3>Ajouter une actualité</h3>
+         <p>Publiez des actualités avec texte, photo et/ou vidéo.</p>
 
         <input
           type="text"
@@ -406,7 +408,10 @@ setNewsList(updated);
         >
           <option value="general">Général</option>
           <option value="rh">RH</option>
-          <option value="organisation">Organisation</option>
+          <option value="Direction">Direction </option>
+           <option value="organisation">Organisation</option>
+           <option value="it">IT</option>
+           <option value="evenement">Événement</option>
         </select>
 
         <label style={{ display: "flex", gap: "6px", marginTop: "10px" }}>
