@@ -414,22 +414,33 @@ setNewsList(updated);
            <option value="evenement">Événement</option>
         </select>
 
-        <label style={{ display: "flex", gap: "6px", marginTop: "10px" }}>
-          <input
-            type="checkbox"
-            checked={pinned}
-            onChange={() => setPinned(!pinned)}
-          />
-          Épingler
-        </label>
+<div style={{
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: "12px"
+}}>
 
-        <button
-          className="btn btn-green"
-          onClick={handlePublish}
-          disabled={loading}
-        >
-          {loading ? "Publication..." : "Publier"}
-        </button>
+  <label style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+    <input
+      type="checkbox"
+      checked={pinned}
+      onChange={() => setPinned(!pinned)}
+    />
+    Épingler
+  </label>
+
+  <button
+    className="btn btn-green"
+    onClick={handlePublish}
+    disabled={loading}
+  >
+    {loading ? "Publication..." : "Publier"}
+  </button>
+
+</div>
+
+        
       </div>
       
 {/* ======================
