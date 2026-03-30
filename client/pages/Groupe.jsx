@@ -73,9 +73,13 @@ export default function Groupe() {
       <div className="groupe-hero">
         <img src="/logo.jpg" alt="Home Group" />
 
-        <h2>
+          {/* <h2>
    {group.stats.experienceValue || years} {group.stats.experienceLabel}  à votre service
-        </h2>
+        </h2> */}
+
+        <h2>
+  {group.heroTitle}
+</h2>
 
         <p>{group.heroText}</p>
       </div>
