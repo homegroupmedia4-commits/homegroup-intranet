@@ -13,6 +13,7 @@ export default function Admin() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [qrsList, setQrsList] = useState([]);
+  const [newsList, setNewsList] = useState([]);
 
   const [faqList, setFaqList] = useState([]);
 const [faqCategories, setFaqCategories] = useState([]);
@@ -21,11 +22,20 @@ const [faqQuestion, setFaqQuestion] = useState("");
 const [faqAnswer, setFaqAnswer] = useState("");
 const [faqCategory, setFaqCategory] = useState("Général");
   const [selectedEntity, setSelectedEntity] = useState("all");
+  
 
   /* ======================
      GROUP STATE
   ====================== */
   const [groupData, setGroupData] = useState(null);
+
+  const togglePin = async (news) => {
+  const res = await api.put(`/news/${news._id}/pin`);
+
+  setNewsList(prev =>
+    prev.map(n => n._id === news._id ? res : n)
+  );
+};
 
   const DEFAULT_GROUP = {
   heroTitle: "22 ans d'expérience à votre service",
@@ -139,6 +149,7 @@ setGroupData({
   // FAQ
 api.get("/contact/faq").then(setFaqList);
 api.get("/contact/faq/categories").then(setFaqCategories);
+  api.get("/news").then(setNewsList);
 
 }, []);
 
@@ -182,6 +193,12 @@ api.get("/contact/faq/categories").then(setFaqCategories);
         pinned,
         photo: imageUrl // ✅ cohérent avec backend
       });
+
+
+      const updated = await api.get("/news");
+setNewsList(updated);
+
+      
 
       alert("Actualité publiée ✅");
 
@@ -285,6 +302,43 @@ api.get("/contact/faq/categories").then(setFaqCategories);
         <h1>Admin</h1>
       </div>
 
+       <div className="a-card">
+      <h3>📰 Gérer les actualités</h3>
+
+      {newsList.length === 0 && <div>Aucune actualité</div>}
+
+      {newsList.map((n) => (
+        <div key={n._id} className="news-admin-item">
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <strong>
+              {n.pinned && "📌 "} {n.title}
+            </strong>
+
+            <div style={{ display: "flex", gap: "10px" }}>
+              <span>{n.category.toUpperCase()}</span>
+
+              <button onClick={() => togglePin(n)}>
+                {n.pinned ? "❌ Désépingler" : "📌 Épingler"}
+              </button>
+            </div>
+          </div>
+
+          <div style={{ fontSize: ".8rem", opacity: 0.7 }}>
+            {n.body}
+          </div>
+
+          {n.photo && (
+            <img src={n.photo} style={{ width: 120, marginTop: 8 }} />
+          )}
+
+          <hr />
+        </div>
+      ))}
+    </div>
+
+      
+
       {/* ======================
           NEWS
       ====================== */}
@@ -304,10 +358,47 @@ api.get("/contact/faq/categories").then(setFaqCategories);
           onChange={(e) => setBody(e.target.value)}
         />
 
-        <input
-          type="file"
-          onChange={(e) => setFile(e.target.files[0])}
-        />
+       <div
+  className="upload-zone"
+  onClick={() => document.getElementById("fileInput").click()}
+>
+  {file ? (
+    <div style={{ position: "relative" }}>
+      <img
+        src={URL.createObjectURL(file)}
+        style={{ width: 120, borderRadius: 8 }}
+      />
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setFile(null);
+        }}
+        style={{
+          position: "absolute",
+          top: -5,
+          right: -5,
+          background: "#000",
+          color: "#fff",
+          borderRadius: "50%",
+          width: 22,
+          height: 22
+        }}
+      >
+        ✕
+      </button>
+    </div>
+  ) : (
+    <div>📷 Cliquer pour ajouter une photo</div>
+  )}
+
+  <input
+    id="fileInput"
+    type="file"
+    style={{ display: "none" }}
+    onChange={(e) => setFile(e.target.files[0])}
+  />
+</div>
 
         <select
           value={category}
