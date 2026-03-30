@@ -24,12 +24,11 @@ export default function Contact() {
   /* ======================
      LOAD DATA
   ====================== */
-  useEffect(() => {
-   api.get("/contact/faq")
-api.get("/contact/faq/categories")
-api.get("/contact/qrs/public")
-api.post("/contact/qrs")
-  }, []);
+useEffect(() => {
+  api.get("/contact/faq").then(setFaqs);
+  api.get("/contact/faq/categories").then(setFaqCategories);
+  api.get("/contact/qrs/public").then(setQrsList);
+}, []);
 
   /* ======================
      FILTER FAQ
@@ -46,13 +45,13 @@ api.post("/contact/qrs")
   const handleSubmit = async () => {
     if (!message) return alert("Message requis");
 
-    await api.post("/qrs", {
-      prenom,
-      nom,
-      isAnon,
-      category: selectedCat,
-      message
-    });
+ await api.post("/contact/qrs", {
+  prenom,
+  nom,
+  isAnon,
+  category: selectedCat,
+  message
+});
 
     alert("Envoyé ✅");
 
