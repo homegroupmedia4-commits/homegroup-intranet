@@ -4,7 +4,8 @@ const router = express.Router();
 const {
   createNews,
   getNews,
-  deleteNews
+  deleteNews,
+    togglePin
 } = require("../controllers/news.controller");
 
 // CREATE
@@ -16,13 +17,7 @@ router.get("/", getNews);
 // DELETE
 router.delete("/:id", deleteNews);
 
-router.put("/:id/pin", async (req, res) => {
-  const news = await require("../models/News").findById(req.params.id);
-
-  news.pinned = !news.pinned;
-  await news.save();
-
-  res.json(news);
-});
+// PIN
+router.put("/:id/pin", togglePin);
 
 module.exports = router;
