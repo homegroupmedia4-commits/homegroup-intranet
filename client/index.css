@@ -6,6 +6,14 @@
    GROUPE PAGE
 ========================= */
 
+.news-admin-item {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: var(--cream);
+}
+
 /* HERO */
 .groupe-hero{
   background:linear-gradient(135deg,#0a0a0a,#111e11);
