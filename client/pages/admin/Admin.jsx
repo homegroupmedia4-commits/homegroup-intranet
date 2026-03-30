@@ -329,9 +329,14 @@ setNewsList(updated);
             </div>
           </div>
 
-          <div style={{ fontSize: ".8rem", opacity: 0.7 }}>
-            {n.body}
-          </div>
+     <div style={{ 
+  fontSize: ".8rem", 
+  opacity: 0.7,
+  wordBreak: "break-word",
+  overflowWrap: "anywhere"
+}}>
+  {n.body}
+</div>
 
           {n.photo && (
             <img src={n.photo} style={{ width: 120, marginTop: 8 }} />
