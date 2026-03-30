@@ -25,9 +25,10 @@ export default function Contact() {
      LOAD DATA
   ====================== */
   useEffect(() => {
-    api.get("/faq").then(setFaqs);
-    api.get("/faq/categories").then(setFaqCategories);
-    api.get("/qrs/public").then(setQrsList);
+   api.get("/contact/faq")
+api.get("/contact/faq/categories")
+api.get("/contact/qrs/public")
+api.post("/contact/qrs")
   }, []);
 
   /* ======================
