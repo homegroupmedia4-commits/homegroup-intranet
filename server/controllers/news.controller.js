@@ -12,6 +12,23 @@ exports.createNews = async (req, res) => {
   }
 };
 
+exports.togglePin = async (req, res) => {
+  try {
+    const news = await News.findById(req.params.id);
+
+    if (!news) {
+      return res.status(404).json({ error: "News not found" });
+    }
+
+    news.pinned = !news.pinned;
+    await news.save();
+
+    res.json(news);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // GET
 exports.getNews = async (req, res) => {
   try {
