@@ -71,7 +71,7 @@ export default function Groupe() {
 
       {/* HERO */}
       <div className="groupe-hero">
-        <img src="/logo.png" alt="Home Group" />
+        <img src="/logo.jpg" alt="Home Group" />
 
         <h2>
    {group.stats.experienceValue || years} {group.stats.experienceLabel}  à votre service
