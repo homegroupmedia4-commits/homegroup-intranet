@@ -104,13 +104,7 @@ export default function News() {
                 </div>
               )}
 
-              {/* DELETE DEV */}
-              <button
-                onClick={() => handleDelete(n._id)}
-                style={{ marginTop: "10px" }}
-              >
-                ❌ Supprimer
-              </button>
+          
             </div>
           </div>
         ))}
