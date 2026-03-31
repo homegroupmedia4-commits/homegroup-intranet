@@ -5,7 +5,7 @@ const FAQ = require("../models/FAQ");
 const mongoose = require("mongoose");
 
 /* ======================
-   FAQ CATEGORY MODEL
+   MODEL
 ====================== */
 const faqCategorySchema = new mongoose.Schema({
   name: {
@@ -24,10 +24,9 @@ const FaqCategory =
    FAQ
 ====================== */
 
-// GET all FAQ
 const getFaq = async (req, res) => {
   try {
-    const data = await FAQ.find().sort({ order: 1, createdAt: -1 });
+    const data = await FAQ.find().sort({ createdAt: -1 });
     res.json(data);
   } catch (err) {
     console.error("❌ getFaq:", err);
@@ -36,10 +35,9 @@ const getFaq = async (req, res) => {
 };
 
 /* ======================
-   FAQ CATEGORIES
+   CATEGORIES
 ====================== */
 
-// GET categories
 const getFaqCategories = async (req, res) => {
   try {
     const cats = await FaqCategory.find().sort({ name: 1 });
@@ -50,7 +48,6 @@ const getFaqCategories = async (req, res) => {
   }
 };
 
-// CREATE category
 const createFaqCategory = async (req, res) => {
   try {
     const { name } = req.body;
@@ -59,18 +56,15 @@ const createFaqCategory = async (req, res) => {
       return res.status(400).json({ error: "Nom requis" });
     }
 
-    const cat = await FaqCategory.create({
-      name: name.trim()
-    });
-
+    const cat = await FaqCategory.create({ name: name.trim() });
     res.json(cat);
+
   } catch (err) {
     console.error("❌ createFaqCategory:", err);
     res.status(500).json({ error: "Erreur création catégorie" });
   }
 };
 
-// DELETE category
 const deleteFaqCategory = async (req, res) => {
   try {
     await FaqCategory.findByIdAndDelete(req.params.id);
@@ -85,7 +79,6 @@ const deleteFaqCategory = async (req, res) => {
    FAQ CRUD
 ====================== */
 
-// CREATE FAQ
 const createFaq = async (req, res) => {
   try {
     const { question, answer, category } = req.body;
@@ -96,7 +89,6 @@ const createFaq = async (req, res) => {
 
     const cleanCategory = category?.trim() || "Général";
 
-    // ✅ synchro auto catégorie
     await FaqCategory.findOneAndUpdate(
       { name: cleanCategory },
       { name: cleanCategory },
@@ -111,13 +103,13 @@ const createFaq = async (req, res) => {
 
     await faq.save();
     res.json(faq);
+
   } catch (err) {
     console.error("❌ createFaq:", err);
     res.status(500).json({ error: "Erreur création FAQ" });
   }
 };
 
-// DELETE FAQ
 const deleteFaq = async (req, res) => {
   try {
     await FAQ.findByIdAndDelete(req.params.id);
@@ -132,16 +124,9 @@ const deleteFaq = async (req, res) => {
    QRS
 ====================== */
 
-// CREATE
 const createQRS = async (req, res) => {
   try {
-    const {
-      prenom = "",
-      nom = "",
-      isAnon = false,
-      category = "Question",
-      message
-    } = req.body;
+    const { prenom = "", nom = "", isAnon = false, category = "Question", message } = req.body;
 
     if (!message || !message.trim()) {
       return res.status(400).json({ error: "Message requis" });
@@ -158,13 +143,13 @@ const createQRS = async (req, res) => {
     });
 
     res.json(q);
+
   } catch (err) {
     console.error("❌ createQRS:", err);
     res.status(500).json({ error: "Erreur création QRS" });
   }
 };
 
-// GET public
 const getPublicQRS = async (req, res) => {
   try {
     const data = await QRS.find({ public: true }).sort({ createdAt: -1 });
@@ -175,7 +160,6 @@ const getPublicQRS = async (req, res) => {
   }
 };
 
-// GET all
 const getAllQRS = async (req, res) => {
   try {
     const data = await QRS.find().sort({ createdAt: -1 });
@@ -186,7 +170,6 @@ const getAllQRS = async (req, res) => {
   }
 };
 
-// UPDATE status
 const updateQRSStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -198,13 +181,13 @@ const updateQRSStatus = async (req, res) => {
     await q.save();
 
     res.json(q);
+
   } catch (err) {
     console.error("❌ updateQRSStatus:", err);
     res.status(500).json({ error: "Erreur update status" });
   }
 };
 
-// TOGGLE visibility
 const toggleQRSVisibility = async (req, res) => {
   try {
     const q = await QRS.findById(req.params.id);
@@ -214,13 +197,13 @@ const toggleQRSVisibility = async (req, res) => {
     await q.save();
 
     res.json(q);
+
   } catch (err) {
     console.error("❌ toggleQRSVisibility:", err);
     res.status(500).json({ error: "Erreur visibilité QRS" });
   }
 };
 
-// DELETE
 const deleteQRS = async (req, res) => {
   try {
     await QRS.findByIdAndDelete(req.params.id);
