@@ -6,6 +6,7 @@ const uploadRoutes = require("./routes/upload");
 const groupRoutes = require("./routes/group.routes");
 const contactRoutes = require("./routes/contactRoutes");
 const newsRoutes = require("./routes/news.routes");
+const memberRoutes = require("./routes/member.routes");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/upload", uploadRoutes);
 app.use("/api/group", groupRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/members", memberRoutes);
 
 app.use("/api/news", newsRoutes);
 /* ======================
