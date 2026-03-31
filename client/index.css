@@ -40,11 +40,50 @@
 .faq-ans{
   max-height:0;
   overflow:hidden;
-  transition:max-height .3s ease;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1);
+} 
+.faq-item.open .faq-ans{
+  max-height: 1000px; /* safe large */
 }
 
-.faq-item.open .faq-ans{
-  max-height:400px;
+.faq-ans-inner{
+  padding:0 1.2rem 1rem;
+  color:var(--ink2);
+  border-top:1px solid var(--border);
+
+  max-height: 250px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+.faq-cat-tabs{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+
+.fct{
+  padding:5px 12px;
+  border-radius:16px;
+  font-size:.75rem;
+  font-weight:500;
+  border:1px solid var(--border);
+  background:#fff;
+  cursor:pointer;
+  transition:all .2s;
+  color:var(--ink2);
+}
+
+.fct:hover{
+  border-color:var(--green);
+  color:var(--green);
+}
+
+.fct.active{
+  background:var(--ink);
+  color:#fff;
+  border-color:var(--ink);
 }
 
 .faq-ans-inner{
