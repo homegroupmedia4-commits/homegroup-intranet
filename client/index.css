@@ -67,13 +67,6 @@
 }
 
 
-.faq-ans-inner{
-  padding:0 1.2rem 1rem;
-  color:var(--ink2);
-  border-top:1px solid var(--border);
-
-  line-height: 1.6;
-}
 
 .faq-cat-tabs{
   display:flex;
@@ -85,15 +78,15 @@
 
 .faq-ans-inner{
   position: relative;
-
   padding:0 1.2rem 1rem;
   color:var(--ink2);
   border-top:1px solid var(--border);
-
-  max-height: 120px;
-  overflow: hidden;
   line-height: 1.6;
+
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
+
 
 .faq-ans-inner::after{
   content:"";
