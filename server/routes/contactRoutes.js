@@ -9,6 +9,9 @@ const {
   createFaq,
   deleteFaq,
 
+  createFaqCategory,   // ✅
+  deleteFaqCategory,   // ✅
+
   /* QRS */
   createQRS,
   getPublicQRS,
