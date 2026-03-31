@@ -4,22 +4,23 @@ const memberSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Le nom est requis"],
       trim: true
     },
     role: {
       type: String,
-      required: true,
+      required: [true, "Le rôle est requis"],
       trim: true
     },
     service: {
       type: String,
-      required: true
+      required: true,
+      default: "general"
     },
     company: {
       type: String,
       enum: ["homegroup", "mprenov", "homedesign", "media4"],
-      default: "mprenov"
+      default: "homegroup"
     },
     phone: {
       type: String,
