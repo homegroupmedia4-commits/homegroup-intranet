@@ -2,11 +2,10 @@
 
 const QRS = require("../models/QRS");
 const FAQ = require("../models/FAQ");
-
 const mongoose = require("mongoose");
 
 /* ======================
-   FAQ CATEGORY (INLINE MODEL)
+   FAQ CATEGORY MODEL
 ====================== */
 const faqCategorySchema = new mongoose.Schema({
   name: {
@@ -17,7 +16,9 @@ const faqCategorySchema = new mongoose.Schema({
   }
 });
 
-const FaqCategory = mongoose.models.FaqCategory || mongoose.model("FaqCategory", faqCategorySchema);
+const FaqCategory =
+  mongoose.models.FaqCategory ||
+  mongoose.model("FaqCategory", faqCategorySchema);
 
 /* ======================
    FAQ
@@ -38,7 +39,18 @@ const getFaq = async (req, res) => {
    FAQ CATEGORIES
 ====================== */
 
-// CREATE
+// GET categories
+const getFaqCategories = async (req, res) => {
+  try {
+    const cats = await FaqCategory.find().sort({ name: 1 });
+    res.json(cats.map(c => c.name));
+  } catch (err) {
+    console.error("❌ getFaqCategories:", err);
+    res.status(500).json({ error: "Erreur catégories FAQ" });
+  }
+};
+
+// CREATE category
 const createFaqCategory = async (req, res) => {
   try {
     const { name } = req.body;
@@ -52,14 +64,13 @@ const createFaqCategory = async (req, res) => {
     });
 
     res.json(cat);
-
   } catch (err) {
     console.error("❌ createFaqCategory:", err);
     res.status(500).json({ error: "Erreur création catégorie" });
   }
 };
 
-// DELETE
+// DELETE category
 const deleteFaqCategory = async (req, res) => {
   try {
     await FaqCategory.findByIdAndDelete(req.params.id);
@@ -70,34 +81,11 @@ const deleteFaqCategory = async (req, res) => {
   }
 };
 
+/* ======================
+   FAQ CRUD
+====================== */
 
-const getFaqCategories = async (req, res) => {
-  try {
-    const cats = await FaqCategory.find().sort({ name: 1 });
-    res.json(cats.map(c => c.name));
-  } catch (err) {
-    console.error("❌ getFaqCategories:", err);
-    res.status(500).json({ error: "Erreur catégories FAQ" });
-  }
-};
-
-
-
-  try {
-    const cats = await FaqCategory.find().sort({ name: 1 });
-    res.json(cats.map(c => c.name));
-  } catch (err) {
-    console.error("❌ getFaqCategories:", err);
-    res.status(500).json({ error: "Erreur catégories FAQ" });
-  }
-};
-    res.json(cats);
-  } catch (err) {
-    console.error("❌ getFaqCategories:", err);
-    res.status(500).json({ error: "Erreur catégories FAQ" });
-  }
-};
-
+// CREATE FAQ
 const createFaq = async (req, res) => {
   try {
     const { question, answer, category } = req.body;
@@ -108,7 +96,7 @@ const createFaq = async (req, res) => {
 
     const cleanCategory = category?.trim() || "Général";
 
-    // ✅ synchro automatique des catégories
+    // ✅ synchro auto catégorie
     await FaqCategory.findOneAndUpdate(
       { name: cleanCategory },
       { name: cleanCategory },
@@ -122,9 +110,7 @@ const createFaq = async (req, res) => {
     });
 
     await faq.save();
-
     res.json(faq);
-
   } catch (err) {
     console.error("❌ createFaq:", err);
     res.status(500).json({ error: "Erreur création FAQ" });
@@ -142,17 +128,11 @@ const deleteFaq = async (req, res) => {
   }
 };
 
-
 /* ======================
    QRS
 ====================== */
 
-// CREATE QRS
-/* ======================
-   QRS
-====================== */
-
-// CREATE QRS
+// CREATE
 const createQRS = async (req, res) => {
   try {
     const {
@@ -163,42 +143,31 @@ const createQRS = async (req, res) => {
       message
     } = req.body;
 
-    // ✅ VALIDATION HARD
     if (!message || !message.trim()) {
-      return res.status(400).json({
-        error: "Message requis"
-      });
+      return res.status(400).json({ error: "Message requis" });
     }
-
-    // ✅ SANITIZE
-    const cleanMessage = message.trim();
 
     const q = await QRS.create({
       prenom: isAnon ? "" : prenom.trim(),
       nom: isAnon ? "" : nom.trim(),
       isAnon,
       category,
-      message: cleanMessage,
-      status: "pending",   // sécurité modération
-      public: false        // jamais public direct
+      message: message.trim(),
+      status: "pending",
+      public: false
     });
 
     res.json(q);
-
   } catch (err) {
     console.error("❌ createQRS:", err);
-    res.status(500).json({
-      error: "Erreur création QRS"
-    });
+    res.status(500).json({ error: "Erreur création QRS" });
   }
 };
 
-// GET public QRS
+// GET public
 const getPublicQRS = async (req, res) => {
   try {
-    const data = await QRS.find({ public: true })
-      .sort({ createdAt: -1 });
-
+    const data = await QRS.find({ public: true }).sort({ createdAt: -1 });
     res.json(data);
   } catch (err) {
     console.error("❌ getPublicQRS:", err);
@@ -206,12 +175,10 @@ const getPublicQRS = async (req, res) => {
   }
 };
 
-// GET all QRS (admin)
+// GET all
 const getAllQRS = async (req, res) => {
   try {
-    const data = await QRS.find()
-      .sort({ createdAt: -1 });
-
+    const data = await QRS.find().sort({ createdAt: -1 });
     res.json(data);
   } catch (err) {
     console.error("❌ getAllQRS:", err);
@@ -219,7 +186,7 @@ const getAllQRS = async (req, res) => {
   }
 };
 
-// UPDATE STATUS
+// UPDATE status
 const updateQRSStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -231,14 +198,13 @@ const updateQRSStatus = async (req, res) => {
     await q.save();
 
     res.json(q);
-
   } catch (err) {
     console.error("❌ updateQRSStatus:", err);
     res.status(500).json({ error: "Erreur update status" });
   }
 };
 
-// TOGGLE VISIBILITY
+// TOGGLE visibility
 const toggleQRSVisibility = async (req, res) => {
   try {
     const q = await QRS.findById(req.params.id);
@@ -248,14 +214,13 @@ const toggleQRSVisibility = async (req, res) => {
     await q.save();
 
     res.json(q);
-
   } catch (err) {
     console.error("❌ toggleQRSVisibility:", err);
     res.status(500).json({ error: "Erreur visibilité QRS" });
   }
 };
 
-// DELETE QRS
+// DELETE
 const deleteQRS = async (req, res) => {
   try {
     await QRS.findByIdAndDelete(req.params.id);
@@ -271,11 +236,8 @@ module.exports = {
   getFaqCategories,
   createFaq,
   deleteFaq,
-
-    createFaqCategory,     // ✅ AJOUT
-  deleteFaqCategory,     // ✅ AJOUT
-
-   
+  createFaqCategory,
+  deleteFaqCategory,
   createQRS,
   getPublicQRS,
   getAllQRS,
