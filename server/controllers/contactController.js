@@ -70,10 +70,19 @@ const deleteFaqCategory = async (req, res) => {
   }
 };
 
-// GET categories
+
 const getFaqCategories = async (req, res) => {
   try {
-    const getFaqCategories = async (req, res) => {
+    const cats = await FaqCategory.find().sort({ name: 1 });
+    res.json(cats.map(c => c.name));
+  } catch (err) {
+    console.error("❌ getFaqCategories:", err);
+    res.status(500).json({ error: "Erreur catégories FAQ" });
+  }
+};
+
+
+
   try {
     const cats = await FaqCategory.find().sort({ name: 1 });
     res.json(cats.map(c => c.name));
@@ -89,7 +98,6 @@ const getFaqCategories = async (req, res) => {
   }
 };
 
-// CREATE FAQ
 const createFaq = async (req, res) => {
   try {
     const { question, answer, category } = req.body;
@@ -98,13 +106,23 @@ const createFaq = async (req, res) => {
       return res.status(400).json({ error: "Champs requis" });
     }
 
+    const cleanCategory = category?.trim() || "Général";
+
+    // ✅ synchro automatique des catégories
+    await FaqCategory.findOneAndUpdate(
+      { name: cleanCategory },
+      { name: cleanCategory },
+      { upsert: true }
+    );
+
     const faq = new FAQ({
       question,
       answer,
-      category: category || "Général"
+      category: cleanCategory
     });
 
     await faq.save();
+
     res.json(faq);
 
   } catch (err) {
