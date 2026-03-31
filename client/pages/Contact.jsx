@@ -11,6 +11,8 @@ export default function Contact() {
   const [search, setSearch] = useState("");
   const [activeCat, setActiveCat] = useState("all");
 
+  const [openFaq, setOpenFaq] = useState(null);
+
   /* ======================
      QRS STATE
   ====================== */
@@ -60,6 +62,10 @@ useEffect(() => {
     setNom("");
   };
 
+  const toggleFaq = (id) => {
+  setOpenFaq(prev => (prev === id ? null : id));
+};
+
   return (
     <div className="page active">
 
@@ -74,48 +80,30 @@ useEffect(() => {
         {/* ======================
             FAQ
         ====================== */}
-        <div>
-          <h2>❓ Foire aux questions</h2>
+    <div>
+  {filteredFaqs.map(f => {
+    const isOpen = openFaq === f._id;
 
-          <div className="faq-search-box">
-            <span className="faq-si">🔍</span>
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher…"
-            />
-          </div>
+    return (
+      <div key={f._id} className={`faq-item ${isOpen ? "open" : ""}`}>
+        
+        {/* QUESTION */}
+        <div className="faq-q" onClick={() => toggleFaq(f._id)}>
+          <span>{f.question}</span>
+          <span className="faq-chevron">▼</span>
+        </div>
 
-          <div className="faq-cat-tabs">
-            <button
-              className={`fct ${activeCat === "all" ? "active" : ""}`}
-              onClick={() => setActiveCat("all")}
-            >
-              Toutes
-            </button>
-
-            {faqCategories.map(cat => (
-              <button
-                key={cat}
-                className={`fct ${activeCat === cat ? "active" : ""}`}
-                onClick={() => setActiveCat(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          <div>
-            {filteredFaqs.map(f => (
-              <div key={f._id} className="faq-item">
-                <div className="faq-q">{f.question}</div>
-                <div className="faq-ans">
-                  <div className="faq-ans-inner">{f.answer}</div>
-                </div>
-              </div>
-            ))}
+        {/* ANSWER */}
+        <div className="faq-ans">
+          <div className="faq-ans-inner">
+            {f.answer}
           </div>
         </div>
+
+      </div>
+    );
+  })}
+</div>
 
         {/* ======================
             QRS
