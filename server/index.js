@@ -1,48 +1,35 @@
-require("dotenv").config({
-  path: require("path").resolve(__dirname, "../.env")
-});
-
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
 const uploadRoutes = require("./routes/upload");
 const groupRoutes = require("./routes/group.routes");
 const contactRoutes = require("./routes/contactRoutes");
 const newsRoutes = require("./routes/news.routes");
-const memberRoutes = require("./routes/member.routes");
 
 const app = express();
 
-/* ======================
-   MIDDLEWARE
-====================== */
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/upload", uploadRoutes);
+app.use("/api/group", groupRoutes);
+app.use("/api/contact", contactRoutes);
+
+app.use("/api/news", newsRoutes);
+/* ======================
+   🔌 DB
+====================== */
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connecté"))
+  .catch(err => console.error("❌ MongoDB erreur :", err));
 
 /* ======================
    ROUTES
 ====================== */
-app.use("/api/upload", uploadRoutes);
-app.use("/api/group", groupRoutes);
-app.use("/api/contact", contactRoutes);
-app.use("/api/members", memberRoutes);
-app.use("/api/news", newsRoutes);
 
-/* ======================
-   DB
-====================== */
-if (!process.env.MONGO_URI) {
-  console.error("❌ MONGO_URI manquant");
-  process.exit(1);
-}
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connecté"))
-  .catch(err => {
-    console.error("❌ MongoDB erreur :", err);
-    process.exit(1);
-  });
+
 
 /* ======================
    TEST
