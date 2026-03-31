@@ -13,10 +13,9 @@ const memberSchema = new mongoose.Schema(
       trim: true
     },
     service: {
-      type: String,
-      required: true,
-      default: "general"
-    },
+  type: String,
+  default: "general"
+}
     company: {
       type: String,
       enum: ["homegroup", "mprenov", "homedesign", "media4"],
