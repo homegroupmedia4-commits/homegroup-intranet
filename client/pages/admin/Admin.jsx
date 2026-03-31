@@ -154,7 +154,6 @@ api.get("/contact/faq/categories").then(setFaqCategories);
 
 }, []);
 
-
 const addCategory = async () => {
   if (!newCategory.trim()) return;
 
@@ -165,15 +164,7 @@ const addCategory = async () => {
   const updated = await api.get("/contact/faq/categories");
   setFaqCategories(updated);
 
-  setFaqCategory(newCategory); // 🔥 AJOUTE CETTE LIGNE
-
-  setNewCategory("");
-};
-
-  // refresh categories
-  const updated = await api.get("/contact/faq/categories");
-  setFaqCategories(updated);
-
+  setFaqCategory(newCategory);
   setNewCategory("");
 };
 
@@ -739,71 +730,60 @@ setNewsList(updated);
 ====================== */}
 <div className="a-card">
   <h3>❓ Gérer la Foire aux questions</h3>
+  <p className="sub">
+    Organisez les entrées par catégorie.
+  </p>
 
-  {faqList.length === 0 && <div>Aucune FAQ</div>}
+  <ul className="faq-a-list">
+    {faqList.length === 0 && (
+      <li style={{ fontSize: ".82rem", color: "var(--ink3)" }}>
+        Aucune FAQ
+      </li>
+    )}
 
-  {faqList.map(f => (
-    <div key={f._id} className="faq-admin-item">
-      <div style={{ fontWeight: 600 }}>{f.question}</div>
-      <div style={{ margin: "5px 0" }}>{f.answer}</div>
-      <div style={{ fontSize: ".75rem", opacity: 0.6 }}>
-        {f.category}
-      </div>
+    {faqList.map((f) => (
+      <li key={f._id} className="faq-a-item">
+        <div className="faq-a-text">
+          <div className="faq-a-q">{f.question}</div>
+          <div className="faq-a-a">{f.answer}</div>
+        </div>
 
-      <button onClick={() => deleteFaq(f._id)}>
-        ❌ Supprimer
-      </button>
+        <span className="badge">
+          {f.category}
+        </span>
 
-      <hr />
-    </div>
-  ))}
+        <button
+          className="doc-del"
+          onClick={() => deleteFaq(f._id)}
+        >
+          ✕
+        </button>
+      </li>
+    ))}
+  </ul>
 
-  {/* QUESTION */}
-  <input
-    placeholder="Question..."
-    value={faqQuestion}
-    onChange={(e) => setFaqQuestion(e.target.value)}
-  />
+  <div className="section-divider" />
 
-  {/* 🔥 CREATE CATEGORY */}
-  <h4>Catégories</h4>
-
-  <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+  {/* INPUT */}
+  <div className="row2">
     <input
-      placeholder="Nouvelle catégorie..."
-      value={newCategory}
-      onChange={(e) => setNewCategory(e.target.value)}
+      placeholder="Question..."
+      value={faqQuestion}
+      onChange={(e) => setFaqQuestion(e.target.value)}
     />
 
-    <button className="btn btn-green" onClick={addCategory}>
-      + Ajouter
-    </button>
+    <select
+      value={faqCategory}
+      onChange={(e) => setFaqCategory(e.target.value)}
+    >
+      {faqCategories.map((cat) => (
+        <option key={cat} value={cat}>
+          {cat}
+        </option>
+      ))}
+    </select>
   </div>
 
-  {/* LIST */}
-  {faqCategories.map(cat => (
-    <div key={cat} style={{
-      display: "flex",
-      justifyContent: "space-between",
-      marginBottom: "5px"
-    }}>
-      <span>{cat}</span>
-    </div>
-  ))}
-
-  {/* SELECT */}
-<select
-  value={faqCategory}
-  onChange={(e) => setFaqCategory(e.target.value)}
->
-  {faqCategories.map(cat => (
-    <option key={cat} value={cat}>
-      {cat}
-    </option>
-  ))}
-</select>
-
-  {/* ANSWER */}
   <textarea
     placeholder="Réponse..."
     value={faqAnswer}
@@ -813,57 +793,74 @@ setNewsList(updated);
   <button className="btn btn-green" onClick={addFaq}>
     + Ajouter cette entrée
   </button>
+
+  {/* CATÉGORIES */}
+  <div style={{ marginTop: "1rem" }}>
+    <h4>Catégories</h4>
+
+    <div style={{ display: "flex", gap: "7px" }}>
+      <input
+        placeholder="Nouvelle catégorie..."
+        value={newCategory}
+        onChange={(e) => setNewCategory(e.target.value)}
+      />
+
+      <button className="btn btn-green" onClick={addCategory}>
+        + Ajouter
+      </button>
+    </div>
+  </div>
 </div>
 
       {/* ======================
     QRS ADMIN
 ====================== */}
 <div className="a-card">
-  <h3>💬 Modération QRS</h3>
+  <h3>💬 Contributions reçues (QRS)</h3>
+  <p className="sub">
+    Modérez les contributions et contrôlez la visibilité.
+  </p>
 
-  {qrsList.length === 0 && <div>Aucune contribution</div>}
+  <ul className="admin-qrs-list">
+    {qrsList.length === 0 && (
+      <li style={{ fontSize: ".82rem", color: "var(--ink3)" }}>
+        Aucune contribution
+      </li>
+    )}
 
-  {qrsList.map(q => (
-    <div key={q._id} className="qrs-admin-card">
+    {qrsList.map((q) => (
+      <li key={q._id} className="admin-qrs-item">
+        <div className="admin-qrs-text">
+          <div className="admin-qrs-author">
+            {q.isAnon ? "🎭 Anonyme" : `👤 ${q.prenom} ${q.nom}`}
+            {" — "}
+            {q.category}
+          </div>
 
-      <div style={{ fontSize: ".75rem", opacity: 0.6 }}>
-        {q.isAnon ? "Anonyme" : `${q.prenom} ${q.nom}`}
-      </div>
+          <div className="admin-qrs-content">
+            {q.message}
+          </div>
+        </div>
 
-      <div style={{ fontWeight: 600 }}>{q.category}</div>
-
-      <div style={{ margin: "6px 0" }}>
-        {q.message}
-      </div>
-
-      <div style={{ fontSize: ".7rem", marginBottom: "8px" }}>
-        Status: <b>{q.status}</b> | Public: <b>{q.public ? "Oui" : "Non"}</b>
-      </div>
-
-      <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-
-        <button onClick={() => updateStatus(q._id, "approved")}>
-          ✅ Approuver
+        <button
+          className={`pub-toggle ${q.public ? "pub" : "priv"}`}
+          onClick={() => togglePublic(q._id)}
+        >
+          {q.public ? "✅ Public" : "🔒 Privé"}
         </button>
 
-        <button onClick={() => updateStatus(q._id, "rejected")}>
-          ❌ Refuser
+        <button
+          className="doc-del"
+          onClick={() => deleteQrs(q._id)}
+        >
+          ✕
         </button>
-
-        <button onClick={() => togglePublic(q._id)}>
-          🌍 Toggle public
-        </button>
-
-        <button onClick={() => deleteQrs(q._id)}>
-          🗑 Supprimer
-        </button>
-
-      </div>
-
-      <hr />
-    </div>
-  ))}
+      </li>
+    ))}
+  </ul>
 </div>
+
+      
 
     </div>
   );
