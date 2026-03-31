@@ -1,11 +1,7 @@
-require("dotenv").config({
-  path: "/home/ubuntu/homegroup-intranet/.env"
-});
-
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
 const uploadRoutes = require("./routes/upload");
 const groupRoutes = require("./routes/group.routes");
 const contactRoutes = require("./routes/contactRoutes");
@@ -13,22 +9,27 @@ const newsRoutes = require("./routes/news.routes");
 
 const app = express();
 
-console.log("🔐 MONGO_URI:", process.env.MONGO_URI ? "OK" : "❌ MISSING");
-
 app.use(cors());
 app.use(express.json());
 
 app.use("/api/upload", uploadRoutes);
 app.use("/api/group", groupRoutes);
 app.use("/api/contact", contactRoutes);
-app.use("/api/news", newsRoutes);
 
+app.use("/api/news", newsRoutes);
 /* ======================
-   DB
+   🔌 DB
 ====================== */
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connecté"))
   .catch(err => console.error("❌ MongoDB erreur :", err));
+
+/* ======================
+   ROUTES
+====================== */
+
+
+
 
 /* ======================
    TEST
