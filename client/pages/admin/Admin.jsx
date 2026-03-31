@@ -155,12 +155,20 @@ api.get("/contact/faq/categories").then(setFaqCategories);
 }, []);
 
 
-  const addCategory = async () => {
+const addCategory = async () => {
   if (!newCategory.trim()) return;
 
-  const res = await api.post("/contact/faq/categories", {
+  await api.post("/contact/faq/categories", {
     name: newCategory
   });
+
+  const updated = await api.get("/contact/faq/categories");
+  setFaqCategories(updated);
+
+  setFaqCategory(newCategory); // 🔥 AJOUTE CETTE LIGNE
+
+  setNewCategory("");
+};
 
   // refresh categories
   const updated = await api.get("/contact/faq/categories");
@@ -784,14 +792,16 @@ setNewsList(updated);
   ))}
 
   {/* SELECT */}
-  <select
-    value={faqCategory}
-    onChange={(e) => setFaqCategory(e.target.value)}
-  >
-    {faqCategories.map(cat => (
-      <option key={cat}>{cat}</option>
-    ))}
-  </select>
+<select
+  value={faqCategory}
+  onChange={(e) => setFaqCategory(e.target.value)}
+>
+  {faqCategories.map(cat => (
+    <option key={cat} value={cat}>
+      {cat}
+    </option>
+  ))}
+</select>
 
   {/* ANSWER */}
   <textarea
