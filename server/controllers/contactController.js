@@ -3,6 +3,22 @@
 const QRS = require("../models/QRS");
 const FAQ = require("../models/FAQ");
 
+const mongoose = require("mongoose");
+
+/* ======================
+   FAQ CATEGORY (INLINE MODEL)
+====================== */
+const faqCategorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  }
+});
+
+const FaqCategory = mongoose.models.FaqCategory || mongoose.model("FaqCategory", faqCategorySchema);
+
 /* ======================
    FAQ
 ====================== */
@@ -18,10 +34,54 @@ const getFaq = async (req, res) => {
   }
 };
 
+/* ======================
+   FAQ CATEGORIES
+====================== */
+
+// CREATE
+const createFaqCategory = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: "Nom requis" });
+    }
+
+    const cat = await FaqCategory.create({
+      name: name.trim()
+    });
+
+    res.json(cat);
+
+  } catch (err) {
+    console.error("❌ createFaqCategory:", err);
+    res.status(500).json({ error: "Erreur création catégorie" });
+  }
+};
+
+// DELETE
+const deleteFaqCategory = async (req, res) => {
+  try {
+    await FaqCategory.findByIdAndDelete(req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("❌ deleteFaqCategory:", err);
+    res.status(500).json({ error: "Erreur suppression catégorie" });
+  }
+};
+
 // GET categories
 const getFaqCategories = async (req, res) => {
   try {
-    const cats = await FAQ.distinct("category");
+    const getFaqCategories = async (req, res) => {
+  try {
+    const cats = await FaqCategory.find().sort({ name: 1 });
+    res.json(cats.map(c => c.name));
+  } catch (err) {
+    console.error("❌ getFaqCategories:", err);
+    res.status(500).json({ error: "Erreur catégories FAQ" });
+  }
+};
     res.json(cats);
   } catch (err) {
     console.error("❌ getFaqCategories:", err);
@@ -193,6 +253,11 @@ module.exports = {
   getFaqCategories,
   createFaq,
   deleteFaq,
+
+    createFaqCategory,     // ✅ AJOUT
+  deleteFaqCategory,     // ✅ AJOUT
+
+   
   createQRS,
   getPublicQRS,
   getAllQRS,
