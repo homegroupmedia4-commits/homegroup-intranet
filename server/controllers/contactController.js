@@ -70,14 +70,48 @@ const deleteFaq = async (req, res) => {
 ====================== */
 
 // CREATE QRS
+/* ======================
+   QRS
+====================== */
+
+// CREATE QRS
 const createQRS = async (req, res) => {
   try {
-    const q = new QRS(req.body);
-    await q.save();
-    res.json({ ok: true });
+    const {
+      prenom = "",
+      nom = "",
+      isAnon = false,
+      category = "Question",
+      message
+    } = req.body;
+
+    // ✅ VALIDATION HARD
+    if (!message || !message.trim()) {
+      return res.status(400).json({
+        error: "Message requis"
+      });
+    }
+
+    // ✅ SANITIZE
+    const cleanMessage = message.trim();
+
+    const q = await QRS.create({
+      prenom: isAnon ? "" : prenom.trim(),
+      nom: isAnon ? "" : nom.trim(),
+      isAnon,
+      category,
+      message: cleanMessage,
+      status: "pending",   // sécurité modération
+      public: false        // jamais public direct
+    });
+
+    res.json(q);
+
   } catch (err) {
     console.error("❌ createQRS:", err);
-    res.status(500).json({ error: "Erreur création QRS" });
+    res.status(500).json({
+      error: "Erreur création QRS"
+    });
   }
 };
 
