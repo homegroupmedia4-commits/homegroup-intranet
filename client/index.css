@@ -31,6 +31,7 @@
   box-shadow:var(--sh);
   margin-bottom:7px;
   overflow:hidden;
+   width: 520px;
 }
 
 .faq-q{
@@ -62,7 +63,7 @@
 } 
 .faq-item.open .faq-ans{
   max-height: 200px; /* ou 250px */
-   border:3px solid red !important; 
+   /* border:3px solid red !important;  */
 }
 
 
