@@ -1,7 +1,9 @@
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
+
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+
 const uploadRoutes = require("./routes/upload");
 const groupRoutes = require("./routes/group.routes");
 const contactRoutes = require("./routes/contactRoutes");
@@ -10,41 +12,46 @@ const memberRoutes = require("./routes/member.routes");
 
 const app = express();
 
+/* ======================
+   MIDDLEWARE
+====================== */
 app.use(cors());
 app.use(express.json());
 
+/* ======================
+   ROUTES API
+====================== */
 app.use("/api/upload", uploadRoutes);
 app.use("/api/group", groupRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/members", memberRoutes);
-
 app.use("/api/news", newsRoutes);
-/* ======================
-   🔌 DB
-====================== */
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connecté"))
-  .catch(err => console.error("❌ MongoDB erreur :", err));
 
 /* ======================
-   ROUTES
-====================== */
-
-
-
-
-/* ======================
-   TEST
+   TEST ROUTE
 ====================== */
 app.get("/api", (req, res) => {
   res.json({ message: "Home Group API running 🚀" });
 });
 
 /* ======================
-   SERVER
+   DB + SERVER START
 ====================== */
+
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// option recommandée (évite warnings mongoose)
+mongoose.set("strictQuery", true);
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ MongoDB connecté");
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB erreur :", err);
+    process.exit(1); // stop propre si DB KO
+  });
