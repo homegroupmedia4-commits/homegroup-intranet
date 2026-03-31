@@ -15,6 +15,8 @@ export default function Admin() {
   const [qrsList, setQrsList] = useState([]);
   const [newsList, setNewsList] = useState([]);
 
+  const [newCategory, setNewCategory] = useState("");
+
   const [faqList, setFaqList] = useState([]);
 const [faqCategories, setFaqCategories] = useState([]);
 
@@ -151,6 +153,21 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   api.get("/news").then(setNewsList);
 
 }, []);
+
+
+  const addCategory = async () => {
+  if (!newCategory.trim()) return;
+
+  const res = await api.post("/contact/faq/categories", {
+    name: newCategory
+  });
+
+  // refresh categories
+  const updated = await api.get("/contact/faq/categories");
+  setFaqCategories(updated);
+
+  setNewCategory("");
+};
 
   /* ======================
      NEWS PUBLISH
@@ -719,15 +736,8 @@ setNewsList(updated);
 
   {faqList.map(f => (
     <div key={f._id} className="faq-admin-item">
-
-      <div style={{ fontWeight: 600 }}>
-        {f.question}
-      </div>
-
-      <div style={{ margin: "5px 0" }}>
-        {f.answer}
-      </div>
-
+      <div style={{ fontWeight: 600 }}>{f.question}</div>
+      <div style={{ margin: "5px 0" }}>{f.answer}</div>
       <div style={{ fontSize: ".75rem", opacity: 0.6 }}>
         {f.category}
       </div>
@@ -740,12 +750,40 @@ setNewsList(updated);
     </div>
   ))}
 
+  {/* QUESTION */}
   <input
     placeholder="Question..."
     value={faqQuestion}
     onChange={(e) => setFaqQuestion(e.target.value)}
   />
 
+  {/* 🔥 CREATE CATEGORY */}
+  <h4>Catégories</h4>
+
+  <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+    <input
+      placeholder="Nouvelle catégorie..."
+      value={newCategory}
+      onChange={(e) => setNewCategory(e.target.value)}
+    />
+
+    <button className="btn btn-green" onClick={addCategory}>
+      + Ajouter
+    </button>
+  </div>
+
+  {/* LIST */}
+  {faqCategories.map(cat => (
+    <div key={cat} style={{
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: "5px"
+    }}>
+      <span>{cat}</span>
+    </div>
+  ))}
+
+  {/* SELECT */}
   <select
     value={faqCategory}
     onChange={(e) => setFaqCategory(e.target.value)}
@@ -755,6 +793,7 @@ setNewsList(updated);
     ))}
   </select>
 
+  {/* ANSWER */}
   <textarea
     placeholder="Réponse..."
     value={faqAnswer}
@@ -765,7 +804,6 @@ setNewsList(updated);
     + Ajouter cette entrée
   </button>
 </div>
-
 
       {/* ======================
     QRS ADMIN
