@@ -3,6 +3,24 @@
 @tailwind utilities;
 
 /* =========================
+   ROOT / DESIGN SYSTEM
+========================= */
+:root{
+  --ink:#111827;--ink2:#374151;--ink3:#6b7280;
+  --cream:#f8fafc;--warm:#f1f5f9;--white:#fff;
+  --green:#2d7d32;--green2:#4caf50;--green-pale:#e8f5e9;
+  --gold:#c9a84c;
+  --red:#c62828;--red-pale:#fce4ec;
+  --blue:#1565c0;--blue-pale:#e3f2fd;
+  --orange:#e65100;--orange-pale:#fff3e0;
+  --purple:#6a1b9a;--purple-pale:#f3e5f5;
+  --border:rgba(17,24,39,.09);
+  --sh:0 2px 12px rgba(17,24,39,.07);
+  --sh2:0 8px 32px rgba(17,24,39,.12);
+  --r:10px;
+}
+
+/* =========================
    GROUPE PAGE
 ========================= */
 
@@ -46,6 +64,16 @@
   max-height: 1000px; /* safe large */
 }
 
+
+
+.faq-cat-tabs{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+
+
 .faq-ans-inner{
   padding:0 1.2rem 1rem;
   color:var(--ink2);
@@ -56,12 +84,6 @@
   line-height: 1.6;
 }
 
-.faq-cat-tabs{
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin-bottom:1rem;
-}
 
 .fct{
   padding:5px 12px;
@@ -86,11 +108,7 @@
   border-color:var(--ink);
 }
 
-.faq-ans-inner{
-  padding:0 1.2rem 1rem;
-  color:var(--ink2);
-  border-top:1px solid var(--border);
-}
+
 
 .nc-body p{
   font-size:.83rem;
@@ -756,23 +774,7 @@
 
 
 
-/* =========================
-   ROOT / DESIGN SYSTEM
-========================= */
-:root{
-  --ink:#111827;--ink2:#374151;--ink3:#6b7280;
-  --cream:#f8fafc;--warm:#f1f5f9;--white:#fff;
-  --green:#2d7d32;--green2:#4caf50;--green-pale:#e8f5e9;
-  --gold:#c9a84c;
-  --red:#c62828;--red-pale:#fce4ec;
-  --blue:#1565c0;--blue-pale:#e3f2fd;
-  --orange:#e65100;--orange-pale:#fff3e0;
-  --purple:#6a1b9a;--purple-pale:#f3e5f5;
-  --border:rgba(17,24,39,.09);
-  --sh:0 2px 12px rgba(17,24,39,.07);
-  --sh2:0 8px 32px rgba(17,24,39,.12);
-  --r:10px;
-}
+
 
 /* RESET */
 *{margin:0;padding:0;box-sizing:border-box}
