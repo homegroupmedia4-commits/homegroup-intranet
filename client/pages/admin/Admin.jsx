@@ -15,6 +15,17 @@ export default function Admin() {
   const [qrsList, setQrsList] = useState([]);
   const [newsList, setNewsList] = useState([]);
 
+
+  const [members, setMembers] = useState([]);
+const [services, setServices] = useState([]);
+
+const [showAddModal, setShowAddModal] = useState(false);
+const [showEditModal, setShowEditModal] = useState(false);
+
+const [editingMember, setEditingMember] = useState(null);
+
+const [filterService, setFilterService] = useState("all");
+
   const [newCategory, setNewCategory] = useState("");
 
   const [faqList, setFaqList] = useState([]);
@@ -152,7 +163,33 @@ api.get("/contact/faq").then(setFaqList);
 api.get("/contact/faq/categories").then(setFaqCategories);
   api.get("/news").then(setNewsList);
 
+  api.get("/members").then(setMembers);
+api.get("/services").then(setServices); // optionnel si dynamique
+
 }, []);
+
+  const handleAddMember = async () => {
+  const res = await api.post("/members", editingMember);
+  setMembers(prev => [...prev, res]);
+  setShowAddModal(false);
+};
+
+  const handleUpdateMember = async () => {
+  const res = await api.put(`/members/${editingMember._id}`, editingMember);
+
+  setMembers(prev =>
+    prev.map(m => m._id === res._id ? res : m)
+  );
+
+  setShowEditModal(false);
+};
+
+  const deleteMember = async (id) => {
+  if (!window.confirm("Supprimer ?")) return;
+
+  await api.delete(`/members/${id}`);
+  setMembers(prev => prev.filter(m => m._id !== id));
+};
 
 const addCategory = async () => {
   if (!newCategory.trim()) return;
@@ -859,6 +896,130 @@ setNewsList(updated);
     ))}
   </ul>
 </div>
+
+
+      <div className="a-card">
+  <h3>👥 Gestion des collaborateurs</h3>
+
+  <p className="sub">
+    Ajoutez, modifiez ou supprimez les membres de l'organisation.
+  </p>
+
+  <div style={{ display: "flex", gap: 8, marginBottom: "1rem" }}>
+    
+    <button
+      className="btn btn-green btn-sm"
+      onClick={() => setShowAddModal(true)}
+    >
+      ➕ Ajouter un collaborateur
+    </button>
+
+    <select
+      value={filterService}
+      onChange={(e) => setFilterService(e.target.value)}
+    >
+      <option value="all">Tous les services</option>
+      {services.map((s) => (
+        <option key={s.id} value={s.id}>
+          {s.name}
+        </option>
+      ))}
+    </select>
+
+  </div>
+
+  <div>
+    {members
+      .filter(m => filterService === "all" || m.service === filterService)
+      .map((m) => (
+        <div key={m._id} className="member-admin-card">
+
+          <strong>{m.name}</strong>
+          <div>{m.role}</div>
+
+          <div style={{ marginTop: 8 }}>
+            <button
+              className="btn btn-outline btn-sm"
+              onClick={() => {
+                setEditingMember(m);
+                setShowEditModal(true);
+              }}
+            >
+              ✏️ Modifier
+            </button>
+
+            <button
+              className="doc-del"
+              onClick={() => deleteMember(m._id)}
+            >
+              🗑️
+            </button>
+          </div>
+
+        </div>
+      ))}
+  </div>
+</div>
+
+      {showAddModal && (
+  <div className="modal-overlay open">
+    <div className="modal">
+
+      <h3>➕ Ajouter</h3>
+
+      <input
+        placeholder="Nom"
+        onChange={(e) => setEditingMember({ ...editingMember, name: e.target.value })}
+      />
+
+      <input
+        placeholder="Rôle"
+        onChange={(e) => setEditingMember({ ...editingMember, role: e.target.value })}
+      />
+
+      <button onClick={handleAddMember}>
+        Ajouter
+      </button>
+
+      <button onClick={() => setShowAddModal(false)}>
+        Annuler
+      </button>
+
+    </div>
+  </div>
+)}
+
+      {showEditModal && editingMember && (
+  <div className="modal-overlay open">
+    <div className="modal">
+
+      <h3>Modifier</h3>
+
+      <input
+        value={editingMember.name}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, name: e.target.value })
+        }
+      />
+
+      <input
+        value={editingMember.role}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, role: e.target.value })
+        }
+      />
+
+      <button onClick={handleUpdateMember}>
+        Sauvegarder
+      </button>
+
+      <button onClick={() => setShowEditModal(false)}>
+        Annuler
+      </button>
+
+    </div>
+  </div>
+)}
 
       
 
