@@ -112,6 +112,7 @@ return ( <div className="page active">
 
         {faqCategories.map(cat => (
           <button
+              type="button"
             key={cat}
             className={`fct ${activeCat === cat ? "active" : ""}`}
             onClick={() => setActiveCat(cat)}
