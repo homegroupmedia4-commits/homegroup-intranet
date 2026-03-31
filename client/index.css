@@ -20,6 +20,86 @@
   --r:10px;
 }
 
+
+.faq-a-list {
+  list-style: none;
+  padding: 0;
+}
+
+.faq-a-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  margin-bottom: 6px;
+  background: var(--cream);
+}
+
+.faq-a-text {
+  flex: 1;
+}
+
+.faq-a-q {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.faq-a-a {
+  font-size: 0.78rem;
+  color: var(--ink3);
+}
+
+.admin-qrs-list {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-qrs-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  margin-bottom: 6px;
+  background: var(--cream);
+}
+
+.admin-qrs-text {
+  flex: 1;
+}
+
+.admin-qrs-author {
+  font-size: 0.75rem;
+  color: var(--ink3);
+}
+
+.admin-qrs-content {
+  font-size: 0.85rem;
+}
+
+.pub-toggle {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.pub-toggle.pub {
+  background: var(--green-pale);
+  color: var(--green);
+  border-color: var(--green);
+}
+
+.pub-toggle.priv {
+  background: var(--warm);
+  color: var(--ink3);
+  border-color: var(--ink3);
+}
+
 /* =========================
    GROUPE PAGE
 ========================= */
