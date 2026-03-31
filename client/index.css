@@ -21,6 +21,211 @@
 }
 
 
+/* ======================
+   ADMIN - MEMBERS
+====================== */
+
+.member-admin-card {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+
+.member-admin-card:hover {
+  box-shadow: var(--sh2);
+  transform: translateY(-2px);
+}
+
+/* Nom */
+.member-admin-card strong {
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: block;
+}
+
+/* Role */
+.member-admin-card div {
+  font-size: 0.8rem;
+  color: var(--ink3);
+}
+
+/* Actions */
+.member-admin-card button {
+  margin-right: 6px;
+}
+
+/* ======================
+   BUTTONS (harmonisé)
+====================== */
+
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 7px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.75rem;
+}
+
+.btn-green {
+  background: var(--green);
+  color: #fff;
+}
+
+.btn-green:hover {
+  background: #1b5e20;
+}
+
+.btn-outline {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--ink2);
+}
+
+.btn-outline:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+/* Delete */
+.doc-del {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--red);
+  font-size: 0.9rem;
+  padding: 4px 6px;
+  border-radius: 5px;
+  transition: background 0.15s;
+}
+
+.doc-del:hover {
+  background: var(--red-pale);
+}
+
+/* ======================
+   SELECT
+====================== */
+
+select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--cream);
+  font-size: 0.8rem;
+  outline: none;
+  cursor: pointer;
+}
+
+select:focus {
+  border-color: var(--green);
+  background: #fff;
+}
+
+/* ======================
+   MODAL OVERLAY
+====================== */
+
+.modal-overlay {
+  display: none;
+}
+
+.modal-overlay.open {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ======================
+   MODAL
+====================== */
+
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.6rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: var(--sh2);
+  animation: fadeUp 0.25s ease;
+}
+
+/* Title */
+.modal h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+/* Inputs */
+.modal input,
+.modal textarea,
+.modal select {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 0.85rem;
+  margin-bottom: 0.8rem;
+  background: var(--cream);
+  transition: all 0.2s;
+}
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+  border-color: var(--green);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(45,127,50,0.1);
+}
+
+/* Buttons inside modal */
+.modal button {
+  margin-right: 8px;
+  margin-top: 5px;
+}
+
+/* ======================
+   TEXT
+====================== */
+
+.sub {
+  font-size: 0.8rem;
+  color: var(--ink3);
+  margin-bottom: 1rem;
+}
+
+/* ======================
+   ANIMATION
+====================== */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
 .faq-a-list {
   list-style: none;
   padding: 0;
