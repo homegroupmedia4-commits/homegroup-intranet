@@ -56,6 +56,13 @@ router.post("/qrs", createQRS);
 // récupérer les contributions publiques
 router.get("/qrs/public", getPublicQRS);
 
+/* ======================
+   FAQ CATEGORIES
+====================== */
+
+router.post("/faq/categories", createFaqCategory);
+router.delete("/faq/categories/:id", deleteFaqCategory);
+
 
 /* ======================
    QRS - ADMIN
