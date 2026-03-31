@@ -8,6 +8,7 @@ exports.getMembers = async (req, res) => {
     const members = await Member.find().sort({ createdAt: -1 });
     res.json(members);
   } catch (err) {
+    console.error("❌ getMembers:", err);
     res.status(500).json({ error: "Erreur récupération membres" });
   }
 };
@@ -17,10 +18,40 @@ exports.getMembers = async (req, res) => {
 ====================== */
 exports.createMember = async (req, res) => {
   try {
-    const member = await Member.create(req.body);
+    const {
+      name,
+      role,
+      service,
+      company,
+      phone,
+      email,
+      desc
+    } = req.body;
+
+    // validation minimale
+    if (!name || !role) {
+      return res.status(400).json({
+        error: "Nom et rôle obligatoires"
+      });
+    }
+
+    const member = await Member.create({
+      name: name.trim(),
+      role: role.trim(),
+      service: service || "general",
+      company: company || "homegroup",
+      phone: phone || "",
+      email: email || "",
+      desc: desc || ""
+    });
+
     res.json(member);
+
   } catch (err) {
-    res.status(400).json({ error: "Erreur création membre" });
+    console.error("❌ createMember:", err);
+    res.status(400).json({
+      error: err.message || "Erreur création membre"
+    });
   }
 };
 
@@ -29,19 +60,29 @@ exports.createMember = async (req, res) => {
 ====================== */
 exports.updateMember = async (req, res) => {
   try {
-    const member = await Member.findByIdAndUpdate(
+    const updated = await Member.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      {
+        ...req.body,
+        name: req.body.name?.trim(),
+        role: req.body.role?.trim()
+      },
       { new: true }
     );
 
-    if (!member) {
-      return res.status(404).json({ error: "Membre non trouvé" });
+    if (!updated) {
+      return res.status(404).json({
+        error: "Membre non trouvé"
+      });
     }
 
-    res.json(member);
+    res.json(updated);
+
   } catch (err) {
-    res.status(400).json({ error: "Erreur update membre" });
+    console.error("❌ updateMember:", err);
+    res.status(400).json({
+      error: "Erreur update membre"
+    });
   }
 };
 
@@ -50,14 +91,20 @@ exports.updateMember = async (req, res) => {
 ====================== */
 exports.deleteMember = async (req, res) => {
   try {
-    const member = await Member.findByIdAndDelete(req.params.id);
+    const deleted = await Member.findByIdAndDelete(req.params.id);
 
-    if (!member) {
-      return res.status(404).json({ error: "Membre non trouvé" });
+    if (!deleted) {
+      return res.status(404).json({
+        error: "Membre non trouvé"
+      });
     }
 
     res.json({ message: "Membre supprimé" });
+
   } catch (err) {
-    res.status(400).json({ error: "Erreur suppression membre" });
+    console.error("❌ deleteMember:", err);
+    res.status(400).json({
+      error: "Erreur suppression membre"
+    });
   }
 };
