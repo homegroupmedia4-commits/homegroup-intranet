@@ -13,14 +13,16 @@ const memberSchema = new mongoose.Schema(
       trim: true
     },
     service: {
-  type: String,
-  default: "general"
-}
+      type: String,
+      default: "general"
+    }, // ✅ virgule FIX
+
     company: {
       type: String,
       enum: ["homegroup", "mprenov", "homedesign", "media4"],
       default: "homegroup"
     },
+
     phone: {
       type: String,
       default: ""
