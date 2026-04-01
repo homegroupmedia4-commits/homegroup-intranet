@@ -12,6 +12,8 @@ const [search, setSearch] = useState("");
 const [activeCat, setActiveCat] = useState("all");
 const [openFaq, setOpenFaq] = useState(null);
 
+  const [qrsCategories, setQrsCategories] = useState([]);
+
 /* ======================
 QRS STATE
 ====================== */
@@ -29,6 +31,7 @@ useEffect(() => {
 api.get("/contact/faq").then(setFaqs);
 api.get("/contact/faq/categories").then(setFaqCategories);
 api.get("/contact/qrs/public").then(setQrsList);
+api.get("/contact/qrs/categories").then(setQrsCategories);
 }, []);
 
 /* ======================
@@ -195,15 +198,19 @@ return ( <div className="page active">
 
       <label>Catégorie</label>
       <div className="cat-select-grid">
-        {["Question","Suggestion","Amélioration","Problème","Autre"].map(cat => (
-          <button
-            key={cat}
-            type="button"
-            className={`csi ${selectedCat === cat ? "sel" : ""}`}
-            onClick={() => setSelectedCat(cat)}
-          >
-            {cat}
-          </button>
+      {qrsCategories.map(cat => (
+
+  
+       <button
+  key={cat._id}
+  type="button"
+  className={`csi ${selectedCat === cat.name ? "sel" : ""}`}
+  onClick={() => setSelectedCat(cat.name)}
+>
+  {cat.name}
+</button>
+
+  
         ))}
       </div>
 
