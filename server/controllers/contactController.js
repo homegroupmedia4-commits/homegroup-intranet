@@ -202,7 +202,11 @@ const createQRS = async (req, res) => {
     });
 
     // ✅ EMAIL
-    await sendQrsEmail(q);
+ try {
+  await sendQrsEmail(q);
+} catch (err) {
+  console.error("❌ EMAIL ERROR:", err);
+}
 
     res.json(q);
 
