@@ -167,7 +167,11 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   api.get("/news").then(setNewsList);
 
   api.get("/members").then(setMembers);
-api.get("/services").then(setServices); // optionnel si dynamique
+// api.get("/services").then(setServices); 
+
+  api.get("/services").then(data => {
+  setServices(Array.isArray(data) ? data : []);
+});
 
   api.get("/contact/qrs/categories").then(setQrsCategories);
 
