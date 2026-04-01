@@ -15,6 +15,9 @@ export default function Admin() {
   const [qrsList, setQrsList] = useState([]);
   const [newsList, setNewsList] = useState([]);
 
+  const [qrsCategories, setQrsCategories] = useState([]);
+const [newQrsCategory, setNewQrsCategory] = useState("");
+
 
   const [members, setMembers] = useState([]);
 const [services, setServices] = useState([]);
@@ -166,6 +169,8 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   api.get("/members").then(setMembers);
 api.get("/services").then(setServices); // optionnel si dynamique
 
+  api.get("/contact/qrs/categories").then(setQrsCategories);
+
 }, []);
 
   const handleAddMember = async () => {
@@ -174,6 +179,29 @@ api.get("/services").then(setServices); // optionnel si dynamique
   setShowAddModal(false);
 };
 
+
+
+  const addQrsCategory = async () => {
+  if (!newQrsCategory.trim()) return;
+
+  await api.post("/contact/qrs/categories", {
+    name: newQrsCategory
+  });
+
+  const updated = await api.get("/contact/qrs/categories");
+  setQrsCategories(updated);
+  setNewQrsCategory("");
+};
+
+
+const deleteQrsCategory = async (id) => {
+  await api.delete(`/contact/qrs/categories/${id}`);
+
+  const updated = await api.get("/contact/qrs/categories");
+  setQrsCategories(updated);
+};
+
+  
   const handleUpdateMember = async () => {
   const res = await api.put(`/members/${editingMember._id}`, editingMember);
 
@@ -889,6 +917,44 @@ setNewsList(updated);
         <button
           className="doc-del"
           onClick={() => deleteQrs(q._id)}
+        >
+          ✕
+        </button>
+
+
+        
+      </li>
+    ))}
+  </ul>
+</div>
+
+
+      <div className="a-card">
+  <h3>📂 Catégories QRS</h3>
+
+  <div style={{ display: "flex", gap: "7px" }}>
+    <input
+      placeholder="Nouvelle catégorie..."
+      value={newQrsCategory}
+      onChange={(e) => setNewQrsCategory(e.target.value)}
+    />
+
+    <button className="btn btn-green" onClick={addQrsCategory}>
+      + Ajouter
+    </button>
+  </div>
+
+  <ul style={{ marginTop: 10 }}>
+    {qrsCategories.map((cat) => (
+ <li key={cat._id} style={{ display: "flex", gap: 10 }}>
+  {cat.name}
+
+        <button
+          className="doc-del"
+          onClick={() => {
+  if (!window.confirm("Supprimer cette catégorie ?")) return;
+  deleteQrsCategory(cat._id);
+}}
         >
           ✕
         </button>
