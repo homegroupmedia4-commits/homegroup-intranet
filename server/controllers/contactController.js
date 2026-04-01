@@ -4,6 +4,9 @@ const QRS = require("../models/QRS");
 const FAQ = require("../models/FAQ");
 const mongoose = require("mongoose");
 
+const { sendQrsEmail } = require("../services/mail");
+const QRSCategory = require("../models/QRSCategory"); // ✅ NEW
+
 /* ======================
    MODEL
 ====================== */
@@ -35,13 +38,13 @@ const getFaq = async (req, res) => {
 };
 
 /* ======================
-   CATEGORIES
+   FAQ CATEGORIES
 ====================== */
 
 const getFaqCategories = async (req, res) => {
   try {
     const cats = await FaqCategory.find().sort({ name: 1 });
-    res.json(cats.map(c => c.name));
+    res.json(cats.map(c => c.name)); // OK pour FAQ
   } catch (err) {
     console.error("❌ getFaqCategories:", err);
     res.status(500).json({ error: "Erreur catégories FAQ" });
@@ -121,26 +124,85 @@ const deleteFaq = async (req, res) => {
 };
 
 /* ======================
+   QRS CATEGORIES (NEW 🔥)
+====================== */
+
+const getQrsCategories = async (req, res) => {
+  try {
+    const cats = await QRSCategory.find().sort({ name: 1 });
+    res.json(cats); // ⚠️ IMPORTANT (avec _id)
+  } catch (err) {
+    console.error("❌ getQrsCategories:", err);
+    res.status(500).json({ error: "Erreur catégories QRS" });
+  }
+};
+
+const createQrsCategory = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: "Nom requis" });
+    }
+
+    const cat = await QRSCategory.create({ name: name.trim() });
+    res.json(cat);
+
+  } catch (err) {
+    console.error("❌ createQrsCategory:", err);
+    res.status(500).json({ error: "Erreur création catégorie QRS" });
+  }
+};
+
+const deleteQrsCategory = async (req, res) => {
+  try {
+    await QRSCategory.findByIdAndDelete(req.params.id);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("❌ deleteQrsCategory:", err);
+    res.status(500).json({ error: "Erreur suppression catégorie QRS" });
+  }
+};
+
+/* ======================
    QRS
 ====================== */
 
 const createQRS = async (req, res) => {
   try {
-    const { prenom = "", nom = "", isAnon = false, category = "Question", message } = req.body;
+    const {
+      prenom = "",
+      nom = "",
+      isAnon = false,
+      category = "Question",
+      message
+    } = req.body;
 
     if (!message || !message.trim()) {
       return res.status(400).json({ error: "Message requis" });
     }
 
+    const cleanCategory = category?.trim() || "Question";
+
+    // ✅ AUTO CREATE CATEGORY
+    await QRSCategory.findOneAndUpdate(
+      { name: cleanCategory },
+      { name: cleanCategory },
+      { upsert: true }
+    );
+
     const q = await QRS.create({
       prenom: isAnon ? "" : prenom.trim(),
       nom: isAnon ? "" : nom.trim(),
       isAnon,
-      category,
+      category: cleanCategory,
       message: message.trim(),
       status: "pending",
       public: false
     });
+
+    // ✅ EMAIL
+    await sendQrsEmail(q);
 
     res.json(q);
 
@@ -215,16 +277,24 @@ const deleteQRS = async (req, res) => {
 };
 
 module.exports = {
+  /* FAQ */
   getFaq,
   getFaqCategories,
   createFaq,
   deleteFaq,
   createFaqCategory,
   deleteFaqCategory,
+
+  /* QRS */
   createQRS,
   getPublicQRS,
   getAllQRS,
   updateQRSStatus,
   toggleQRSVisibility,
-  deleteQRS
+  deleteQRS,
+
+  /* QRS CATEGORIES */
+  getQrsCategories,
+  createQrsCategory,
+  deleteQrsCategory
 };
