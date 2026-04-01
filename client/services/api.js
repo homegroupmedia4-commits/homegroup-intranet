@@ -3,10 +3,20 @@ const BASE_URL =
     ? "http://localhost:5000/api"
     : "https://com.home-group.fr/api";
 
+const safeJson = async (res) => {
+  try {
+    return await res.json();
+  } catch {
+    return null;
+  }
+};
+
 export const api = {
+
   get: async (url) => {
     const res = await fetch(`${BASE_URL}${url}`);
-    return res.json();
+    const data = await safeJson(res);
+    return data;
   },
 
   post: async (url, data) => {
@@ -14,30 +24,28 @@ export const api = {
 
     const res = await fetch(`${BASE_URL}${url}`, {
       method: "POST",
-      headers: isFormData
-        ? {} // ✅ NE RIEN METTRE
-        : { "Content-Type": "application/json" },
+      headers: isFormData ? {} : { "Content-Type": "application/json" },
       body: isFormData ? data : JSON.stringify(data)
     });
 
-    return res.json();
+    return await safeJson(res);
   },
 
-   put: async (url, data) => {
+  put: async (url, data) => {
     const res = await fetch(`${BASE_URL}${url}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
 
-    return res.json();
+    return await safeJson(res);
   },
-
 
   delete: async (url) => {
     const res = await fetch(`${BASE_URL}${url}`, {
       method: "DELETE"
     });
-    return res.json();
+
+    return await safeJson(res);
   }
 };
