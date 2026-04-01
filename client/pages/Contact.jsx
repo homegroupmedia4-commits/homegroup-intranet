@@ -198,7 +198,7 @@ return ( <div className="page active">
 
       <label>Catégorie</label>
       <div className="cat-select-grid">
-      {qrsCategories.map(cat => (
+     {(qrsCategories || []).map(cat => (
 
   
        <button
