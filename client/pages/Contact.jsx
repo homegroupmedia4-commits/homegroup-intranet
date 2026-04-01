@@ -31,7 +31,10 @@ useEffect(() => {
 api.get("/contact/faq").then(setFaqs);
 api.get("/contact/faq/categories").then(setFaqCategories);
 api.get("/contact/qrs/public").then(setQrsList);
-api.get("/contact/qrs/categories").then(setQrsCategories);
+api.get("/contact/qrs/categories").then(data => {
+  console.log("QRS categories:", data);
+  setQrsCategories(Array.isArray(data) ? data : []);
+});
 }, []);
 
 /* ======================
