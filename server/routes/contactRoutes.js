@@ -8,9 +8,8 @@ const {
   getFaqCategories,
   createFaq,
   deleteFaq,
-
-  createFaqCategory,   // ✅
-  deleteFaqCategory,   // ✅
+  createFaqCategory,
+  deleteFaqCategory,
 
   /* QRS */
   createQRS,
@@ -18,7 +17,12 @@ const {
   getAllQRS,
   updateQRSStatus,
   toggleQRSVisibility,
-  deleteQRS
+  deleteQRS,
+
+  /* QRS CATEGORIES 🔥 */
+  getQrsCategories,
+  createQrsCategory,
+  deleteQrsCategory
 
 } = require("../controllers/contactController");
 
@@ -33,6 +37,10 @@ router.get("/faq", getFaq);
 
 // récupérer les catégories
 router.get("/faq/categories", getFaqCategories);
+
+router.get("/qrs/categories", getQrsCategories);
+router.post("/qrs/categories", createQrsCategory);
+router.delete("/qrs/categories/:id", deleteQrsCategory);
 
 
 /* ======================
