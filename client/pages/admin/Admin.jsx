@@ -1043,11 +1043,11 @@ setNewsList(updated);
           <div>{m.role}</div>
 
           {/* DEBUG / INFO */}
-          <div style={{ fontSize: ".7rem", opacity: 0.6 }}>
-            {m.company} • {m.service}
-          </div>
+        <div className="member-badge">
+  {m.company} • {m.service}
+</div>
 
-          <div style={{ marginTop: 8 }}>
+          <div className="member-admin-actions">
             <button
               className="btn btn-outline btn-sm"
               onClick={() => {
