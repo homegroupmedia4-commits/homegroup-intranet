@@ -6,9 +6,15 @@ export default function Organisation() {
   const [members, setMembers] = useState([]);
   const [activeCompany, setActiveCompany] = useState("all");
 
-  /* ======================
-     SERVICES (avec couleurs)
-  ====================== */
+  // CHAT STATE
+  const [messages, setMessages] = useState([
+    {
+      role: "bot",
+      text: "Bonjour ! Posez-moi vos questions sur l'organisation du groupe Home Group — qui gère quoi, comment contacter les équipes, les procédures internes…"
+    }
+  ]);
+  const [input, setInput] = useState("");
+
   const services = [
     { id: "direction", name: "Direction", icon: "🏛️", color: "#c9a84c", bg: "#fff8e1" },
     { id: "administratif", name: "Administratif", icon: "📋", color: "#9c27b0", bg: "#f3e5f5" },
@@ -17,49 +23,46 @@ export default function Organisation() {
     { id: "logistique", name: "Logistique", icon: "🚚", color: "#4caf50", bg: "#e8f5e9" }
   ];
 
-  /* ======================
-     FETCH API (IMPORTANT)
-  ====================== */
   useEffect(() => {
     api.get("/members").then((data) => {
       setMembers(Array.isArray(data) ? data : []);
     });
   }, []);
 
-  /* ======================
-     HELPERS
-  ====================== */
-  const companyLabel = (c) => {
-    return {
-      homegroup: "Home Group",
-      mprenov: "MP Renov",
-      homedesign: "Home Design",
-      media4: "Media4"
-    }[c] || c;
-  };
+  const companyLabel = (c) => ({
+    homegroup: "Home Group",
+    mprenov: "MP Renov",
+    homedesign: "Home Design",
+    media4: "Media4"
+  }[c] || c);
 
   const filteredMembers = members.filter((m) => {
     if (activeCompany === "all") return true;
     return m.company === activeCompany;
   });
 
-  const getMembersByService = (serviceId) => {
-    return filteredMembers.filter((m) => m.service === serviceId);
-  };
+  const getMembersByService = (serviceId) =>
+    filteredMembers.filter((m) => m.service === serviceId);
 
-  const getInitials = (name) => {
-    if (!name) return "?";
-    return name
-      .split(" ")
-      .map((w) => w[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
-  };
+  const getInitials = (name) =>
+    name ? name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase() : "?";
 
   /* ======================
-     UI
+     CHAT LOGIC (démo)
   ====================== */
+  const sendMessage = (text) => {
+    if (!text.trim()) return;
+
+    const newMsgs = [
+      ...messages,
+      { role: "user", text },
+      { role: "bot", text: "Réponse IA (démo) — branche ton backend ici." }
+    ];
+
+    setMessages(newMsgs);
+    setInput("");
+  };
+
   return (
     <div className="page active">
 
@@ -70,7 +73,69 @@ export default function Organisation() {
         <p>Retrouvez les équipes et les rôles de chaque entité.</p>
       </div>
 
-      {/* FILTRES */}
+      {/* ======================
+          1. ASSISTANT
+      ====================== */}
+      <div style={{ marginBottom: "2.5rem" }}>
+
+        <div className="api-notice">
+          ⚠️ Clé API non configurée. Mode démo actif.
+        </div>
+
+        <div className="chat-container">
+
+          <div className="chat-hdr">
+            <div className="chat-dot"></div>
+
+            <div className="chat-hdr-info">
+              <h3>Assistant — Qui fait quoi ?</h3>
+              <p>Organisation, rôles, procédures</p>
+            </div>
+          </div>
+
+          <div className="chat-msgs">
+            {messages.map((m, i) => (
+              <div key={i} className={`msg ${m.role}`}>
+                <div className="msg-lbl">
+                  {m.role === "bot" ? "Assistant" : "Vous"}
+                </div>
+                <div className="msg-bubble">{m.text}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="chat-quick">
+            {[
+              "Qui gère la logistique ?",
+              "Contact Service Marché",
+              "Organisation MP Renov",
+              "Responsable technique"
+            ].map((q) => (
+              <button key={q} className="qr-btn" onClick={() => sendMessage(q)}>
+                {q}
+              </button>
+            ))}
+          </div>
+
+          <div className="chat-input-row">
+            <input
+              className="chat-input"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Votre question…"
+              onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
+            />
+            <button className="chat-send" onClick={() => sendMessage(input)}>
+              ➤
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ======================
+          FILTRES
+      ====================== */}
       <div className="company-filter">
         {[
           ["all", "🏢 Tout le groupe"],
@@ -89,7 +154,9 @@ export default function Organisation() {
         ))}
       </div>
 
-      {/* SERVICES */}
+      {/* ======================
+          SERVICES
+      ====================== */}
       {services.map((svc) => {
         const svcMembers = getMembersByService(svc.id);
         if (!svcMembers.length) return null;
@@ -98,28 +165,18 @@ export default function Organisation() {
           <div key={svc.id} className="service-section">
 
             <div className="svc-header">
-              <div
-                className="svc-icon"
-                style={{ background: svc.bg, color: svc.color }}
-              >
+              <div className="svc-icon" style={{ background: svc.bg, color: svc.color }}>
                 {svc.icon}
               </div>
-
-              <div>
-                <div className="svc-name">{svc.name}</div>
-              </div>
+              <div className="svc-name">{svc.name}</div>
             </div>
 
             <div className="member-grid">
               {svcMembers.map((m) => (
                 <div key={m._id} className="member-card">
 
-                  {/* TOP */}
                   <div className="mc-top">
-                    <div
-                      className="mc-avatar"
-                      style={{ background: svc.color }}
-                    >
+                    <div className="mc-avatar" style={{ background: svc.color }}>
                       {getInitials(m.name)}
                     </div>
 
@@ -129,19 +186,16 @@ export default function Organisation() {
                     </div>
                   </div>
 
-                  {/* BADGE */}
                   <div className="member-badge">
                     {companyLabel(m.company)} • {svc.name}
                   </div>
 
-                  {/* DESCRIPTION */}
                   <div className={`mc-desc ${!m.desc ? "placeholder" : ""}`}>
                     {m.desc || "Aucune description disponible"}
                   </div>
 
-                  {/* CONTACT */}
                   {(m.phone || m.email) && (
-                    <div style={{ marginTop: 6, fontSize: ".75rem" }}>
+                    <div style={{ fontSize: ".75rem" }}>
                       {m.phone && <div>📞 {m.phone}</div>}
                       {m.email && <div>✉️ {m.email}</div>}
                     </div>
@@ -155,7 +209,9 @@ export default function Organisation() {
         );
       })}
 
-      {/* ORGANIGRAMME */}
+      {/* ======================
+          ORGANIGRAMME
+      ====================== */}
       <div className="org-chart-container">
 
         <div className="org-chart-header">
