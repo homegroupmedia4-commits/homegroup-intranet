@@ -1316,3 +1316,8 @@ setNewsList(updated);
     </div>
   </div>
 )}
+
+      
+    </div>
+  );
+}
