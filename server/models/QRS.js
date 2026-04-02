@@ -20,11 +20,14 @@ const qrsSchema = new mongoose.Schema({
     default: false
   },
 
-  category: {
-    type: String,
-    enum: ["Question", "Suggestion", "Amélioration", "Problème", "Autre"],
-    default: "Question"
-  },
+  
+
+category: {
+  type: String,
+  default: "Question"
+},
+
+  
 
   message: {
     type: String,
