@@ -1242,7 +1242,7 @@ setNewsList(updated);
         </div>
       )}
 
-    </div>  {/* ✅ FIN DU RETURN */}
+    </div> 
 
-  );  {/* ✅ FERMETURE DU RETURN */}
-}     {/* ✅ FIN DU COMPOSANT */}
+  ); 
+}     
