@@ -169,9 +169,9 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   api.get("/members").then(setMembers);
 // api.get("/services").then(setServices); 
 
-  api.get("/services").then(data => {
+api.get("/services").then(data => {
   setServices(Array.isArray(data) ? data : []);
-});
+}).catch(() => setServices([]));
 
   api.get("/contact/qrs/categories").then(setQrsCategories);
 
