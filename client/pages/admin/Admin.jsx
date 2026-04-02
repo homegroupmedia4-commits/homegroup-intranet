@@ -999,7 +999,6 @@ setNewsList(updated);
     ))}
   </ul>
 </div>
-
 <div className="a-card">
   <h3>👥 Gestion des collaborateurs</h3>
 
@@ -1007,12 +1006,12 @@ setNewsList(updated);
     Ajoutez, modifiez ou supprimez les membres de l'organisation.
   </p>
 
-  <div style={{ display: "flex", gap: 8, marginBottom: "1rem" }}>
+  <div style={{ display: "flex", gap: 8, marginBottom: "1rem", flexWrap: "wrap" }}>
     
     <button
       className="btn btn-green btn-sm"
       onClick={() => {
-       setEditingMember({ ...EMPTY_MEMBER });
+        setEditingMember({ ...EMPTY_MEMBER });
         setShowAddModal(true);
       }}
     >
@@ -1022,6 +1021,7 @@ setNewsList(updated);
     <select
       value={filterService}
       onChange={(e) => setFilterService(e.target.value)}
+      style={{ width: "auto", marginBottom: 0, fontSize: ".8rem", padding: "5px 10px" }}
     >
       <option value="all">Tous les services</option>
       {services.map((s) => (
@@ -1033,216 +1033,286 @@ setNewsList(updated);
 
   </div>
 
+  {/* LIST */}
   <div>
     {members
       .filter(m => filterService === "all" || m.service === filterService)
-      .map((m) => (
-        <div key={m._id} className="member-admin-card">
+      .map((m) => {
 
-          <strong>{m.name}</strong>
-          <div>{m.role}</div>
+        const initials = m.name
+          ?.split(" ")
+          .map(n => n[0])
+          .join("")
+          .slice(0, 2)
+          .toUpperCase();
 
-          {/* DEBUG / INFO */}
-        <div className="member-badge">
-  {m.company} • {m.service}
-</div>
+        return (
+          <div key={m._id} className="member-admin-card">
 
-          <div className="member-admin-actions">
-            <button
-              className="btn btn-outline btn-sm"
-              onClick={() => {
-                setEditingMember(m);
-                setShowEditModal(true);
-              }}
-            >
-              ✏️ Modifier
-            </button>
+            {/* TOP */}
+            <div className="member-admin-top">
+              <div className="member-admin-avatar">
+                {initials}
+              </div>
 
-            <button
-              className="doc-del"
-              onClick={() => deleteMember(m._id)}
-            >
-              🗑️
-            </button>
+              <div>
+                <div className="member-admin-name">{m.name}</div>
+                <div className="member-admin-role">{m.role}</div>
+              </div>
+            </div>
+
+            {/* BADGE */}
+            <div className="member-badge">
+              {m.company} • {m.service}
+            </div>
+
+            {/* ACTIONS */}
+            <div className="member-admin-actions">
+              <button
+                className="btn btn-outline btn-sm"
+                onClick={() => {
+                  setEditingMember(m);
+                  setShowEditModal(true);
+                }}
+              >
+                ✏️ Modifier
+              </button>
+
+              <button
+                className="doc-del"
+                onClick={() => deleteMember(m._id)}
+              >
+                🗑️
+              </button>
+            </div>
+
           </div>
-
-        </div>
-      ))}
+        );
+      })}
   </div>
 </div>
-      {/* ======================
-          MODAL ADD
-      ====================== */}
-      {showAddModal && (
-        <div className="modal-overlay open">
-          <div className="modal">
 
-            <h3>➕ Ajouter</h3>
+{/* ======================
+    MODAL ADD
+====================== */}
+{showAddModal && (
+  <div className="modal-overlay open">
+    <div className="modal" style={{ maxWidth: "540px" }}>
 
-            <input
-              placeholder="Nom"
-              value={editingMember.name}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, name: e.target.value })
-              }
-            />
+      <h3>➕ Ajouter un collaborateur</h3>
 
-            <input
-              placeholder="Rôle"
-              value={editingMember.role}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, role: e.target.value })
-              }
-            />
-
-            <select
-              value={editingMember.company}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, company: e.target.value })
-              }
-            >
-              <option value="homegroup">Home Group</option>
-              <option value="mprenov">MP Renov</option>
-              <option value="homedesign">Home Design</option>
-              <option value="media4">Media4</option>
-            </select>
-
-            <select
-              value={editingMember.service}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, service: e.target.value })
-              }
-            >
-              <option value="direction">Direction</option>
-              <option value="administratif">Administratif</option>
-              <option value="marche">Marché</option>
-              <option value="travaux">Travaux</option>
-              <option value="logistique">Logistique</option>
-            </select>
-
-            <input
-              placeholder="Téléphone"
-              value={editingMember.phone}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, phone: e.target.value })
-              }
-            />
-
-            <input
-              placeholder="Email"
-              value={editingMember.email}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, email: e.target.value })
-              }
-            />
-
-            <textarea
-              placeholder="Description"
-              value={editingMember.desc}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, desc: e.target.value })
-              }
-            />
-
-            <button className="btn btn-green" onClick={handleAddMember}>
-              Ajouter
-            </button>
-
-            <button
-              onClick={() => {
-                setShowAddModal(false);
-                setEditingMember({ ...EMPTY_MEMBER });
-              }}
-            >
-              Annuler
-            </button>
-
-          </div>
+      <div className="row2">
+        <div>
+          <label>Prénom Nom *</label>
+          <input
+            type="text"
+            value={editingMember.name}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, name: e.target.value })
+            }
+          />
         </div>
-      )}
 
-      {/* ======================
-          MODAL EDIT
-      ====================== */}
-      {showEditModal && editingMember && (
-        <div className="modal-overlay open">
-          <div className="modal">
-
-            <h3>Modifier</h3>
-
-            <input
-              value={editingMember.name}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, name: e.target.value })
-              }
-            />
-
-            <input
-              value={editingMember.role}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, role: e.target.value })
-              }
-            />
-
-            <select
-              value={editingMember.company}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, company: e.target.value })
-              }
-            >
-              <option value="homegroup">Home Group</option>
-              <option value="mprenov">MP Renov</option>
-              <option value="homedesign">Home Design</option>
-              <option value="media4">Media4</option>
-            </select>
-
-            <select
-              value={editingMember.service}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, service: e.target.value })
-              }
-            >
-              <option value="direction">Direction</option>
-              <option value="administratif">Administratif</option>
-              <option value="marche">Marché</option>
-              <option value="travaux">Travaux</option>
-              <option value="logistique">Logistique</option>
-            </select>
-
-            <input
-              value={editingMember.phone}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, phone: e.target.value })
-              }
-            />
-
-            <input
-              value={editingMember.email}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, email: e.target.value })
-              }
-            />
-
-            <textarea
-              value={editingMember.desc}
-              onChange={(e) =>
-                setEditingMember({ ...editingMember, desc: e.target.value })
-              }
-            />
-
-            <button className="btn btn-green" onClick={handleUpdateMember}>
-              Sauvegarder
-            </button>
-
-            <button onClick={() => setShowEditModal(false)}>
-              Annuler
-            </button>
-
-          </div>
+        <div>
+          <label>Poste / Rôle *</label>
+          <input
+            type="text"
+            value={editingMember.role}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, role: e.target.value })
+            }
+          />
         </div>
-      )}
+      </div>
 
-    </div> 
+      <div className="row2">
+        <div>
+          <label>Service *</label>
+          <select
+            value={editingMember.service}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, service: e.target.value })
+            }
+          >
+            {services.map(s => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </div>
 
-  ); 
-}     
+        <div>
+          <label>Société *</label>
+          <select
+            value={editingMember.company}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, company: e.target.value })
+            }
+          >
+            <option value="homegroup">Home Group</option>
+            <option value="mprenov">MP Renov</option>
+            <option value="homedesign">Home Design</option>
+            <option value="media4">Media4</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="row2">
+        <div>
+          <label>Téléphone (optionnel)</label>
+          <input
+            type="tel"
+            value={editingMember.phone}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, phone: e.target.value })
+            }
+          />
+        </div>
+
+        <div>
+          <label>Email (optionnel)</label>
+          <input
+            type="email"
+            value={editingMember.email}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, email: e.target.value })
+            }
+          />
+        </div>
+      </div>
+
+      <label>Description</label>
+      <textarea
+        value={editingMember.desc}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, desc: e.target.value })
+        }
+      />
+
+      <div style={{ display: "flex", gap: 8 }}>
+        <button className="btn btn-primary" onClick={handleAddMember}>
+          ➕ Ajouter
+        </button>
+
+        <button
+          className="btn btn-outline"
+          onClick={() => {
+            setShowAddModal(false);
+            setEditingMember({ ...EMPTY_MEMBER });
+          }}
+        >
+          Annuler
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
+
+{/* ======================
+    MODAL EDIT
+====================== */}
+{showEditModal && editingMember && (
+  <div className="modal-overlay open">
+    <div className="modal" style={{ maxWidth: "540px" }}>
+
+      <h3>✏️ Modifier le collaborateur</h3>
+
+      <div className="row2">
+        <div>
+          <label>Prénom Nom</label>
+          <input
+            value={editingMember.name}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, name: e.target.value })
+            }
+          />
+        </div>
+
+        <div>
+          <label>Poste / Rôle</label>
+          <input
+            value={editingMember.role}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, role: e.target.value })
+            }
+          />
+        </div>
+      </div>
+
+      <div className="row2">
+        <div>
+          <label>Service</label>
+          <select
+            value={editingMember.service}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, service: e.target.value })
+            }
+          >
+            {services.map(s => (
+              <option key={s.id} value={s.id}>{s.name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label>Société</label>
+          <select
+            value={editingMember.company}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, company: e.target.value })
+            }
+          >
+            <option value="homegroup">Home Group</option>
+            <option value="mprenov">MP Renov</option>
+            <option value="homedesign">Home Design</option>
+            <option value="media4">Media4</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="row2">
+        <div>
+          <label>Téléphone</label>
+          <input
+            value={editingMember.phone}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, phone: e.target.value })
+            }
+          />
+        </div>
+
+        <div>
+          <label>Email</label>
+          <input
+            value={editingMember.email}
+            onChange={(e) =>
+              setEditingMember({ ...editingMember, email: e.target.value })
+            }
+          />
+        </div>
+      </div>
+
+      <label>Description</label>
+      <textarea
+        value={editingMember.desc}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, desc: e.target.value })
+        }
+      />
+
+      <div style={{ display: "flex", gap: 8 }}>
+        <button className="btn btn-primary" onClick={handleUpdateMember}>
+          ✓ Enregistrer
+        </button>
+
+        <button
+          className="btn btn-outline"
+          onClick={() => setShowEditModal(false)}
+        >
+          Annuler
+        </button>
+      </div>
+
+    </div>
+  </div>
+)}
