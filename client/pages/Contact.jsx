@@ -52,25 +52,34 @@ const filteredFaqs = faqs.filter(f =>
 SUBMIT QRS
 ====================== */
 const handleSubmit = async () => {
-if (!message) return alert("Message requis");
+  if (!message) return alert("Message requis");
 
-```
-await api.post("/contact/qrs", {
-  prenom,
-  nom,
-  isAnon,
-  category: selectedCat,
-  message
-});
+  try {
+    const res = await api.post("/contact/qrs", {
+      prenom,
+      nom,
+      isAnon,
+      category: selectedCat || "Question",
+      message
+    });
 
-alert("Envoyé ✅");
+    if (!res) {
+      throw new Error("Réponse API invalide");
+    }
 
-setMessage("");
-setPrenom("");
-setNom("");
-```
+    alert("Envoyé ✅");
 
+    setMessage("");
+    setPrenom("");
+    setNom("");
+
+  } catch (err) {
+    console.error("❌ ERREUR SUBMIT:", err);
+    alert("Erreur lors de l'envoi");
+  }
 };
+
+  
 
 /* ======================
 FAQ TOGGLE
