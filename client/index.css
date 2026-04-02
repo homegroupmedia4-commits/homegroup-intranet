@@ -20,6 +20,189 @@
   --r:10px;
 }
 
+
+/* =========================
+   ORGANISATION PREMIUM FIX
+========================= */
+
+/* SERVICE SECTION */
+.service-section{
+  margin-bottom:2.5rem;
+}
+
+.svc-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:1.1rem;
+  padding-bottom:.8rem;
+  border-bottom:2px solid var(--border);
+}
+
+.svc-icon{
+  width:36px;
+  height:36px;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1rem;
+}
+
+.svc-name{
+  font-family:'DM Serif Display',serif;
+  font-size:1.2rem;
+}
+
+/* GRID MEMBERS */
+.member-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:.9rem;
+}
+
+/* CARD */
+.member-card{
+  background:#fff;
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  box-shadow:var(--sh);
+  padding:1.2rem;
+  transition:all .2s;
+}
+
+.member-card:hover{
+  box-shadow:var(--sh2);
+  transform:translateY(-3px);
+}
+
+/* TOP */
+.mc-top{
+  display:flex;
+  align-items:flex-start;
+  gap:11px;
+  margin-bottom:.8rem;
+}
+
+/* AVATAR */
+.mc-avatar{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:.78rem;
+  font-weight:700;
+  color:#fff;
+}
+
+/* NAME */
+.mc-name{
+  font-weight:600;
+  font-size:.9rem;
+}
+
+/* ROLE */
+.mc-role{
+  font-size:.76rem;
+  color:var(--ink3);
+}
+
+/* DESC */
+.mc-desc{
+  font-size:.8rem;
+  color:var(--ink2);
+  line-height:1.55;
+  margin-bottom:.8rem;
+}
+
+.mc-desc.placeholder{
+  color:var(--ink3);
+  font-style:italic;
+}
+
+/* =========================
+   CHAT PREMIUM IMPROVE
+========================= */
+
+.chat-msgs{
+  scrollbar-width:thin;
+}
+
+.chat-msgs::-webkit-scrollbar{
+  width:4px;
+}
+
+.chat-msgs::-webkit-scrollbar-thumb{
+  background:var(--border);
+  border-radius:4px;
+}
+
+/* bubbles style upgrade */
+.msg.bot .msg-bubble{
+  border-radius:4px 12px 12px 12px;
+}
+
+.msg.user .msg-bubble{
+  border-radius:12px 12px 4px 12px;
+}
+
+/* =========================
+   ORGANIGRAMME UPGRADE
+========================= */
+
+.org-chart-container{
+  margin-top:2.5rem;
+  padding:1.8rem;
+  background:#fff;
+  border-radius:14px;
+  border:1px solid var(--border);
+  box-shadow:var(--sh);
+  overflow-x:auto;
+}
+
+.org-tree{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-width:600px;
+}
+
+/* SERVICE BLOCK */
+.org-service-block{
+  border-radius:10px;
+  border:2px solid var(--border);
+  padding:1rem;
+  margin-bottom:10px;
+}
+
+/* TITLE */
+.org-service-title{
+  font-weight:700;
+  font-size:.8rem;
+  margin-bottom:.6rem;
+  display:flex;
+  gap:5px;
+}
+
+/* MEMBER */
+.org-member-item{
+  font-size:.72rem;
+  padding:4px 8px;
+  background:var(--cream);
+  border-radius:5px;
+  margin-bottom:3px;
+}
+
+.org-member-item span{
+  display:block;
+  font-size:.68rem;
+  color:var(--ink3);
+}
+
+
+
 .member-admin-actions {
   display: flex;
   justify-content: flex-end;
@@ -787,13 +970,6 @@ select:focus {
   color:var(--ink3);
 }
 
-.org-tree{
-  min-height:150px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:var(--ink3);
-}
 
 /* =========================
    CONTACT
