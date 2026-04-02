@@ -25,7 +25,17 @@ const [services, setServices] = useState([]);
 const [showAddModal, setShowAddModal] = useState(false);
 const [showEditModal, setShowEditModal] = useState(false);
 
-const [editingMember, setEditingMember] = useState(null);
+const EMPTY_MEMBER = {
+  name: "",
+  role: "",
+  service: "direction",
+  company: "homegroup",
+  phone: "",
+  email: "",
+  desc: ""
+};
+
+const [editingMember, setEditingMember] = useState({ ...EMPTY_MEMBER });
 
 const [filterService, setFilterService] = useState("all");
 
@@ -44,6 +54,14 @@ const [faqCategory, setFaqCategory] = useState("Général");
      GROUP STATE
   ====================== */
   const [groupData, setGroupData] = useState(null);
+
+  const SERVICES = [
+  { id: "direction", name: "Direction" },
+  { id: "administratif", name: "Administratif" },
+  { id: "marche", name: "Marché" },
+  { id: "travaux", name: "Travaux" },
+  { id: "logistique", name: "Logistique" }
+];
 
 const togglePin = async (news) => {
   await api.put(`/news/${news._id}/pin`);
@@ -169,18 +187,28 @@ api.get("/contact/faq/categories").then(setFaqCategories);
   api.get("/members").then(setMembers);
 // api.get("/services").then(setServices); 
 
-api.get("/services").then(data => {
-  setServices(Array.isArray(data) ? data : []);
-}).catch(() => setServices([]));
+// api.get("/services").then(data => {
+//   setServices(Array.isArray(data) ? data : []);
+// }).catch(() => setServices([]));
 
   api.get("/contact/qrs/categories").then(setQrsCategories);
+    setServices(SERVICES);
 
 }, []);
 
-  const handleAddMember = async () => {
+const handleAddMember = async () => {
+
+  if (!editingMember.name || !editingMember.role) {
+    return alert("Nom et rôle requis");
+  }
+
   const res = await api.post("/members", editingMember);
+
   setMembers(prev => [...prev, res]);
+
   setShowAddModal(false);
+
+  setEditingMember({ ...EMPTY_MEMBER }); // ✅ reset propre
 };
 
 
@@ -206,7 +234,12 @@ const deleteQrsCategory = async (id) => {
 };
 
   
-  const handleUpdateMember = async () => {
+const handleUpdateMember = async () => {
+
+  if (!editingMember.name || !editingMember.role) {
+    return alert("Nom et rôle requis");
+  }
+
   const res = await api.put(`/members/${editingMember._id}`, editingMember);
 
   setMembers(prev =>
@@ -967,8 +1000,7 @@ setNewsList(updated);
   </ul>
 </div>
 
-
-      <div className="a-card">
+<div className="a-card">
   <h3>👥 Gestion des collaborateurs</h3>
 
   <p className="sub">
@@ -979,7 +1011,10 @@ setNewsList(updated);
     
     <button
       className="btn btn-green btn-sm"
-      onClick={() => setShowAddModal(true)}
+      onClick={() => {
+       setEditingMember({ ...EMPTY_MEMBER });
+        setShowAddModal(true);
+      }}
     >
       ➕ Ajouter un collaborateur
     </button>
@@ -1007,6 +1042,11 @@ setNewsList(updated);
           <strong>{m.name}</strong>
           <div>{m.role}</div>
 
+          {/* DEBUG / INFO */}
+          <div style={{ fontSize: ".7rem", opacity: 0.6 }}>
+            {m.company} • {m.service}
+          </div>
+
           <div style={{ marginTop: 8 }}>
             <button
               className="btn btn-outline btn-sm"
@@ -1031,7 +1071,10 @@ setNewsList(updated);
   </div>
 </div>
 
-      {showAddModal && (
+{/* ======================
+    MODAL ADD
+====================== */}
+{showAddModal && (
   <div className="modal-overlay open">
     <div className="modal">
 
@@ -1039,19 +1082,79 @@ setNewsList(updated);
 
       <input
         placeholder="Nom"
-        onChange={(e) => setEditingMember({ ...editingMember, name: e.target.value })}
+        value={editingMember.name}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, name: e.target.value })
+        }
       />
 
       <input
         placeholder="Rôle"
-        onChange={(e) => setEditingMember({ ...editingMember, role: e.target.value })}
+        value={editingMember.role}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, role: e.target.value })
+        }
       />
 
-      <button onClick={handleAddMember}>
+      {/* COMPANY */}
+      <select
+        value={editingMember.company}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, company: e.target.value })
+        }
+      >
+        <option value="homegroup">Home Group</option>
+        <option value="mprenov">MP Renov</option>
+        <option value="homedesign">Home Design</option>
+        <option value="media4">Media4</option>
+      </select>
+
+      {/* SERVICE */}
+      <select
+        value={editingMember.service}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, service: e.target.value })
+        }
+      >
+        <option value="direction">Direction</option>
+        <option value="administratif">Administratif</option>
+        <option value="marche">Marché</option>
+        <option value="travaux">Travaux</option>
+        <option value="logistique">Logistique</option>
+      </select>
+
+      <input
+        placeholder="Téléphone"
+        value={editingMember.phone}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, phone: e.target.value })
+        }
+      />
+
+      <input
+        placeholder="Email"
+        value={editingMember.email}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, email: e.target.value })
+        }
+      />
+
+      <textarea
+        placeholder="Description"
+        value={editingMember.desc}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, desc: e.target.value })
+        }
+      />
+
+      <button className="btn btn-green" onClick={handleAddMember}>
         Ajouter
       </button>
 
-      <button onClick={() => setShowAddModal(false)}>
+      <button onClick={() => {
+  setShowAddModal(false);
+  setEditingMember({ ...EMPTY_MEMBER });
+}}>
         Annuler
       </button>
 
@@ -1059,7 +1162,10 @@ setNewsList(updated);
   </div>
 )}
 
-      {showEditModal && editingMember && (
+{/* ======================
+    MODAL EDIT
+====================== */}
+{showEditModal && editingMember && (
   <div className="modal-overlay open">
     <div className="modal">
 
@@ -1079,7 +1185,53 @@ setNewsList(updated);
         }
       />
 
-      <button onClick={handleUpdateMember}>
+      <select
+        value={editingMember.company}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, company: e.target.value })
+        }
+      >
+        <option value="homegroup">Home Group</option>
+        <option value="mprenov">MP Renov</option>
+        <option value="homedesign">Home Design</option>
+        <option value="media4">Media4</option>
+      </select>
+
+      <select
+        value={editingMember.service}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, service: e.target.value })
+        }
+      >
+        <option value="direction">Direction</option>
+        <option value="administratif">Administratif</option>
+        <option value="marche">Marché</option>
+        <option value="travaux">Travaux</option>
+        <option value="logistique">Logistique</option>
+      </select>
+
+      <input
+        value={editingMember.phone}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, phone: e.target.value })
+        }
+      />
+
+      <input
+        value={editingMember.email}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, email: e.target.value })
+        }
+      />
+
+      <textarea
+        value={editingMember.desc}
+        onChange={(e) =>
+          setEditingMember({ ...editingMember, desc: e.target.value })
+        }
+      />
+
+      <button className="btn btn-green" onClick={handleUpdateMember}>
         Sauvegarder
       </button>
 
@@ -1090,9 +1242,3 @@ setNewsList(updated);
     </div>
   </div>
 )}
-
-      
-
-    </div>
-  );
-}
