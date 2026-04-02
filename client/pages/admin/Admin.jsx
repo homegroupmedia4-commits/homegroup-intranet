@@ -1070,175 +1070,179 @@ setNewsList(updated);
       ))}
   </div>
 </div>
+      {/* ======================
+          MODAL ADD
+      ====================== */}
+      {showAddModal && (
+        <div className="modal-overlay open">
+          <div className="modal">
 
-{/* ======================
-    MODAL ADD
-====================== */}
-{showAddModal && (
-  <div className="modal-overlay open">
-    <div className="modal">
+            <h3>➕ Ajouter</h3>
 
-      <h3>➕ Ajouter</h3>
+            <input
+              placeholder="Nom"
+              value={editingMember.name}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, name: e.target.value })
+              }
+            />
 
-      <input
-        placeholder="Nom"
-        value={editingMember.name}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, name: e.target.value })
-        }
-      />
+            <input
+              placeholder="Rôle"
+              value={editingMember.role}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, role: e.target.value })
+              }
+            />
 
-      <input
-        placeholder="Rôle"
-        value={editingMember.role}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, role: e.target.value })
-        }
-      />
+            <select
+              value={editingMember.company}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, company: e.target.value })
+              }
+            >
+              <option value="homegroup">Home Group</option>
+              <option value="mprenov">MP Renov</option>
+              <option value="homedesign">Home Design</option>
+              <option value="media4">Media4</option>
+            </select>
 
-      {/* COMPANY */}
-      <select
-        value={editingMember.company}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, company: e.target.value })
-        }
-      >
-        <option value="homegroup">Home Group</option>
-        <option value="mprenov">MP Renov</option>
-        <option value="homedesign">Home Design</option>
-        <option value="media4">Media4</option>
-      </select>
+            <select
+              value={editingMember.service}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, service: e.target.value })
+              }
+            >
+              <option value="direction">Direction</option>
+              <option value="administratif">Administratif</option>
+              <option value="marche">Marché</option>
+              <option value="travaux">Travaux</option>
+              <option value="logistique">Logistique</option>
+            </select>
 
-      {/* SERVICE */}
-      <select
-        value={editingMember.service}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, service: e.target.value })
-        }
-      >
-        <option value="direction">Direction</option>
-        <option value="administratif">Administratif</option>
-        <option value="marche">Marché</option>
-        <option value="travaux">Travaux</option>
-        <option value="logistique">Logistique</option>
-      </select>
+            <input
+              placeholder="Téléphone"
+              value={editingMember.phone}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, phone: e.target.value })
+              }
+            />
 
-      <input
-        placeholder="Téléphone"
-        value={editingMember.phone}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, phone: e.target.value })
-        }
-      />
+            <input
+              placeholder="Email"
+              value={editingMember.email}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, email: e.target.value })
+              }
+            />
 
-      <input
-        placeholder="Email"
-        value={editingMember.email}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, email: e.target.value })
-        }
-      />
+            <textarea
+              placeholder="Description"
+              value={editingMember.desc}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, desc: e.target.value })
+              }
+            />
 
-      <textarea
-        placeholder="Description"
-        value={editingMember.desc}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, desc: e.target.value })
-        }
-      />
+            <button className="btn btn-green" onClick={handleAddMember}>
+              Ajouter
+            </button>
 
-      <button className="btn btn-green" onClick={handleAddMember}>
-        Ajouter
-      </button>
+            <button
+              onClick={() => {
+                setShowAddModal(false);
+                setEditingMember({ ...EMPTY_MEMBER });
+              }}
+            >
+              Annuler
+            </button>
 
-      <button onClick={() => {
-  setShowAddModal(false);
-  setEditingMember({ ...EMPTY_MEMBER });
-}}>
-        Annuler
-      </button>
+          </div>
+        </div>
+      )}
 
-    </div>
-  </div>
-)}
+      {/* ======================
+          MODAL EDIT
+      ====================== */}
+      {showEditModal && editingMember && (
+        <div className="modal-overlay open">
+          <div className="modal">
 
-{/* ======================
-    MODAL EDIT
-====================== */}
-{showEditModal && editingMember && (
-  <div className="modal-overlay open">
-    <div className="modal">
+            <h3>Modifier</h3>
 
-      <h3>Modifier</h3>
+            <input
+              value={editingMember.name}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, name: e.target.value })
+              }
+            />
 
-      <input
-        value={editingMember.name}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, name: e.target.value })
-        }
-      />
+            <input
+              value={editingMember.role}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, role: e.target.value })
+              }
+            />
 
-      <input
-        value={editingMember.role}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, role: e.target.value })
-        }
-      />
+            <select
+              value={editingMember.company}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, company: e.target.value })
+              }
+            >
+              <option value="homegroup">Home Group</option>
+              <option value="mprenov">MP Renov</option>
+              <option value="homedesign">Home Design</option>
+              <option value="media4">Media4</option>
+            </select>
 
-      <select
-        value={editingMember.company}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, company: e.target.value })
-        }
-      >
-        <option value="homegroup">Home Group</option>
-        <option value="mprenov">MP Renov</option>
-        <option value="homedesign">Home Design</option>
-        <option value="media4">Media4</option>
-      </select>
+            <select
+              value={editingMember.service}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, service: e.target.value })
+              }
+            >
+              <option value="direction">Direction</option>
+              <option value="administratif">Administratif</option>
+              <option value="marche">Marché</option>
+              <option value="travaux">Travaux</option>
+              <option value="logistique">Logistique</option>
+            </select>
 
-      <select
-        value={editingMember.service}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, service: e.target.value })
-        }
-      >
-        <option value="direction">Direction</option>
-        <option value="administratif">Administratif</option>
-        <option value="marche">Marché</option>
-        <option value="travaux">Travaux</option>
-        <option value="logistique">Logistique</option>
-      </select>
+            <input
+              value={editingMember.phone}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, phone: e.target.value })
+              }
+            />
 
-      <input
-        value={editingMember.phone}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, phone: e.target.value })
-        }
-      />
+            <input
+              value={editingMember.email}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, email: e.target.value })
+              }
+            />
 
-      <input
-        value={editingMember.email}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, email: e.target.value })
-        }
-      />
+            <textarea
+              value={editingMember.desc}
+              onChange={(e) =>
+                setEditingMember({ ...editingMember, desc: e.target.value })
+              }
+            />
 
-      <textarea
-        value={editingMember.desc}
-        onChange={(e) =>
-          setEditingMember({ ...editingMember, desc: e.target.value })
-        }
-      />
+            <button className="btn btn-green" onClick={handleUpdateMember}>
+              Sauvegarder
+            </button>
 
-      <button className="btn btn-green" onClick={handleUpdateMember}>
-        Sauvegarder
-      </button>
+            <button onClick={() => setShowEditModal(false)}>
+              Annuler
+            </button>
 
-      <button onClick={() => setShowEditModal(false)}>
-        Annuler
-      </button>
+          </div>
+        </div>
+      )}
 
-    </div>
-  </div>
-)}
+    </div>  {/* ✅ FIN DU RETURN */}
+
+  );  {/* ✅ FERMETURE DU RETURN */}
+}     {/* ✅ FIN DU COMPOSANT */}
