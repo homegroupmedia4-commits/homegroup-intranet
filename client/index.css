@@ -20,6 +20,31 @@
   --r:10px;
 }
 
+.member-admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.member-admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.member-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.65rem;
+  border-radius: 12px;
+  background: var(--green-pale);
+  color: var(--green);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
 
 /* ======================
    ADMIN - MEMBERS
@@ -1199,12 +1224,12 @@ input:focus,textarea:focus{
 /* =========================
    BUTTONS
 ========================= */
-.btn{
+/* .btn{
   padding:9px 18px;
   border-radius:7px;
   font-weight:600;
   cursor:pointer;
-}
+} */
 
 .btn-primary{
   background:var(--ink);
