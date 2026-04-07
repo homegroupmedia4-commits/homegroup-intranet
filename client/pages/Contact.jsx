@@ -92,7 +92,7 @@ return ( <div className="page active">
 
 ```
   <div className="ph">
-    <div className="ph-tag">Aide & Échanges</div>
+    <div className="ph-tag">Aide & Échanges gdhdfhfghfghfgh</div>
     <h1>Contact</h1>
     <p>Trouvez des réponses dans la FAQ ou posez vos questions.</p>
   </div>
