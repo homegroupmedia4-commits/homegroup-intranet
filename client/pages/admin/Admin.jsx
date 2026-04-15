@@ -15,6 +15,14 @@ export default function Admin() {
   const [qrsList, setQrsList] = useState([]);
   const [newsList, setNewsList] = useState([]);
 
+  const [resources, setResources] = useState([]);
+const [newResourceType, setNewResourceType] = useState("url");
+const [newResourceName, setNewResourceName] = useState("");
+const [newResourceContent, setNewResourceContent] = useState("");
+const [newResourceUrl, setNewResourceUrl] = useState("");
+
+  
+
   const [qrsCategories, setQrsCategories] = useState([]);
 const [newQrsCategory, setNewQrsCategory] = useState("");
 
@@ -179,6 +187,8 @@ setGroupData({
   
   // ✅ QRS
   api.get("/contact/qrs").then(setQrsList);
+
+  api.get("/resources").then(setResources);
   // FAQ
 api.get("/contact/faq").then(setFaqList);
 api.get("/contact/faq/categories").then(setFaqCategories);
@@ -211,6 +221,30 @@ const handleAddMember = async () => {
   setEditingMember({ ...EMPTY_MEMBER }); // ✅ reset propre
 };
 
+
+  const addResource = async () => {
+  if (!newResourceName.trim()) return alert("Nom requis");
+  if (newResourceType === "url" && !newResourceUrl.trim()) return alert("URL requise");
+  if (newResourceType === "text" && !newResourceContent.trim()) return alert("Contenu requis");
+
+  const res = await api.post("/resources", {
+    type: newResourceType,
+    name: newResourceName,
+    content: newResourceContent,
+    url: newResourceUrl
+  });
+
+  setResources(prev => [res, ...prev]);
+  setNewResourceName("");
+  setNewResourceContent("");
+  setNewResourceUrl("");
+};
+
+const deleteResource = async (id) => {
+  if (!window.confirm("Supprimer cette ressource ?")) return;
+  await api.delete(`/resources/${id}`);
+  setResources(prev => prev.filter(r => r._id !== id));
+};
 
 
   const addQrsCategory = async () => {
@@ -1316,6 +1350,70 @@ setNewsList(updated);
     </div>
   </div>
 )}
+
+
+      {/* ======================
+    RESSOURCES IA
+====================== */}
+<div className="a-card">
+  <h3>📚 Documents & Sources de référence</h3>
+  <p className="sub">Ces ressources orientent les réponses de l'assistant IA.</p>
+
+  <ul style={{ marginBottom: "1rem" }}>
+    {resources.length === 0 && (
+      <li style={{ fontSize: ".82rem", color: "var(--ink3)" }}>Aucune ressource</li>
+    )}
+    {resources.map(r => (
+      <li key={r._id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "6px 0", borderBottom: "1px solid var(--border)" }}>
+        <div>
+          <span className="badge" style={{ marginRight: 8 }}>{r.type.toUpperCase()}</span>
+          <strong>{r.name}</strong>
+          {r.url && <span style={{ fontSize: ".75rem", opacity: 0.6, marginLeft: 8 }}>{r.url}</span>}
+        </div>
+        <button className="doc-del" onClick={() => deleteResource(r._id)}>✕</button>
+      </li>
+    ))}
+  </ul>
+
+  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+    <select value={newResourceType} onChange={e => setNewResourceType(e.target.value)} style={{ width: "auto" }}>
+      <option value="url">🔗 URL</option>
+      <option value="text">📝 Texte</option>
+      <option value="pdf">📄 PDF (nom)</option>
+    </select>
+
+    <input
+      placeholder="Nom de la ressource"
+      value={newResourceName}
+      onChange={e => setNewResourceName(e.target.value)}
+      style={{ flex: 1 }}
+    />
+  </div>
+
+  {newResourceType === "url" && (
+    <input
+      placeholder="https://..."
+      value={newResourceUrl}
+      onChange={e => setNewResourceUrl(e.target.value)}
+      style={{ marginTop: 8 }}
+    />
+  )}
+
+  {newResourceType === "text" && (
+    <textarea
+      placeholder="Colle ici le contenu texte..."
+      value={newResourceContent}
+      onChange={e => setNewResourceContent(e.target.value)}
+      style={{ marginTop: 8 }}
+    />
+  )}
+
+  <button className="btn btn-green" onClick={addResource} style={{ marginTop: 8 }}>
+    + Ajouter cette ressource
+  </button>
+</div>
+
+      
 
       
     </div>
