@@ -17,12 +17,21 @@ function cleanFileName(name) {
 }
 
 /* ======================
-   FILTER (images only)
+   FILTER (images + PDF)
 ====================== */
 function fileFilter(req, file, cb) {
-  if (!file.mimetype.startsWith("image/")) {
-    return cb(new Error("Only images are allowed"), false);
+  const allowed = [
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+    "application/pdf"
+  ];
+
+  if (!allowed.includes(file.mimetype)) {
+    return cb(new Error("Only images and PDFs are allowed"), false);
   }
+
   cb(null, true);
 }
 
@@ -33,16 +42,17 @@ const upload = multer({
   storage: multerS3({
     s3,
     bucket: "homegroup-media",
-    acl: "public-read", // 🔥 CRITIQUE
+    acl: "public-read",
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
       const cleanName = cleanFileName(file.originalname);
-      const fileName = `news/${Date.now()}-${cleanName}`;
+      const folder = file.mimetype === "application/pdf" ? "documents" : "news";
+      const fileName = `${folder}/${Date.now()}-${cleanName}`;
       cb(null, fileName);
     }
   }),
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB
+    fileSize: 20 * 1024 * 1024 // 20MB (images + PDF)
   },
   fileFilter
 });
@@ -53,7 +63,6 @@ const upload = multer({
 router.post("/", (req, res) => {
   upload.single("file")(req, res, (err) => {
 
-    // ❌ erreur multer ou S3
     if (err instanceof multer.MulterError) {
       console.error("❌ Multer error:", err);
       return res.status(400).json({
@@ -67,7 +76,6 @@ router.post("/", (req, res) => {
       });
     }
 
-    // ❌ aucun fichier
     if (!req.file) {
       console.error("❌ Aucun fichier reçu");
       return res.status(400).json({
@@ -75,7 +83,6 @@ router.post("/", (req, res) => {
       });
     }
 
-    // ✅ URL publique correcte OVH
     const publicUrl = `https://homegroup-media.s3.eu-west-par.io.cloud.ovh.net/${req.file.key}`;
 
     console.log("✅ Upload réussi:");
