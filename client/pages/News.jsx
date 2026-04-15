@@ -81,8 +81,14 @@ export default function News() {
 
             {/* BODY */}
             <div className="nc-body">
-              <h3>{n.title}</h3>
-              <p>{n.body}</p>
+
+              
+        <div className="nc-text">
+  <h3>{n.title}</h3>
+  <p>{n.body}</p>
+</div>
+
+              
               {n.image && (
   <img src={n.image} className="nc-media" />
 )}
