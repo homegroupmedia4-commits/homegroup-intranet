@@ -657,6 +657,16 @@ select:focus {
 }
 
 
+.nc-media{
+  width:100%;
+  aspect-ratio:16/9;
+  object-fit:cover;
+  border-radius:6px;
+  margin-top:.7rem;
+
+  flex-shrink: 0; /* 🔥 important */
+}
+
 
 .news-admin-item {
   padding: 10px;
