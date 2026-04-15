@@ -1352,12 +1352,12 @@ setNewsList(updated);
 )}
 
 
-      {/* ======================
+{/* ======================
     RESSOURCES IA
 ====================== */}
 <div className="a-card">
   <h3>📚 Documents & Sources de référence</h3>
-  <p className="sub">Ces ressources orientent les réponses de l'assistant IA.</p>
+  <p className="sub">Ces ressources orientent les réponses de l'assistant IA. Le contenu est extrait automatiquement.</p>
 
   <ul style={{ marginBottom: "1rem" }}>
     {resources.length === 0 && (
@@ -1369,6 +1369,11 @@ setNewsList(updated);
           <span className="badge" style={{ marginRight: 8 }}>{r.type.toUpperCase()}</span>
           <strong>{r.name}</strong>
           {r.url && <span style={{ fontSize: ".75rem", opacity: 0.6, marginLeft: 8 }}>{r.url}</span>}
+          {r.content && (
+            <div style={{ fontSize: ".72rem", opacity: 0.5, marginTop: 2 }}>
+              ✅ {r.content.length} caractères extraits
+            </div>
+          )}
         </div>
         <button className="doc-del" onClick={() => deleteResource(r._id)}>✕</button>
       </li>
@@ -1377,9 +1382,9 @@ setNewsList(updated);
 
   <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
     <select value={newResourceType} onChange={e => setNewResourceType(e.target.value)} style={{ width: "auto" }}>
-      <option value="url">🔗 URL</option>
-      <option value="text">📝 Texte</option>
-      <option value="pdf">📄 PDF (nom)</option>
+      <option value="url">🔗 URL (scraping auto)</option>
+      <option value="pdf">📄 PDF (extraction auto)</option>
+      <option value="text">📝 Texte libre</option>
     </select>
 
     <input
@@ -1390,6 +1395,7 @@ setNewsList(updated);
     />
   </div>
 
+  {/* URL */}
   {newResourceType === "url" && (
     <input
       placeholder="https://..."
@@ -1399,9 +1405,44 @@ setNewsList(updated);
     />
   )}
 
+  {/* PDF — upload vers S3 puis URL */}
+  {newResourceType === "pdf" && (
+    <div style={{ marginTop: 8 }}>
+      <div
+        className="upload-zone"
+        onClick={() => document.getElementById("pdfInput").click()}
+      >
+        {newResourceUrl ? (
+          <div>✅ PDF uploadé — prêt à extraire</div>
+        ) : (
+          <div>📄 Cliquer pour uploader un PDF</div>
+        )}
+        <input
+          id="pdfInput"
+          type="file"
+          accept=".pdf"
+          style={{ display: "none" }}
+          onChange={async (e) => {
+            const f = e.target.files[0];
+            if (!f) return;
+            const formData = new FormData();
+            formData.append("file", f);
+            const res = await fetch("https://com.home-group.fr/api/upload", {
+              method: "POST",
+              body: formData
+            });
+            const data = await res.json();
+            if (data.url) setNewResourceUrl(data.url);
+          }}
+        />
+      </div>
+    </div>
+  )}
+
+  {/* TEXTE */}
   {newResourceType === "text" && (
     <textarea
-      placeholder="Colle ici le contenu texte..."
+      placeholder="Colle ici le contenu texte (procédures, règles, infos...)..."
       value={newResourceContent}
       onChange={e => setNewResourceContent(e.target.value)}
       style={{ marginTop: 8 }}
@@ -1409,10 +1450,9 @@ setNewsList(updated);
   )}
 
   <button className="btn btn-green" onClick={addResource} style={{ marginTop: 8 }}>
-    + Ajouter cette ressource
+    + Ajouter et extraire le contenu
   </button>
 </div>
-
       
 
       
