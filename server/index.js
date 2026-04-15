@@ -43,6 +43,9 @@ app.use("/api/members", memberRoutes); // ✅ FIX CRITIQUE
 app.use("/api/chat", chatRoutes);
 app.use("/api/resources", resourceRoutes);
 
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ limit: "20mb", extended: true }));
+
 /* ======================
    TEST
 ====================== */
