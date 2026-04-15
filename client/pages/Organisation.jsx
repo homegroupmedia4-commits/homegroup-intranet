@@ -50,18 +50,28 @@ export default function Organisation() {
   /* ======================
      CHAT LOGIC (démo)
   ====================== */
-  const sendMessage = (text) => {
-    if (!text.trim()) return;
+const sendMessage = async (text) => {
+  if (!text.trim()) return;
 
-    const newMsgs = [
-      ...messages,
-      { role: "user", text },
-      { role: "bot", text: "Réponse IA (démo) — branche ton backend ici." }
-    ];
+  const userMsg = { role: "user", text };
+  setMessages(prev => [...prev, userMsg]);
+  setInput("");
 
-    setMessages(newMsgs);
-    setInput("");
-  };
+  // Format pour Mistral
+  const history = [...messages, userMsg]
+    .filter(m => m.role !== "bot" || m !== messages[0])
+    .map(m => ({
+      role: m.role === "bot" ? "assistant" : "user",
+      content: m.text
+    }));
+
+  try {
+    const res = await api.post("/chat", { messages: history });
+    setMessages(prev => [...prev, { role: "bot", text: res.reply }]);
+  } catch {
+    setMessages(prev => [...prev, { role: "bot", text: "Erreur de connexion à l'assistant." }]);
+  }
+};
 
   return (
     <div className="page active">
@@ -78,9 +88,6 @@ export default function Organisation() {
       ====================== */}
       <div style={{ marginBottom: "2.5rem" }}>
 
-        <div className="api-notice">
-          ⚠️ Clé API non configurée. Mode démo actif.
-        </div>
 
         <div className="chat-container">
 
