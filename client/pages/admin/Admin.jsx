@@ -597,7 +597,9 @@ const paginatedNews = filteredNews.slice(
       ====================== */}
       <div className="a-card">
         <h3>Ajouter une actualité</h3>
-         <p>Publiez des actualités avec texte, photo et/ou vidéo.</p>
+      <p style={{ margin: '10px 0' }}>
+  Publiez des actualités avec texte, photo et/ou vidéo.
+</p>
 
         <input
           type="text"
@@ -643,7 +645,7 @@ const paginatedNews = filteredNews.slice(
       </button>
     </div>
   ) : (
-    <div>📷 Cliquer pour ajouter une photo</div>
+    <div>Cliquer pour ajouter une photo</div>
   )}
 
   <input
