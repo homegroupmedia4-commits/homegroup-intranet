@@ -24,6 +24,7 @@ const [newResourceUrl, setNewResourceUrl] = useState("");
   const [newsCategoryFilter, setNewsCategoryFilter] = useState("all");
 const [newsPage, setNewsPage] = useState(1);
 const NEWS_PER_PAGE = 2;
+  const [showNewsForm, setShowNewsForm] = useState(false);
 
   
 
@@ -362,6 +363,7 @@ setNewsList(updated);
       setBody("");
       setPinned(false);
       setFile(null);
+      setShowNewsForm(false);
 
     } catch (err) {
       console.error("❌ ERROR:", err);
@@ -592,110 +594,124 @@ const paginatedNews = filteredNews.slice(
 
       
 
-      {/* ======================
-          NEWS
-      ====================== */}
-      <div className="a-card">
-        <h3>Ajouter une actualité</h3>
-      <p style={{ margin: '10px 0' }}>
-  Publiez des actualités avec texte, photo et/ou vidéo.
-</p>
+{/* ======================
+    NEWS
+====================== */}
+<div className="a-card">
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+    <h3>Ajouter une actualité</h3>
 
-        <input
-          type="text"
-          placeholder="Titre"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
+    <button
+      className="btn btn-green btn-sm"
+      type="button"
+      onClick={() => setShowNewsForm((prev) => !prev)}
+    >
+      {showNewsForm ? "Fermer" : "Ajouter une actualité"}
+    </button>
+  </div>
 
-        <textarea
-          placeholder="Contenu"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
+  <p style={{ margin: "10px 0" }}>
+    Publiez des actualités avec texte, photo et/ou vidéo.
+  </p>
 
-       <div
-  className="upload-zone"
-  onClick={() => document.getElementById("fileInput").click()}
->
-  {file ? (
-    <div style={{ position: "relative" }}>
-      <img
-        src={URL.createObjectURL(file)}
-        style={{ width: 120, borderRadius: 8 }}
+  {showNewsForm && (
+    <>
+      <input
+        type="text"
+        placeholder="Titre"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
 
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setFile(null);
-        }}
-        style={{
-          position: "absolute",
-          top: -5,
-          right: -5,
-          background: "#000",
-          color: "#fff",
-          borderRadius: "50%",
-          width: 22,
-          height: 22
-        }}
+      <textarea
+        placeholder="Contenu"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+      />
+
+      <div
+        className="upload-zone"
+        onClick={() => document.getElementById("fileInput").click()}
       >
-        ✕
-      </button>
-    </div>
-  ) : (
-    <div>Cliquer pour ajouter une photo</div>
-  )}
+        {file ? (
+          <div style={{ position: "relative" }}>
+            <img
+              src={URL.createObjectURL(file)}
+              alt=""
+              style={{ width: 120, borderRadius: 8 }}
+            />
 
-  <input
-    id="fileInput"
-    type="file"
-    style={{ display: "none" }}
-    onChange={(e) => setFile(e.target.files[0])}
-  />
-</div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setFile(null);
+              }}
+              style={{
+                position: "absolute",
+                top: -5,
+                right: -5,
+                background: "#000",
+                color: "#fff",
+                borderRadius: "50%",
+                width: 22,
+                height: 22
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div>Cliquer pour ajouter une photo</div>
+        )}
 
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="general">Général</option>
-          <option value="rh">RH</option>
-          <option value="direction">Direction </option>
-           <option value="organisation">Organisation</option>
-           <option value="it">IT</option>
-           <option value="evenement">Événement</option>
-        </select>
-
-<div style={{
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  marginTop: "12px"
-}}>
-
-  <label style={{ display: "flex", gap: "6px", alignItems: "center" }}>
-    <input
-      type="checkbox"
-      checked={pinned}
-      onChange={() => setPinned(!pinned)}
-    />
-    Épingler
-  </label>
-
-  <button
-    className="btn btn-green"
-    onClick={handlePublish}
-    disabled={loading}
-  >
-    {loading ? "Publication..." : "Publier"}
-  </button>
-
-</div>
-
-        
+        <input
+          id="fileInput"
+          type="file"
+          style={{ display: "none" }}
+          onChange={(e) => setFile(e.target.files[0])}
+        />
       </div>
+
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      >
+        <option value="general">Général</option>
+        <option value="rh">RH</option>
+        <option value="direction">Direction</option>
+        <option value="organisation">Organisation</option>
+        <option value="it">IT</option>
+        <option value="evenement">Événement</option>
+      </select>
+
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: "12px"
+      }}>
+        <label style={{ display: "flex", gap: "6px", alignItems: "center" }}>
+          <input
+            type="checkbox"
+            checked={pinned}
+            onChange={() => setPinned(!pinned)}
+          />
+          Épingler
+        </label>
+
+        <button
+          className="btn btn-green"
+          onClick={handlePublish}
+          disabled={loading}
+        >
+          {loading ? "Publication..." : "Publier"}
+        </button>
+      </div>
+    </>
+  )}
+</div>
+
+      
       
 {/* ======================
     GROUPE COMPLET
