@@ -518,20 +518,21 @@ const paginatedNews = filteredNews.slice(
         </strong>
 
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <span>{n.category.toUpperCase()}</span>
+          
+          <span className="btn-pin" >{n.category.toUpperCase()}</span>
 
           <button
             className={`btn-pin ${n.pinned ? "active" : ""}`}
             onClick={() => togglePin(n)}
           >
-            {n.pinned ? "📌 Épinglée" : "📌 Épingler"}
+            {n.pinned ? "Épinglée" : "Épingler"}
           </button>
         </div>
       </div>
 
       <div
         style={{
-          fontSize: ".8rem",
+          // fontSize: ".8rem",
           opacity: 0.7,
           wordBreak: "break-word",
           overflowWrap: "anywhere",
@@ -545,7 +546,7 @@ const paginatedNews = filteredNews.slice(
         <img src={n.photo} alt="" style={{ width: 120, marginTop: 8 }} />
       )}
 
-      <hr style={{ marginTop: 10 }} />
+
     </div>
   ))}
 
@@ -731,7 +732,7 @@ const paginatedNews = filteredNews.slice(
     }
   />
 
-  <hr />
+
 
 
 <h4>Statistiques</h4>
@@ -823,7 +824,7 @@ const paginatedNews = filteredNews.slice(
   }
 />
 
-<hr />
+
 
 <h4>Site web</h4>
 
@@ -869,7 +870,7 @@ const paginatedNews = filteredNews.slice(
   }
 />
 
-<hr />
+
 
   
   
@@ -940,7 +941,7 @@ const paginatedNews = filteredNews.slice(
             onChange={(ev) => updateEntity(realIndex, "url", ev.target.value)}
           />
 
-          <hr />
+     
         </div>
       );
     })}
