@@ -6,10 +6,10 @@ export default function Header() {
   const isActive = (path) => pathname === path;
 
   return (
-    <header>
+    <header className="main-header">
       {/* LEFT */}
       <div className="h-logo">
-        <img src="/logo.jpg" alt="logo" />  
+        <img src="/logo.jpg" alt="logo" />
 
         <div className="h-div"></div>
 
@@ -20,40 +20,40 @@ export default function Header() {
       </div>
 
       {/* NAV */}
-      <nav>
+      <nav className="main-nav">
         <Link
           to="/"
           className={isActive("/") ? "active" : ""}
         >
-          📢 Actualités
+         Actualités
         </Link>
 
         <Link
           to="/groupe"
           className={isActive("/groupe") ? "active" : ""}
         >
-          🌐 Le Groupe
+          Le Groupe
         </Link>
 
         <Link
           to="/organisation"
           className={isActive("/organisation") ? "active" : ""}
         >
-          🏢 Organisation
+        Organisation
         </Link>
 
         <Link
           to="/contact"
           className={isActive("/contact") ? "active" : ""}
         >
-          💬 Contact
+        Contact
         </Link>
 
         <Link
           to="/admin"
           className="nav-admin"
         >
-          ⚙️ Admin
+          Admin
         </Link>
       </nav>
     </header>
