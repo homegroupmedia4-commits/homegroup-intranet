@@ -7,7 +7,7 @@ export default function Nav() {
   const activeClass = "bg-gray-300";
 
   return (
-    <nav className="bg-gray-100 px-6 py-3 flex gap-3">
+    <nav className="secondary-nav bg-gray-100 px-6 py-3 flex gap-3">
       <NavLink
         to="/"
         className={({ isActive }) =>
