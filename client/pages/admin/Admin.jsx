@@ -21,6 +21,10 @@ const [newResourceName, setNewResourceName] = useState("");
 const [newResourceContent, setNewResourceContent] = useState("");
 const [newResourceUrl, setNewResourceUrl] = useState("");
 
+  const [newsCategoryFilter, setNewsCategoryFilter] = useState("all");
+const [newsPage, setNewsPage] = useState(1);
+const NEWS_PER_PAGE = 2;
+
   
 
   const [qrsCategories, setQrsCategories] = useState([]);
@@ -73,9 +77,10 @@ const [faqCategory, setFaqCategory] = useState("Général");
 
 const togglePin = async (news) => {
   await api.put(`/news/${news._id}/pin`);
-
   const updated = await api.get("/news");
   setNewsList(updated);
+  setNewsPage(1);
+setNewsCategoryFilter("all");
 };
 
   const DEFAULT_GROUP = {
@@ -446,6 +451,23 @@ setNewsList(updated);
   /* ======================
      UI
   ====================== */
+
+
+
+  const filteredNews =
+  newsCategoryFilter === "all"
+    ? newsList
+    : newsList.filter((n) => n.category === newsCategoryFilter);
+
+const totalNewsPages = Math.max(1, Math.ceil(filteredNews.length / NEWS_PER_PAGE));
+
+const paginatedNews = filteredNews.slice(
+  (newsPage - 1) * NEWS_PER_PAGE,
+  newsPage * NEWS_PER_PAGE
+);
+
+
+  
   return (
     <div className="page active">
 
@@ -453,51 +475,119 @@ setNewsList(updated);
         <h1>Admin</h1>
       </div>
 
-       <div className="a-card">
-      <h3>Actualités ajoutées</h3>
-          
 
-      {newsList.length === 0 && <div>Aucune actualité</div>}
+      
+<div className="a-card">
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      gap: "10px",
+      flexWrap: "wrap",
+      marginBottom: "12px"
+    }}
+  >
+    <h3>Actualités ajoutées</h3>
 
-      {newsList.map((n) => (
-        <div key={n._id} className="news-admin-item">
+    <select
+      value={newsCategoryFilter}
+      onChange={(e) => {
+        setNewsCategoryFilter(e.target.value);
+        setNewsPage(1);
+      }}
+      style={{ width: "auto", marginBottom: 0 }}
+    >
+      <option value="all">Toutes les catégories</option>
+      <option value="general">Général</option>
+      <option value="rh">RH</option>
+      <option value="direction">Direction</option>
+      <option value="organisation">Organisation</option>
+      <option value="it">IT</option>
+      <option value="evenement">Événement</option>
+    </select>
+  </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <strong>
-              {n.pinned && "📌 "} {n.title}
-            </strong>
+  {filteredNews.length === 0 && <div>Aucune actualité</div>}
 
-            <div style={{ display: "flex", gap: "10px" }}>
-              <span>{n.category.toUpperCase()}</span>
+  {paginatedNews.map((n) => (
+    <div key={n._id} className="news-admin-item">
+      <div style={{ display: "flex", justifyContent: "space-between", gap: "12px" }}>
+        <strong style={{ flex: 1 }}>
+          {n.pinned && "📌 "} {n.title}
+        </strong>
 
-             <button
-  className={`btn-pin ${n.pinned ? "active" : ""}`}
-  onClick={() => togglePin(n)}
->
-  {n.pinned ? "📌 Épinglée" : "📌 Épingler"}
-</button>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <span>{n.category.toUpperCase()}</span>
 
-              
-            </div>
-          </div>
+          <button
+            className={`btn-pin ${n.pinned ? "active" : ""}`}
+            onClick={() => togglePin(n)}
+          >
+            {n.pinned ? "📌 Épinglée" : "📌 Épingler"}
+          </button>
+        </div>
+      </div>
 
-     <div style={{ 
-  fontSize: ".8rem", 
-  opacity: 0.7,
-  wordBreak: "break-word",
-  overflowWrap: "anywhere"
-}}>
-  {n.body}
+      <div
+        style={{
+          fontSize: ".8rem",
+          opacity: 0.7,
+          wordBreak: "break-word",
+          overflowWrap: "anywhere",
+          marginTop: "6px"
+        }}
+      >
+        {n.body}
+      </div>
+
+      {n.photo && (
+        <img src={n.photo} alt="" style={{ width: 120, marginTop: 8 }} />
+      )}
+
+      <hr style={{ marginTop: 10 }} />
+    </div>
+  ))}
+
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      gap: "8px",
+      marginTop: "16px",
+      flexWrap: "wrap"
+    }}
+  >
+    <button
+      className="btn btn-outline btn-sm"
+      onClick={() => setNewsPage((p) => Math.max(1, p - 1))}
+      disabled={newsPage === 1}
+    >
+      Précédent
+    </button>
+
+    {Array.from({ length: totalNewsPages }, (_, i) => i + 1).map((page) => (
+      <button
+        key={page}
+        className={`btn btn-sm ${page === newsPage ? "btn-green" : "btn-outline"}`}
+        onClick={() => setNewsPage(page)}
+      >
+        {page}
+      </button>
+    ))}
+
+    <button
+      className="btn btn-outline btn-sm"
+      onClick={() => setNewsPage((p) => Math.min(totalNewsPages, p + 1))}
+      disabled={newsPage === totalNewsPages}
+    >
+      Suivant
+    </button>
+  </div>
 </div>
 
-          {n.photo && (
-            <img src={n.photo} style={{ width: 120, marginTop: 8 }} />
-          )}
-
-          <hr />
-        </div>
-      ))}
-    </div>
+      
 
       
 
