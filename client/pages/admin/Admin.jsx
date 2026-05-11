@@ -418,9 +418,27 @@ export default function Admin() {
 
   return (
     <div className="page active">
-      <div className="ph">
-        <h1>Admin</h1>
-      </div>
+     <div
+  className="ph"
+  style={{
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10
+  }}
+>
+  <h1>Admin</h1>
+
+  <button
+    className="btn btn-outline btn-sm"
+    onClick={() => {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }}
+  >
+    Déconnexion
+  </button>
+</div>
 
       {/* ====================== ACTUALITÉS AJOUTÉES ====================== */}
       <div className="a-card">
