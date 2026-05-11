@@ -103,7 +103,7 @@ export default function Admin() {
         badgeText: "Rénovation",
         badgeColor: "#fff3e0",
         badgeTextColor: "#e65100",
-        icon: "🔨",
+        icon: "",
         title: "MP RENOV",
         description:
           "Spécialiste des travaux de rénovation clé en main. MP Renov maîtrise l'ensemble des corps d'état nécessaires aux réhabilitations TCE.",
@@ -113,7 +113,7 @@ export default function Admin() {
         badgeText: "Design & Équipement",
         badgeColor: "#e3f2fd",
         badgeTextColor: "#1565c0",
-        icon: "🏠",
+        icon: "",
         title: "HOME xxxxxDESIGN",
         description:
           "Le spécialiste des cuisines, salles de bain, ameublements et rénovation intérieure.",
@@ -123,7 +123,7 @@ export default function Admin() {
         badgeText: "Communication digitale",
         badgeColor: "#f3e5f5",
         badgeTextColor: "#6a1b9a",
-        icon: "📺",
+        icon: "",
         title: "MEDIA4",
         description: "Solutions d'affichage dynamique pilotables à distance.",
         url: "http://media4.fr/"
@@ -312,7 +312,7 @@ export default function Admin() {
       const updated = await api.get("/news");
       setNewsList(updated);
 
-      alert("Actualité publiée ✅");
+      alert("Actualité publiée ");
 
       setTitle("");
       setBody("");
@@ -321,7 +321,7 @@ export default function Admin() {
       setShowNewsForm(false);
       setShowAllNewsItems(false);
     } catch (err) {
-      console.error("❌ ERROR:", err);
+      console.error("ERROR:", err);
       alert("Erreur lors de la publication");
     } finally {
       setLoading(false);
@@ -343,7 +343,7 @@ export default function Admin() {
 
   const saveGroup = async () => {
     await api.put("/group", groupData);
-    alert("Groupe mis à jour ✅");
+    alert("Groupe mis à jour ");
   };
 
   const updateStatus = async (id, status) => {
@@ -682,7 +682,7 @@ export default function Admin() {
             flexWrap: "wrap"
           }}
         >
-          <h3>🌐 Groupe</h3>
+          <h3>Groupe</h3>
 
           <button
             className="btn btn-outline btn-sm"
@@ -882,7 +882,7 @@ export default function Admin() {
                 ) : (
                   <>
                     <input
-                      placeholder="Badge (ex: 🔨 Rénovation)"
+                      placeholder="Badge (ex: Rénovation)"
                       value={`${e.icon || ""} ${e.badgeText || ""}`.trim()}
                       onChange={(ev) => {
                         const val = ev.target.value.trim();
@@ -934,7 +934,7 @@ export default function Admin() {
             flexWrap: "wrap"
           }}
         >
-          <h3>❓ Gérer la Foire aux questions</h3>
+          <h3>Gérer la Foire aux questions</h3>
 
           <button
             className="btn btn-outline btn-sm"
@@ -1042,7 +1042,7 @@ export default function Admin() {
             flexWrap: "wrap"
           }}
         >
-          <h3>💬 Contributions reçues (QRS)</h3>
+          <h3>Contributions reçues (QRS)</h3>
 
           <button
             className="btn btn-outline btn-sm"
@@ -1066,7 +1066,7 @@ export default function Admin() {
             <li key={q._id} className="admin-qrs-item">
               <div className="admin-qrs-text">
                 <div className="admin-qrs-author">
-                  {q.isAnon ? "🎭 Anonyme" : `👤 ${q.prenom} ${q.nom}`}
+                  {q.isAnon ? " Anonyme" : ` ${q.prenom} ${q.nom}`}
                   {" — "}
                   {q.category}
                 </div>
@@ -1078,7 +1078,7 @@ export default function Admin() {
                 className={`pub-toggle ${q.public ? "pub" : "priv"}`}
                 onClick={() => togglePublic(q._id)}
               >
-                {q.public ? "✅ Public" : "🔒 Privé"}
+                {q.public ? " Public" : " Privé"}
               </button>
 
               <button className="doc-del" onClick={() => deleteQrs(q._id)}>
@@ -1092,7 +1092,7 @@ export default function Admin() {
           <>
             <div className="section-divider" />
 
-            <h3 style={{ marginTop: 0 }}>📂 Catégories QRS</h3>
+            <h3 style={{ marginTop: 0 }}>Catégories QRS</h3>
 
             <div style={{ display: "flex", gap: "7px" }}>
               <input
@@ -1141,7 +1141,7 @@ export default function Admin() {
             flexWrap: "wrap"
           }}
         >
-          <h3>👥 Gestion des collaborateurs</h3>
+          <h3> Gestion des collaborateurs</h3>
 
           <button
             className="btn btn-outline btn-sm"
@@ -1166,7 +1166,7 @@ export default function Admin() {
               setShowAddModal(true);
             }}
           >
-            ➕ Ajouter un collaborateur
+            Ajouter un collaborateur
           </button>
 
           {showMembersAdvanced && (
@@ -1232,11 +1232,11 @@ export default function Admin() {
                         setShowEditModal(true);
                       }}
                     >
-                      ✏️ Modifier
+                      Modifier
                     </button>
 
                     <button className="doc-del" onClick={() => deleteMember(m._id)}>
-                      🗑️
+                     Supprim.
                     </button>
                   </div>
                 </div>
@@ -1256,7 +1256,7 @@ export default function Admin() {
             flexWrap: "wrap"
           }}
         >
-          <h3>📚 Documents & Sources de référence</h3>
+          <h3>Documents & Sources de référence</h3>
 
           <button
             className="btn btn-outline btn-sm"
@@ -1303,7 +1303,7 @@ export default function Admin() {
 
                 {showResourcesAdvanced && r.content && (
                   <div style={{ fontSize: ".72rem", opacity: 0.5, marginTop: 2 }}>
-                    ✅ {r.content.length} caractères extraits
+                    {r.content.length} caractères extraits
                   </div>
                 )}
               </div>
@@ -1323,9 +1323,9 @@ export default function Admin() {
                 onChange={(e) => setNewResourceType(e.target.value)}
                 style={{ width: "auto" }}
               >
-                <option value="url">🔗 URL (scraping auto)</option>
-                <option value="pdf">📄 PDF (extraction auto)</option>
-                <option value="text">📝 Texte libre</option>
+                <option value="url"> URL (scraping auto)</option>
+                <option value="pdf">PDF (extraction auto)</option>
+                <option value="text">Texte libre</option>
               </select>
 
               <input
@@ -1352,9 +1352,9 @@ export default function Admin() {
                   onClick={() => document.getElementById("pdfInput").click()}
                 >
                   {newResourceUrl ? (
-                    <div>✅ PDF uploadé — prêt à extraire</div>
+                    <div>PDF uploadé — prêt à extraire</div>
                   ) : (
-                    <div>📄 Cliquer pour uploader un PDF</div>
+                    <div>Cliquer pour uploader un PDF</div>
                   )}
 
                   <input
@@ -1403,7 +1403,7 @@ export default function Admin() {
       {showAddModal && (
         <div className="modal-overlay open">
           <div className="modal" style={{ maxWidth: "540px" }}>
-            <h3>➕ Ajouter un collaborateur</h3>
+            <h3>Ajouter un collaborateur</h3>
 
             <div className="row2">
               <div>
@@ -1496,7 +1496,7 @@ export default function Admin() {
 
             <div style={{ display: "flex", gap: 8 }}>
               <button className="btn btn-primary" onClick={handleAddMember}>
-                ➕ Ajouter
+                Ajouter
               </button>
 
               <button
@@ -1517,7 +1517,7 @@ export default function Admin() {
       {showEditModal && editingMember && (
         <div className="modal-overlay open">
           <div className="modal" style={{ maxWidth: "540px" }}>
-            <h3>✏️ Modifier le collaborateur</h3>
+            <h3>Modifier le collaborateur</h3>
 
             <div className="row2">
               <div>
