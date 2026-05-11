@@ -23,6 +23,8 @@ const memberRoutes = require("./routes/member.routes"); // ✅ FIX
 const chatRoutes = require("./routes/chat.routes");
 const resourceRoutes = require("./routes/resource.routes");
 
+const authRoutes = require("./routes/auth.routes");
+
 const app = express();
 
 /* ======================
@@ -39,6 +41,7 @@ app.use("/api/group", groupRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/members", memberRoutes); // ✅ FIX CRITIQUE
+app.use("/api/auth", authRoutes);
 
 app.use("/api/chat", chatRoutes);
 app.use("/api/resources", resourceRoutes);
