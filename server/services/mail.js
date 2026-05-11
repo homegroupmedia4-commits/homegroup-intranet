@@ -27,4 +27,29 @@ const sendQrsEmail = async (qrs) => {
   });
 };
 
-module.exports = { sendQrsEmail };
+const sendResetPasswordEmail = async (email, token) => {
+
+  const url = `${process.env.FRONT_URL}/reset-password?token=${token}`;
+
+  await transporter.sendMail({
+    from: process.env.MAIL_FROM,
+    to: email,
+    subject: "Réinitialisation mot de passe",
+    html: `
+      <h2>Réinitialisation mot de passe</h2>
+
+      <p>
+        Cliquez ici :
+      </p>
+
+      <a href="${url}">
+        ${url}
+      </a>
+    `
+  });
+};
+
+
+
+module.exports = { sendQrsEmail,
+  sendResetPasswordEmail };
