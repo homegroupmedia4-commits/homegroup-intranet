@@ -233,7 +233,7 @@ return ( <div className="page active">
       />
 
       <button className="submit-btn" onClick={handleSubmit}>
-        Envoyer →
+        Envoyer 
       </button>
 
       {/* BOARD */}
