@@ -170,6 +170,7 @@ body{
   border:1px solid var(--border);
   box-shadow:var(--sh);
   overflow-x:auto;
+   display:none !important;
 }
 
 .org-tree{
@@ -909,6 +910,7 @@ select:focus{
   background:#fff;
   border-radius:14px;
   border:1px solid var(--border);
+     display:none !important;
 }
 
 .org-chart-header{
