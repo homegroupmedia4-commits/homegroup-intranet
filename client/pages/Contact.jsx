@@ -90,9 +90,9 @@ setOpenFaq(prev => (prev === id ? null : id));
 
 return ( <div className="page active">
 
-```
+
   <div className="ph">
-    <div className="ph-tag">Aide & Échanges gdhdfhfghfghfgh</div>
+    <div className="ph-tag">Aide & Échanges </div>
     <h1>Contact</h1>
     <p>Trouvez des réponses dans la FAQ ou posez vos questions.</p>
   </div>
@@ -104,11 +104,11 @@ return ( <div className="page active">
     ====================== */}
     <div>
 
-      <h2>❓ Foire aux questions</h2>
+      <h2>Foire aux questions</h2>
 
       {/* SEARCH */}
       <div className="faq-search-box">
-        <span className="faq-si">🔍</span>
+   
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -179,7 +179,7 @@ return ( <div className="page active">
         QRS
     ====================== */}
     <div>
-      <h2>💬 Questions / Suggestions</h2>
+      <h2>Questions / Suggestions</h2>
 
       <p>Exprimez-vous librement.</p>
 
