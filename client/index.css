@@ -959,11 +959,13 @@ select:focus{
   display:flex;
   gap:10px;
   align-items:center;
-  padding:10px;
+  /* padding:10px; */
   background:var(--warm);
   border-radius:8px;
   cursor:pointer;
-  margin-bottom:1rem;
+  /* margin-bottom:1rem; */
+   margin: 10px 0;
+   padding: 15px 11px;
 }
 
 .tgl{
@@ -1000,17 +1002,19 @@ select:focus{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
+   margin-bottom: 1.5rem;
 }
 
 .cat-select-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:6px;
-  margin-bottom:1rem;
+margin: 1rem 0px;
 }
 
 .csi{
-  padding:6px;
+  /* padding:6px; */
+   padding: .9rem 1.2rem;
   border:1px solid var(--border);
   border-radius:6px;
   background:#fff;
@@ -1023,7 +1027,7 @@ select:focus{
 
 .submit-btn{
   width:100%;
-  padding:10px;
+padding: .9rem 1.2rem;
   background:var(--ink);
   color:#fff;
   border:none;
@@ -1038,6 +1042,7 @@ select:focus{
   border:1px solid var(--border);
   border-radius:8px;
   padding:1rem;
+   margin: 1rem 0px;
 }
 
 /* =========================
