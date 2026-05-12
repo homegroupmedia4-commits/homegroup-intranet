@@ -1145,13 +1145,11 @@ select:focus{
   border-radius:var(--r);
   border:1px solid var(--border);
   overflow:hidden;
-  transition:transform .2s,
-     
+  transition:transform .2s;
   display:flex;
   flex-direction:column;
   height:420px;
 }
-
 .news-card:hover{
   transform:translateY(-4px) scale(1.01);
  
