@@ -181,7 +181,7 @@ return ( <div className="page active">
     <div>
       <h2>Questions / Suggestions</h2>
 
-     <p style="display:none;">Exprimez-vous librement.</p>
+<p style={{ display: "none" }}>Exprimez-vous librement.</p>
 
       {/* TOGGLE */}
       <div className="tgl-wrap" onClick={() => setIsAnon(!isAnon)}>
