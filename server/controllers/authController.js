@@ -42,6 +42,17 @@ const login = async (req, res) => {
       });
     }
 
+    if (req.body.adminCode !== process.env.ADMIN_ACCESS_CODE) {
+      return res.status(401).json({
+        error: "Code administrateur incorrect"
+      });
+    }
+
+    if (req.body.consent === true) {
+      admin.consentAcceptedAt = new Date();
+      await admin.save();
+    }
+
     const token = generateToken(admin);
 
     res.json({
@@ -138,8 +149,23 @@ const resetPassword = async (req, res) => {
   }
 };
 
+/* ======================
+   CHECK ACCESS CODE
+====================== */
+
+const checkAccessCode = async (req, res) => {
+  const { code } = req.body;
+
+  if (code === process.env.APP_ACCESS_CODE) {
+    return res.json({ success: true });
+  }
+
+  return res.status(401).json({ error: "Code incorrect" });
+};
+
 module.exports = {
   login,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  checkAccessCode
 };

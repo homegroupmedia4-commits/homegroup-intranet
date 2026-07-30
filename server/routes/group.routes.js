@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 const {
   getGroup,
@@ -14,6 +15,6 @@ router.get("/", getGroup);
 /* ======================
    UPDATE GROUP
 ====================== */
-router.put("/", updateGroup); // ✅ plus logique que POST
+router.put("/", auth, updateGroup); // ✅ plus logique que POST
 
 module.exports = router;

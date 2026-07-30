@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
+import AccessGate from "./components/auth/AccessGate";
 
 import News from "./pages/News";
 import Groupe from "./pages/Groupe";
@@ -16,26 +17,35 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<News />} />
-          <Route path="/groupe" element={<Groupe />} />
-          <Route path="/organisation" element={<Organisation />} />
-          <Route path="/contact" element={<Contact />} />
-        <Route
-  path="/admin"
-  element={
-    <ProtectedRoute>
-      <Admin />
-    </ProtectedRoute>
-  }
-/>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
-          <Route path="/login" element={<Login />} />
-<Route path="/forgot-password" element={<ForgotPassword />} />
-<Route path="/reset-password" element={<ResetPassword />} />
-        </Routes>
-      </Layout>
+        <Route
+          path="/*"
+          element={
+            <AccessGate>
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<News />} />
+                  <Route path="/groupe" element={<Groupe />} />
+                  <Route path="/organisation" element={<Organisation />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route
+                    path="/admin"
+                    element={
+                      <ProtectedRoute>
+                        <Admin />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </Layout>
+            </AccessGate>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   );
 }

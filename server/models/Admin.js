@@ -13,7 +13,12 @@ const adminSchema = new mongoose.Schema({
   },
 
   resetToken: String,
-  resetTokenExpire: Date
+  resetTokenExpire: Date,
+
+  consentAcceptedAt: {
+    type: Date,
+    required: false
+  }
 });
 
 module.exports = mongoose.model("Admin", adminSchema);

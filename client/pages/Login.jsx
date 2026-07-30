@@ -8,12 +8,16 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [adminCode, setAdminCode] = useState("");
+  const [consent, setConsent] = useState(false);
 
   const submit = async () => {
 
     const res = await api.post("/auth/login", {
       email,
-      password
+      password,
+      consent: true,
+      adminCode
     });
 
     if (res?.token) {
@@ -48,7 +52,24 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="btn btn-green" onClick={submit}>
+        <input
+          type="password"
+          placeholder="Code administrateur"
+          value={adminCode}
+          onChange={(e) => setAdminCode(e.target.value)}
+        />
+
+        <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: ".85rem" }}>
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            style={{ width: "auto" }}
+          />
+          J'accepte de ne pas diffuser les informations contenues dans cet espace
+        </label>
+
+        <button className="btn btn-green" onClick={submit} disabled={!consent}>
           Connexion
         </button>
 

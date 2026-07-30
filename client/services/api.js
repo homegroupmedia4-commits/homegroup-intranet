@@ -11,6 +11,11 @@ const safeJson = async (res) => {
   }
 };
 
+const getAuthHeader = () => {
+  const token = localStorage.getItem("admin_token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 export const api = {
 
   get: async (url) => {
@@ -24,7 +29,9 @@ export const api = {
 
     const res = await fetch(`${BASE_URL}${url}`, {
       method: "POST",
-      headers: isFormData ? {} : { "Content-Type": "application/json" },
+      headers: isFormData
+        ? { ...getAuthHeader() }
+        : { "Content-Type": "application/json", ...getAuthHeader() },
       body: isFormData ? data : JSON.stringify(data)
     });
 
@@ -34,7 +41,7 @@ export const api = {
   put: async (url, data) => {
     const res = await fetch(`${BASE_URL}${url}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...getAuthHeader() },
       body: JSON.stringify(data)
     });
 
@@ -43,7 +50,8 @@ export const api = {
 
   delete: async (url) => {
     const res = await fetch(`${BASE_URL}${url}`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: { ...getAuthHeader() }
     });
 
     return await safeJson(res);

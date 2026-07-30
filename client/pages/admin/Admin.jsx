@@ -432,7 +432,7 @@ export default function Admin() {
   <button
     className="btn btn-outline btn-sm"
     onClick={() => {
-      localStorage.removeItem("token");
+      localStorage.removeItem("admin_token");
       window.location.href = "/login";
     }}
   >

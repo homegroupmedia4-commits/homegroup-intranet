@@ -1,6 +1,7 @@
 // routes/contactRoutes.js
 
 const express = require("express");
+const auth = require("../middleware/auth");
 
 const {
   /* FAQ */
@@ -39,8 +40,8 @@ router.get("/faq", getFaq);
 router.get("/faq/categories", getFaqCategories);
 
 router.get("/qrs/categories", getQrsCategories);
-router.post("/qrs/categories", createQrsCategory);
-router.delete("/qrs/categories/:id", deleteQrsCategory);
+router.post("/qrs/categories", auth, createQrsCategory);
+router.delete("/qrs/categories/:id", auth, deleteQrsCategory);
 
 
 /* ======================
@@ -48,10 +49,10 @@ router.delete("/qrs/categories/:id", deleteQrsCategory);
 ====================== */
 
 // créer une FAQ
-router.post("/faq", createFaq);
+router.post("/faq", auth, createFaq);
 
 // supprimer une FAQ
-router.delete("/faq/:id", deleteFaq);
+router.delete("/faq/:id", auth, deleteFaq);
 
 
 /* ======================
@@ -68,8 +69,8 @@ router.get("/qrs/public", getPublicQRS);
    FAQ CATEGORIES
 ====================== */
 
-router.post("/faq/categories", createFaqCategory);
-router.delete("/faq/categories/:id", deleteFaqCategory);
+router.post("/faq/categories", auth, createFaqCategory);
+router.delete("/faq/categories/:id", auth, deleteFaqCategory);
 
 
 /* ======================
@@ -80,13 +81,13 @@ router.delete("/faq/categories/:id", deleteFaqCategory);
 router.get("/qrs", getAllQRS);
 
 // changer status (pending / approved / rejected)
-router.put("/qrs/:id/status", updateQRSStatus);
+router.put("/qrs/:id/status", auth, updateQRSStatus);
 
 // rendre public / privé
-router.put("/qrs/:id/visibility", toggleQRSVisibility);
+router.put("/qrs/:id/visibility", auth, toggleQRSVisibility);
 
 // supprimer une contribution
-router.delete("/qrs/:id", deleteQRS);
+router.delete("/qrs/:id", auth, deleteQRS);
 
 
 module.exports = router;
