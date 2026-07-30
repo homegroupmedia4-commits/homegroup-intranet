@@ -54,7 +54,7 @@ export default function News() {
       <div className="ph">
         <div className="ph-tag">La vie du groupe</div>
         <h1>Actualités</h1>
-        <p>Les dernières nouvelles du groupe Home Group.</p>
+        <p>Les dernières nouvelles du groupe Home Group. 2</p>
       </div>
 
       <div className="news-grid">
